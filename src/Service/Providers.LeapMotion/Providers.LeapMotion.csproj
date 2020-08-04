@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{78E2E02E-770C-4ED6-B757-ECB540F58843}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Providers.LeapMotion</RootNamespace>
+    <AssemblyName>Providers.LeapMotion</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>$(AppData)/Ideum/TouchlessDesignService/bin/Service/InputProviders/Leap/</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>$(AppData)/Ideum/TouchlessDesignService/bin/Service/InputProviders/Leap/</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="LeapCSharp\Arm.cs" />
+    <Compile Include="LeapCSharp\Bone.cs" />
+    <Compile Include="LeapCSharp\CircularObjectBuffer.cs" />
+    <Compile Include="LeapCSharp\Config.cs" />
+    <Compile Include="LeapCSharp\Connection.cs" />
+    <Compile Include="LeapCSharp\Controller.cs" />
+    <Compile Include="LeapCSharp\CopyFromLeapCExtensions.cs" />
+    <Compile Include="LeapCSharp\CopyFromOtherExtensions.cs" />
+    <Compile Include="LeapCSharp\CSharpExtensions.cs" />
+    <Compile Include="LeapCSharp\Device.cs" />
+    <Compile Include="LeapCSharp\DeviceList.cs" />
+    <Compile Include="LeapCSharp\DistortionData.cs" />
+    <Compile Include="LeapCSharp\Events.cs" />
+    <Compile Include="LeapCSharp\FailedDevice.cs" />
+    <Compile Include="LeapCSharp\FailedDeviceList.cs" />
+    <Compile Include="LeapCSharp\Finger.cs" />
+    <Compile Include="LeapCSharp\Frame.cs" />
+    <Compile Include="LeapCSharp\Hand.cs" />
+    <Compile Include="LeapCSharp\IController.cs" />
+    <Compile Include="LeapCSharp\Image.cs" />
+    <Compile Include="LeapCSharp\ImageData.cs" />
+    <Compile Include="LeapCSharp\LeapC.cs" />
+    <Compile Include="LeapCSharp\LeapQuaternion.cs" />
+    <Compile Include="LeapCSharp\LeapTransform.cs" />
+    <Compile Include="LeapCSharp\Logger.cs" />
+    <Compile Include="LeapCSharp\Matrix.cs" />
+    <Compile Include="LeapCSharp\MemoryManager.cs" />
+    <Compile Include="LeapCSharp\MessageSeverity.cs" />
+    <Compile Include="LeapCSharp\PointMapping.cs" />
+    <Compile Include="LeapCSharp\StructMarshal.cs" />
+    <Compile Include="LeapCSharp\TransformExtensions.cs" />
+    <Compile Include="LeapCSharp\Vector.cs" />
+    <Compile Include="LeapMotionProvider.cs" />
+    <Compile Include="LeapSettings.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\InputCore\InputCore.csproj">
+      <Project>{c681700b-5b0c-4ebc-9849-facd53624516}</Project>
+      <Name>InputCore</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="LeapC.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

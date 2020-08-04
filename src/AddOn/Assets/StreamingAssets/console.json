@@ -1,0 +1,12 @@
+{
+  "IsEnabled": true,
+  "AllowOpenCommand": true,
+  "ExecuteOnStartup": [],
+  "LogTrace": true,
+  "LogDebug": true,
+  "LogInfo": true,
+  "LogWarn": true,
+  "LogError": true,
+  "LogFatal": true,
+  "ConsoleArea": 0
+}
