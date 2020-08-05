@@ -267,24 +267,24 @@ MonoBehaviour:
     Century B.C. originating from the school of Pheidias. The cast was taken from
     The J. Paul Getty Museum (ORIG1116)
 
-    
 
-    The Hope Athena takes its name
-    from Thomas Hope, the former owner of the most distinguished of the copies of
-    this type, once in the Hope collection at Deepdene, now in the Los Angeles County
+
+    The Hope Athena takes its name from
+    Thomas Hope, the former owner of the most distinguished of the copies of this
+    type, once in the Hope collection at Deepdene, now in the Los Angeles County
     Museum of Art. The Hope Athena is very closely associated with the Athena Farnese
     in Naples, earlier than the Albani collection, and more distantly with an Athena
     still in the Albani collection. The Hope and Farnese Athenas are created as belonging
     to the same type, while the Albani Athena is shown to be diferent enough to be
     regarded as a separate type.
 
-    
 
-    In addition to the Hope Athena, there
-    are ten well known replicas of this statue type: four statues or fragments of
-    statues and six heads. Their places of origin spam from Asia Minor to the Athenian
-    Akropolis and across to Italy. It is therefore probably that the original was
-    a celebrated and popular statue in the whole of the Mediterranean area.'
+
+    In addition to the Hope Athena, there are
+    ten well known replicas of this statue type: four statues or fragments of statues
+    and six heads. Their places of origin spam from Asia Minor to the Athenian Akropolis
+    and across to Italy. It is therefore probably that the original was a celebrated
+    and popular statue in the whole of the Mediterranean area.'
 --- !u!1 &176392101
 GameObject:
   m_ObjectHideFlags: 0
@@ -408,6 +408,41 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 176392101}
   m_CullTransparentMesh: 0
+--- !u!21 &193704413
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Ui Circle
+  m_Shader: {fileID: 4800000, guid: 6981e0eacde35ca4aa61659e95f28bb1, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _BorderWidth: 0
+    - _ColorMask: 15
+    - _Fuzziness: 0.03
+    - _Stencil: 0
+    - _StencilComp: 8
+    - _StencilOp: 0
+    - _StencilReadMask: 255
+    - _StencilWriteMask: 255
+    - _UseUIAlphaClip: 0
+    m_Colors:
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &202977095
 GameObject:
   m_ObjectHideFlags: 0
@@ -821,41 +856,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 315270784}
   m_CullTransparentMesh: 0
---- !u!21 &327093807
-Material:
-  serializedVersion: 6
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Ui Circle
-  m_Shader: {fileID: 4800000, guid: 6981e0eacde35ca4aa61659e95f28bb1, type: 3}
-  m_ShaderKeywords: 
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs:
-    - _MainTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Floats:
-    - _BorderWidth: 0
-    - _ColorMask: 15
-    - _Fuzziness: 0.03
-    - _Stencil: 0
-    - _StencilComp: 8
-    - _StencilOp: 0
-    - _StencilReadMask: 255
-    - _StencilWriteMask: 255
-    - _UseUIAlphaClip: 0
-    m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &327374251
 GameObject:
   m_ObjectHideFlags: 0
@@ -1551,8 +1551,8 @@ Light:
     m_Type: 1
     m_Resolution: -1
     m_CustomResolution: -1
-    m_Strength: 1
-    m_Bias: 0.05
+    m_Strength: 0.5
+    m_Bias: 0.003
     m_NormalBias: 0.4
     m_NearPlane: 0.2
     m_CullingMatrixOverride:
@@ -2620,41 +2620,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 858418403}
   m_CullTransparentMesh: 0
---- !u!21 &913284545
-Material:
-  serializedVersion: 6
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Ui Circle
-  m_Shader: {fileID: 4800000, guid: 6981e0eacde35ca4aa61659e95f28bb1, type: 3}
-  m_ShaderKeywords: 
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs:
-    - _MainTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Floats:
-    - _BorderWidth: 0
-    - _ColorMask: 15
-    - _Fuzziness: 0.03
-    - _Stencil: 0
-    - _StencilComp: 8
-    - _StencilOp: 0
-    - _StencilReadMask: 255
-    - _StencilWriteMask: 255
-    - _UseUIAlphaClip: 0
-    m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &926532406
 GameObject:
   m_ObjectHideFlags: 0
@@ -3122,6 +3087,41 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 988114124}
   m_CullTransparentMesh: 0
+--- !u!21 &1011567310
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Ui Circle
+  m_Shader: {fileID: 4800000, guid: 6981e0eacde35ca4aa61659e95f28bb1, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _BorderWidth: 0
+    - _ColorMask: 15
+    - _Fuzziness: 0.03
+    - _Stencil: 0
+    - _StencilComp: 8
+    - _StencilOp: 0
+    - _StencilReadMask: 255
+    - _StencilWriteMask: 255
+    - _UseUIAlphaClip: 0
+    m_Colors:
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &1082623478
 GameObject:
   m_ObjectHideFlags: 0
@@ -3751,41 +3751,6 @@ Transform:
   m_Father: {fileID: 652328721}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!21 &1242600456
-Material:
-  serializedVersion: 6
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Ui Circle
-  m_Shader: {fileID: 4800000, guid: 6981e0eacde35ca4aa61659e95f28bb1, type: 3}
-  m_ShaderKeywords: 
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs:
-    - _MainTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Floats:
-    - _BorderWidth: 0
-    - _ColorMask: 15
-    - _Fuzziness: 0.03
-    - _Stencil: 0
-    - _StencilComp: 8
-    - _StencilOp: 0
-    - _StencilReadMask: 255
-    - _StencilWriteMask: 255
-    - _UseUIAlphaClip: 0
-    m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &1337925355
 GameObject:
   m_ObjectHideFlags: 0
@@ -5186,6 +5151,41 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1828576230}
   m_CullTransparentMesh: 0
+--- !u!21 &1846644947
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Ui Circle
+  m_Shader: {fileID: 4800000, guid: 6981e0eacde35ca4aa61659e95f28bb1, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _BorderWidth: 0
+    - _ColorMask: 15
+    - _Fuzziness: 0.03
+    - _Stencil: 0
+    - _StencilComp: 8
+    - _StencilOp: 0
+    - _StencilReadMask: 255
+    - _StencilWriteMask: 255
+    - _UseUIAlphaClip: 0
+    m_Colors:
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &1906725097
 GameObject:
   m_ObjectHideFlags: 0
