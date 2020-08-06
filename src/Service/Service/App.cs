@@ -29,7 +29,7 @@ namespace TouchlessDesign {
       Ipc = new Ipc();
       Ui = new Ui();
       LEDController = new LEDs.Controller();
-      Components = new Component[] { Input, Ipc, Ui, LEDController };
+      Components = new Component[] { Ipc, Ui, LEDController, Input };
       foreach (var c in Components) {
         c.App = this;
         c.Start();
