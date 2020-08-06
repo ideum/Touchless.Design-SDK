@@ -4,8 +4,10 @@ using System.Drawing;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Windows.Forms;
 using Gma.System.MouseKeyHook;
+using Timer = System.Threading.Timer;
 
 namespace TouchlessDesign {
 
@@ -38,17 +40,64 @@ namespace TouchlessDesign {
     private InputSettings _settings;
     private IKeyboardMouseEvents _hook;
     private DateTime? _timeSinceToggleEmulationKeyCombination;
-    
+
+
     public override void Start() {
       _settings = InputSettings.Get(DataDir);
       InitializeHooks();
+      InitializeClickHandling();
       InitializeInputProvider();
     }
 
     public override void Stop() {
       DeinitializeInputProvider();
+      DeInitializeClickHandling();
       DeInitializeHooks();
     }
+
+
+    #region Click Handling
+
+    private bool _isClicking;
+    private Timer _clickTimer;
+    
+    private void InitializeClickHandling() {
+      HoverState.AddChangedListener(HandleHoverStateChangedForClick);
+      _clickTimer = new Timer(HandleClickCallback, null, Timeout.Infinite, Timeout.Infinite);
+    }
+
+    private void HandleHoverStateChangedForClick(Property<HoverStates> property, HoverStates oldValue, HoverStates value) {
+      if (value != HoverStates.Click && _isClicking) {
+        if (IsButtonDown.Value) {
+          ((ICursor)this).SetMouseButtonDown(false);
+        }
+        StopClickCountdown();
+      }
+    }
+
+    private void StartClickCountdown() {
+      _isClicking = true;
+      _clickTimer.Change(0, _settings.ClickDuration_ms);
+    }
+
+    private void StopClickCountdown() {
+      _clickTimer.Change(Timeout.Infinite, Timeout.Infinite);
+      _isClicking = false;
+    }
+
+    private void HandleClickCallback(object state) {
+      if (!_isClicking) return;
+      StopClickCountdown();
+      ((ICursor)this).SetMouseButtonDown(false);
+    }
+
+    private void DeInitializeClickHandling() {
+      _clickTimer.Dispose();
+      _clickTimer = null;
+    }
+
+
+    #endregion
 
     #region Input Provider
     private IInputProvider _provider;
@@ -238,27 +287,32 @@ namespace TouchlessDesign {
 
     void ICursor.SetMouseButtonDown(bool isDown) {
       if (!IsEmulationEnabled.Value) return;
-      var status = isDown ? MouseEventFlags.LeftDown : MouseEventFlags.LeftUp;
       if (IsButtonDown.Value == isDown) return;
       IsButtonDown.Value = isDown;
-      mouse_event((uint)status, 0, 0, 0, 0);
-    }
-    
-    void ICursor.SetPositionAndButton(int x, int y, bool isDown) {
-      if (!IsEmulationEnabled.Value) return;
-      var b = Bounds;
-      if (x < b.Left) x = b.Left;
-      if (x > b.Right) x = b.Right;
-      if (y > b.Bottom) y = b.Bottom;
-      if (y < b.Top) y = b.Top;
-      SetCursorPos(x, y);
+      if (_isClicking && !isDown) {
+        StopClickCountdown();
+      }
       var status = isDown ? MouseEventFlags.LeftDown : MouseEventFlags.LeftUp;
-      IsButtonDown.Value = isDown;
       mouse_event((uint)status, 0, 0, 0, 0);
     }
 
     void ICursor.DoClick() {
+      if (!_settings.ClickEnabled) return;
+      if (_isClicking) return;
+      ((ICursor)this).SetMouseButtonDown(true);
+      StartClickCountdown();
+    }
 
+    HoverStates ICursor.GetHoverState() {
+      return HoverState.Value;
+    }
+
+    bool ICursor.GetIsClicking() {
+      return _isClicking;
+    }
+
+    bool ICursor.GetClickingEnabled() {
+      return _settings.ClickEnabled;
     }
 
     #endregion
@@ -387,7 +441,8 @@ namespace TouchlessDesign {
 
       public string ToggleEmulationKeyCombination = "Control+Alt+I";
       public double ToggleEmulationToggleSpeed_ms = 3000d;
-      public int ClickDuration_ms = 100;
+      public int ClickDuration_ms = 500;
+      public bool ClickEnabled = true;
       public string InputProviderPath = "Leap/Providers.LeapMotion.dll";
 
       public static InputSettings Get(string dir) {
@@ -404,7 +459,8 @@ namespace TouchlessDesign {
         return new InputSettings {
           ToggleEmulationKeyCombination = "Control+Alt+I",
           ToggleEmulationToggleSpeed_ms = 3000d,
-          ClickDuration_ms = 100,
+          ClickDuration_ms = 500,
+          ClickEnabled = true,
           InputProviderPath = "Leap/Providers.LeapMotion.dll"
         };
       }

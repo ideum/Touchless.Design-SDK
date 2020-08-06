@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading;
 using Leap;
 using TouchlessDesign;
@@ -18,6 +19,7 @@ namespace Providers.LeapMotion {
     private LeapTransform _xform;
     private Controller _controller;
     private Timer _timer;
+    private bool _hasClicked;
 
     public void Start() {
       _settings = LeapSettings.Get(DataDir);
@@ -56,9 +58,14 @@ namespace Providers.LeapMotion {
       if (_controller == null || !_controller.IsConnected) return;
       if (!Cursor.IsEmulationEnabled) return;
       var f = _controller.Frame(0);
+
       if (f.Hands.Count <= 0) {
         if (Cursor.IsButtonDown) {
           Cursor.SetMouseButtonDown(false);
+        }
+
+        if (_hasClicked) {
+          _hasClicked = false;
         }
       }
       else {
@@ -73,11 +80,27 @@ namespace Providers.LeapMotion {
 
         //click
         var isGrabbing = hand.GrabStrength > _settings.GrabClickThreshold;
+        var hoverState = Cursor.GetHoverState();
         if (isGrabbing && !Cursor.IsButtonDown) {
-          Cursor.SetMouseButtonDown(true);
+          if (hoverState == HoverStates.Click) {
+            if (!_hasClicked) {
+              _hasClicked = true;
+              Cursor.DoClick();
+            }
+            else {
+
+            }
+          }
+          else {
+            Cursor.SetMouseButtonDown(true);
+          }
         }
         else if (!isGrabbing && Cursor.IsButtonDown) {
           Cursor.SetMouseButtonDown(false);
+        }
+
+        if (!isGrabbing && _hasClicked) {
+          _hasClicked = false;
         }
       }
     }

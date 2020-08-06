@@ -55,16 +55,26 @@
     void SetMouseButtonDown(bool isDown);
 
     /// <summary>
-    /// Sets the cursor's pixel position and whether or not the cursor should be in a down state.
-    /// </summary>
-    /// <param name="x">the desired x-coordinate in screen space</param>
-    /// <param name="y">the desired y-coordinate in screen space</param>
-    /// <param name="isDown">if true, the cursor will be set to a 'clicking' state</param>
-    void SetPositionAndButton(int x, int y, bool isDown);
-
-    /// <summary>
     /// Performs a click operation at the current position of the cursor. During this operation, the cursor's position will not change.
     /// </summary>
     void DoClick();
+
+    /// <summary>
+    /// Gets the current hover state
+    /// </summary>
+    /// <returns></returns>
+    HoverStates GetHoverState();
+
+    /// <summary>
+    /// Returns whether or not if the cursor is in the middle of a click operation
+    /// </summary>
+    /// <returns></returns>
+    bool GetIsClicking();
+
+    /// <summary>
+    /// Returns whether or not click operations are currently enabled
+    /// </summary>
+    /// <returns></returns>
+    bool GetClickingEnabled();
   }
 }
