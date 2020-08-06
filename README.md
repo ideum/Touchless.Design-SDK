@@ -1,18 +1,23 @@
-# Touchless.Design-SDK
+!["Splash Image"](/docs/images/splash.png)
 
-In light of the coronavirus crisis, touchless interaction has become the focus of many public spaces when thinking about technology. Using the Leap Motion camera and SDK, our Integrated Touchless System allows users to interact with our tables and exhibits with no physical touch. This system tracks the users hand and watches for open and close gestures to give complete control over the mouse. Alongside this system are two additional applications: a dynamic cursor overlay and a secondary screen addon. These are meant to provide both feedback and onboarding information to the user with changing colors, gesture demonstrations, and interaction information when hovering over buttons or drag areas. This repository also includes a unity asset package that allows users to integrate support for the system into their own applications, and a demo application for reference. The core system is built in .Net Framework 4.6.1 and the peripheral applications are built in the Unity Game Engine. 
+# Touchless.Design SDK
 
-This repository is meant to be built and run on Ideum's hardware systems that include a touch table with 4k screen, a Leap Motion device, 3.5” display, and LED lights. 
+[[Website](https://touchless.design)] [[Leap Motion SDK](https://developer.leapmotion.com/setup/desktop)]
 
-<b>Disclaimer: This software was designed and built to run on UHD displays (3840x2160). Running on any other display may result in scaling issues.</b>
+In light of the coronavirus crisis, touchless interaction has become the focus of many public spaces when thinking about technology. Using the [Leap Motion camera](https://www.ultraleap.com/product/leap-motion-controller/) and [V4 SDK](https://developer.leapmotion.com/setup/desktop), our Integrated Touchless System allows users to interact with our tables and exhibits with no physical touch. This system tracks the users hand and watches for open and close gestures to give complete control over the mouse. Alongside this system are two additional applications: a dynamic cursor overlay and a secondary screen addon. These are meant to provide both feedback and onboarding information to the user with changing colors, gesture demonstrations, and interaction information when hovering over buttons or drag areas. This repository also includes a unity asset package that allows users to integrate support for the system into their own applications, and a demo application for reference. The core system is built in .Net Framework 4.6.1 and the peripheral applications are built in the Unity Game Engine. 
+
+Important Notes:
+- The [Leap Motion V4 Orion SDK](https://developer.leapmotion.com/setup/desktop) must be installed with a leap motion device connected for this application to function.
+- This repository is meant to be built and run on [Ideum's hardware systems](https://ideum.com/products/touch-tables/drafting) that include a touch table with UHD screen, a Leap Motion device, 3.5” display, and LED lights.
+- The keyboard shortcut <b>Ctrl+Alt+I</b> will toggle mouse emulation on/off when the service is running
 
 Preview Video:
 
-[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/apu0_l-zF6g/0.jpg)](https://www.youtube.com/watch?v=apu0_l-zF6g)
+[![Touchless.Design demo](https://img.youtube.com/vi/apu0_l-zF6g/0.jpg)](https://www.youtube.com/watch?v=apu0_l-zF6g)
 
 ## Repository Layout
 
-In the src directory is all of the source code for the Integrated Touchless System, as well as the peripheral applications and dependencies with the exception of the Leap Motion SDK which should be downloaded and installed before running the Touchless.Design applications.
+In the src directory is all of the source code for the Integrated Touchless System, as well as the peripheral applications and dependencies with the exception of the [Leap Motion V4 Orion SDK](https://developer.leapmotion.com/setup/desktop) which should be downloaded and installed before running the Touchless.Design applications.
 
 ### Service
 
@@ -24,7 +29,7 @@ This is the core of the Integrated Touchless System. It operates as a Windows se
 
 The Overlay application is a replacement for the Windows cursor and provides feedback to the user as they interact with the Integrated Touchless System. When enabled, the System will automatically manage and communicate with the Overlay application.
 
-!["Overlay Curosr"](/docs/images/cursor.png)
+!["Overlay Cursor"](/docs/images/cursor.png)
 
 When interacting with a client application that is connected to the Integrated Touchless System, the Overlay will have the following behaviors:
 
@@ -62,8 +67,6 @@ In order to build the core of the Integrated Touchless System, open the Touchles
 #### Running:
 
 Navigate to the build directory (see above), open "TouchlessDesignService/bin/Service/", and run the TouchlessDesignService.exe. In the AddOn or Overlay applications have been built and configured, they will also be launched and the mouse should immediately begin reacting to the Leap Motion controller. An icon will appear in the system tray and exposes a number of options, including the ability to toggle on or off the mouse emulation. The System can also be terminated from this icon, which will likewise close the AddOn and Overlay applications if they are running.
-
-<b>Note: Ctrl+Alt+I will toggle mouse emulation on/off </b>
 
 #### Settings:
 
