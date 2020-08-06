@@ -24,6 +24,7 @@ namespace Ideum {
     public ItemData LastSelectedItem { get; private set; }
 
     void Start() {
+      Application.targetFrameRate = 60;
       foreach (var panel in Panels) {
         panel.App = this;
         panel.Init();

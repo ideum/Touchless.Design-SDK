@@ -20,13 +20,13 @@ namespace Ideum {
     public override void AppChangedSelection(ItemData selection) {
       _tween?.Kill();
       if (selection == null) {
-        _tween = DOSpacing(825, 0.25f);
+        _tween = DOSpacing(825, 0.5f);
         foreach (var button in Buttons) {
           button.Select(false);
         }
       }
       else {
-        _tween = DOSpacing(225, 0.25f);
+        _tween = DOSpacing(225, 0.5f);
         foreach (var button in Buttons) {
           button.Select(selection.Button == button);
         }
