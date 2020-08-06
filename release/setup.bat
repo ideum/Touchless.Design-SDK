@@ -1,3 +1,4 @@
 if not exist "%AppData%\Ideum\TouchlessDesignService" mkdir "%AppData%\Ideum\TouchlessDesignService"
 robocopy .\TouchlessDesignService\ "%AppData%\Ideum\TouchlessDesignService" /E
-explorer "%AppData%\Ideum\TouchlessDesignService"
+cd /D "%AppData%\Ideum\TouchlessDesignService\bin\Service\"
+start /d "%AppData%\Ideum\TouchlessDesignService\bin\Service\" TouchlessDesignService.exe

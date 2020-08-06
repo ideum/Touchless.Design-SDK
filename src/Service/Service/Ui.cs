@@ -5,6 +5,8 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using IWshRuntimeLibrary;
+using File = System.IO.File;
 
 namespace TouchlessDesign {
   public class Ui : App.Component {
@@ -49,11 +51,43 @@ namespace TouchlessDesign {
       _settings = UiSettings.Get(DataDir);
       InitializeNotificationArea();
       InitializeExternalApplications();
+      CheckStartup();
     }
-    
+
     public override void Stop() {
       DeInitializeNotificationArea();
       DeInitializeExternalApplications();
+    }
+
+    private void CheckStartup() {
+      const string startupFilename = "Touchless.Design.Service.lnk";
+      var startupPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Startup), startupFilename);
+      var shortcutExists = File.Exists(startupPath);
+      if (!_settings.StartOnStartup) {
+        if (shortcutExists) {
+          try {
+            File.Delete(startupPath);
+          }
+          catch (Exception e) {
+            Log.Error(e);
+          }
+        }
+      }
+      else {
+        if (!shortcutExists) {
+          try {
+            var shell = new WshShell();
+            var windowsApplicationShortcut = (IWshShortcut)shell.CreateShortcut(startupPath);
+            windowsApplicationShortcut.Description = "Touchless.Design Service";
+            windowsApplicationShortcut.TargetPath = Application.ExecutablePath;
+            windowsApplicationShortcut.Save();
+          }
+          catch (Exception e) {
+            Log.Error(e);
+          }
+        }
+      }
+
     }
 
     #region Notification Area
@@ -230,6 +264,7 @@ namespace TouchlessDesign {
       public bool DeveloperMode = true;
       public int AddOnWidth_mm = 76;
       public int AddOnHeight_mm = 49;
+      public bool StartOnStartup = true;
 
       public static UiSettings Get(string dir) {
         var path = Path.Combine(dir, Filename);
@@ -249,7 +284,8 @@ namespace TouchlessDesign {
           },
           DeveloperMode = true,
           AddOnWidth_mm = 76,
-          AddOnHeight_mm = 49
+          AddOnHeight_mm = 49,
+          StartOnStartup = true
         };
       }
     }
