@@ -19,6 +19,9 @@ public class App : MonoBehaviour {
   public UIController UIController;
   public RectTransform Scalar;
 
+  public GameObject BigScreen;
+  public GameObject PedestalScreen;
+
   // Sets the screen to whatever is specified in the settings file. Initialize the TouchlessDesign and path directory to Service and subscribe to OnConnect and OnDisconnect events.
   void Awake() {
     int screen = 0;
@@ -70,11 +73,23 @@ public class App : MonoBehaviour {
   private void OnConnected() {
     Log.Info("Connected. Starting to query...");
     _connected = true;
+
+#if UNITY_EDITOR
+    TouchlessDesign.Sync(() => {
+      int width = Display.main.renderingWidth;
+      int height = Display.main.renderingHeight;
+      HandleAddOnQuery(true, true, width, height, width, height);
+    });
+#else
     TouchlessDesign.QueryAddOn(HandleAddOnQuery);
+#endif
   }
 
   // Response to the addon information query. Scales the application to fit the pixel ratio of the screen.
   private void HandleAddOnQuery(bool hasScreen, bool hasLEDs, int width_px, int height_px, int width_mm, int height_mm) {
+    BigScreen.SetActive(width_mm != height_mm);
+    PedestalScreen.SetActive(width_mm == height_mm);
+
     Log.Info($"{hasScreen}, {hasLEDs}, {width_px}, {height_px}, {width_mm}, {height_mm}");
     if (!hasScreen) return;
     float scaledX = Scalar.localScale.x * (width_mm / height_mm) / (width_px / height_px);
@@ -95,11 +110,11 @@ public class App : MonoBehaviour {
 
   // Method delegate to handle TouchlessDesign response to QueryNoTouchState.
   private void HandleNoTouchState(bool noTouch) {
-    UIController.NoTouchWarning(noTouch);
+    //UIController.NoTouchWarning(noTouch);
   }
 
   // Method delegate to handle TouchlessDesign response to QueryClickAndHoverState.
   private void HandleQueryResponse(bool clickState, HoverStates hoverState) {
-    UIController.DoStateChange(hoverState, clickState);
+    //UIController.DoStateChange(hoverState, clickState);
   }
 }
