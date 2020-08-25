@@ -23,7 +23,6 @@ public class FaderAnimator : MonoBehaviour, IStateAnimator {
   }
 
   public void AnimateTo(HoverStates state, bool clicked) {
-    Debug.Log(state + " " + clicked);
     if (clicked && state != HoverStates.None) {
       Selected(state == HoverStates.Click);
       return;
