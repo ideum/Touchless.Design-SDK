@@ -78,19 +78,19 @@ namespace Ideum {
       DoStateChange(HoverStates.None, false);
     }
 
-    private void Update() {
-      if (Input.GetKeyDown(KeyCode.S)) {
-        DoStateChange(State, !_selected);
-      }
-      if (Input.GetKeyDown(KeyCode.H)) {
-        DoStateChange(HoverStates.Click, false);
-      }
-      if (Input.GetKeyDown(KeyCode.D)) {
-        DoStateChange(HoverStates.Drag, false);
-      }
-      if (Input.GetKeyDown(KeyCode.N)) {
-        DoStateChange(HoverStates.None, false);
-      }
-    }
+    //private void Update() {
+    //  if (Input.GetKeyDown(KeyCode.S)) {
+    //    DoStateChange(State, !_selected);
+    //  }
+    //  if (Input.GetKeyDown(KeyCode.H)) {
+    //    DoStateChange(HoverStates.Click, false);
+    //  }
+    //  if (Input.GetKeyDown(KeyCode.D)) {
+    //    DoStateChange(HoverStates.Drag, false);
+    //  }
+    //  if (Input.GetKeyDown(KeyCode.N)) {
+    //    DoStateChange(HoverStates.None, false);
+    //  }
+    //}
   }
 }

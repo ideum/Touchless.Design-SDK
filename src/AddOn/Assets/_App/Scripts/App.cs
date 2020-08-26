@@ -87,8 +87,8 @@ public class App : MonoBehaviour {
 
   // Response to the addon information query. Scales the application to fit the pixel ratio of the screen.
   private void HandleAddOnQuery(bool hasScreen, bool hasLEDs, int width_px, int height_px, int width_mm, int height_mm) {
-    BigScreen.SetActive(width_mm != height_mm);
-    PedestalScreen.SetActive(width_mm == height_mm);
+    BigScreen.SetActive(width_px != height_px);
+    PedestalScreen.SetActive(width_px == height_px);
 
     Log.Info($"{hasScreen}, {hasLEDs}, {width_px}, {height_px}, {width_mm}, {height_mm}");
     if (!hasScreen) return;
@@ -110,11 +110,11 @@ public class App : MonoBehaviour {
 
   // Method delegate to handle TouchlessDesign response to QueryNoTouchState.
   private void HandleNoTouchState(bool noTouch) {
-    //UIController.NoTouchWarning(noTouch);
+    UIController.NoTouchWarning(noTouch);
   }
 
   // Method delegate to handle TouchlessDesign response to QueryClickAndHoverState.
   private void HandleQueryResponse(bool clickState, HoverStates hoverState) {
-    //UIController.DoStateChange(hoverState, clickState);
+    UIController.DoStateChange(hoverState, clickState);
   }
 }
