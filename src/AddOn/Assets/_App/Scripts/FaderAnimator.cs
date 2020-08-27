@@ -12,8 +12,8 @@ public class FaderAnimator : MonoBehaviour, IStateAnimator {
 
   private Image _iconImage;
 
-  private Color _green = new Color(0.0f, 1.0f, 0.0f, 1.0f);
-  private Color _red = new Color(1.0f, 0.0f, 0.0f, 1.0f);
+  private Color _green = new Color(0.165f, 0.918f, 0.165f, 1.0f);
+  private Color _red = new Color(0.118f, 0.118f, 0.110f, 1.0f);
 
   private Sequence _seq;
   private void Awake() {
