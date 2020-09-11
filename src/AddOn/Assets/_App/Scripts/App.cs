@@ -54,6 +54,23 @@ public class App : MonoBehaviour {
             Application.Quit();
         } 
 #endif
+
+    if (Display.displays.Length > 1) {
+      //PlayerPrefs.SetInt("UnitySelectMonitor", screen);
+
+      var display = Display.displays[screen];
+      int w = display.systemWidth;
+      int h = display.systemHeight;
+
+      Display.displays[screen].Activate();
+      
+      Screen.SetResolution(w, h, true);
+    }
+    else {
+      Application.Quit();
+    }
+
+
     TouchlessDesign.Initialize(AppSettings.Get().DataDirectory.GetPath());
     TouchlessDesign.Connected += OnConnected;
     TouchlessDesign.Disconnected += OnDisconnected;

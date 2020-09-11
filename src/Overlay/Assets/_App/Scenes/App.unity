@@ -265,8 +265,8 @@ MonoBehaviour:
   DragHand: {fileID: 1278248094}
   SizeHover: 180
   SizeShrink: 150
-  BorderWidthFull: 24
-  BorderWidthSmall: 8
+  BorderWidthFull: 16
+  BorderWidthSmall: 10
   FingerDownDelta: 15
   IsHD: 1
   HDMultipler: 3
@@ -464,7 +464,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 872682093}
+  m_Material: {fileID: 1838082507}
   m_Color: {r: 0.11764706, g: 0.11372549, b: 0.101960786, a: 0.8}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
@@ -488,7 +488,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 373033065}
   m_CullTransparentMesh: 0
---- !u!21 &846725535
+--- !u!21 &716624672
 Material:
   serializedVersion: 6
   m_ObjectHideFlags: 0
@@ -512,44 +512,9 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _BorderWidth: 0.022222223
+    - _BorderWidth: 0.055555556
     - _ColorMask: 15
-    - _Fuzziness: 0.005
-    - _Stencil: 0
-    - _StencilComp: 8
-    - _StencilOp: 0
-    - _StencilReadMask: 255
-    - _StencilWriteMask: 255
-    - _UseUIAlphaClip: 0
-    m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
---- !u!21 &872682093
-Material:
-  serializedVersion: 6
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Ui Circle
-  m_Shader: {fileID: 4800000, guid: 6981e0eacde35ca4aa61659e95f28bb1, type: 3}
-  m_ShaderKeywords: 
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs:
-    - _MainTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Floats:
-    - _BorderWidth: 0
-    - _ColorMask: 15
-    - _Fuzziness: 0.03
+    - _Fuzziness: 0.022
     - _Stencil: 0
     - _StencilComp: 8
     - _StencilOp: 0
@@ -710,6 +675,41 @@ Transform:
   m_Father: {fileID: 243500547}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!21 &1838082507
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Ui Circle
+  m_Shader: {fileID: 4800000, guid: 6981e0eacde35ca4aa61659e95f28bb1, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _BorderWidth: 0
+    - _ColorMask: 15
+    - _Fuzziness: 0.03
+    - _Stencil: 0
+    - _StencilComp: 8
+    - _StencilOp: 0
+    - _StencilReadMask: 255
+    - _StencilWriteMask: 255
+    - _UseUIAlphaClip: 0
+    m_Colors:
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &1865081588
 GameObject:
   m_ObjectHideFlags: 0
@@ -855,7 +855,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 846725535}
+  m_Material: {fileID: 716624672}
   m_Color: {r: 1, g: 0.99607843, b: 0.007843138, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
@@ -883,8 +883,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07adff72a91ca63469e177419351ee1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BorderWidth: 8
-  Fuzziness: 0.005
+  BorderWidth: 20
+  Fuzziness: 0.022
 --- !u!222 &1967766833
 CanvasRenderer:
   m_ObjectHideFlags: 0
