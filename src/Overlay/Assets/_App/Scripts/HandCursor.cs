@@ -20,6 +20,9 @@ public class HandCursor : Cursor {
 
   public float FingerDownDelta = 100f;
 
+  public bool IsHD = false;
+  public float HDMultipler = 2f;
+
   private RectTransform _pointerHandRect;
   private float _pointerHandHeight;
   private RectTransform _cursorRect;
@@ -33,6 +36,9 @@ public class HandCursor : Cursor {
   private bool _selected; 
   private Sequence _seq;
 
+  private float _borderWidthFull;
+  private float _borderWidthSmall;
+
   private int _clickAnimationCounter = 0;
   private bool _clicking = false;
 
@@ -43,9 +49,17 @@ public class HandCursor : Cursor {
     _pointerHandHeight = _pointerHandRect.sizeDelta.y;
     _cursorRect = GetComponent<RectTransform>();
 
+    if (IsHD) {
+      _borderWidthFull = BorderWidthFull * HDMultipler;
+      _borderWidthSmall = BorderWidthSmall * HDMultipler;
+    } else {
+      _borderWidthFull = BorderWidthFull;
+      _borderWidthSmall = BorderWidthSmall;
+    }
+
     PointerHand.color = _hoverColor;
     Ring.color = _hoverColor;
-    Ring.BorderWidth = BorderWidthSmall;
+    Ring.BorderWidth = _borderWidthSmall;
     _cursorRect.sizeDelta = new Vector2(SizeHover, SizeHover);
 
     _pointerHandCG = PointerHand.GetComponent<CanvasGroup>();
@@ -101,7 +115,7 @@ public class HandCursor : Cursor {
     _seq.Join(_pointerHandCG.DOFade(1.0f, 0.5f));
     _seq.Join(_dragHandCG.DOFade(0.0f, 0.5f));
     _seq.Join(_pointerHandRect.DOSizeDelta(new Vector2(_pointerHandRect.sizeDelta.x, _pointerHandHeight), 0.5f));
-    _seq.Join(DOTween.To(() => Ring.BorderWidth, x => Ring.BorderWidth = x, BorderWidthSmall, 0.5f));
+    _seq.Join(DOTween.To(() => Ring.BorderWidth, x => Ring.BorderWidth = x, _borderWidthSmall, 0.5f));
     _seq.Join(_cursorRect.DOSizeDelta(new Vector2(SizeHover, SizeHover), 0.5f));
     _seq.AppendInterval(1f);
     _seq.OnComplete(() => {
@@ -119,7 +133,7 @@ public class HandCursor : Cursor {
     _seq.Join(_pointerHandCG.DOFade(1.0f, 0.5f));
     _seq.Join(_dragHandCG.DOFade(0.0f, 0.5f));
     _seq.Join(_pointerHandRect.DOSizeDelta(new Vector2(_pointerHandRect.sizeDelta.x, _pointerHandHeight), 0.5f));
-    _seq.Join(DOTween.To(() => Ring.BorderWidth, x => Ring.BorderWidth = x, BorderWidthSmall, 0.5f));
+    _seq.Join(DOTween.To(() => Ring.BorderWidth, x => Ring.BorderWidth = x, _borderWidthSmall, 0.5f));
     _seq.Join(_cursorRect.DOSizeDelta(new Vector2(SizeHover, SizeHover), 0.5f));
   }
 
@@ -132,7 +146,7 @@ public class HandCursor : Cursor {
     _seq.Join(_dragHandCG.DOFade(0.0f, 0.5f));
     _seq.Join(PointerHand.DOColor(_hoverColor, 0.5f));
     _seq.Join(_pointerHandRect.DOSizeDelta(new Vector2(_pointerHandRect.sizeDelta.x, _pointerHandHeight), 0.5f));
-    _seq.Join(DOTween.To(() => Ring.BorderWidth, x => Ring.BorderWidth = x, BorderWidthFull, 0.5f));
+    _seq.Join(DOTween.To(() => Ring.BorderWidth, x => Ring.BorderWidth = x, _borderWidthFull, 0.5f));
     _seq.Join(_cursorRect.DOSizeDelta(new Vector2(SizeHover, SizeHover), 0.5f));
     _seq.AppendInterval(0.5f);
 
@@ -141,7 +155,7 @@ public class HandCursor : Cursor {
 
       _seq.Append(_cursorRect.DOSizeDelta(new Vector2(SizeShrink, SizeShrink), 0.5f));
       _seq.Join(_pointerHandRect.DOSizeDelta(new Vector2(_pointerHandRect.sizeDelta.x, _pointerHandHeight - FingerDownDelta), 0.5f));
-      _seq.Join(DOTween.To(() => Ring.BorderWidth, x => Ring.BorderWidth = x, BorderWidthSmall, 0.5f));
+      _seq.Join(DOTween.To(() => Ring.BorderWidth, x => Ring.BorderWidth = x, _borderWidthSmall, 0.5f));
       _seq.AppendInterval(0.25f);
       _seq.OnComplete(() => {
         HoverClick();
@@ -159,7 +173,7 @@ public class HandCursor : Cursor {
     _seq.Join(PointerHand.DOColor(_selectedColor, 0.5f));
     _seq.Join(_dragHandCG.DOFade(0.0f, 0.5f));
     _seq.Join(_pointerHandRect.DOSizeDelta(new Vector2(_pointerHandRect.sizeDelta.x, _pointerHandHeight - FingerDownDelta), 0.5f));
-    _seq.Join(DOTween.To(() => Ring.BorderWidth, x => Ring.BorderWidth = x, BorderWidthSmall, 0.5f));
+    _seq.Join(DOTween.To(() => Ring.BorderWidth, x => Ring.BorderWidth = x, _borderWidthSmall, 0.5f));
     _seq.Join(_cursorRect.DOSizeDelta(new Vector2(SizeShrink, SizeShrink), 0.5f));
     _seq.AppendInterval(0.4f);
     _seq.OnComplete(() => {
@@ -175,7 +189,7 @@ public class HandCursor : Cursor {
     _seq.Join(_pointerHandCG.DOFade(0.0f, 0.5f));
     _seq.Join(_dragHandCG.DOFade(1.0f, 0.5f));
     _seq.Join(DragHand.DOColor(_selected ? _selectedColor : _hoverColor, 0.5f));
-    _seq.Join(DOTween.To(() => Ring.BorderWidth, x => Ring.BorderWidth = x, BorderWidthSmall, 0.5f));
+    _seq.Join(DOTween.To(() => Ring.BorderWidth, x => Ring.BorderWidth = x, _borderWidthSmall, 0.5f));
     float cursorSize = _selected ? SizeShrink : SizeHover;
     _seq.Join(_cursorRect.DOSizeDelta(new Vector2(cursorSize, cursorSize), 0.5f));
   }
