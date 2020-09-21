@@ -101,21 +101,24 @@
     <Compile Include="Components\Ui\PageDisplay.xaml.cs">
       <DependentUpon>PageDisplay.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Components\Ui\PageGeneral.xaml.cs">
+      <DependentUpon>PageGeneral.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Components\Ui\PageInput.xaml.cs">
       <DependentUpon>PageInput.xaml</DependentUpon>
     </Compile>
     <Compile Include="Components\Ui\StatusView.xaml.cs">
       <DependentUpon>StatusView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Components\Ui\ViewModels\BoolProperty.cs" />
-    <Compile Include="Components\Ui\ViewModels\ClampedDoubleProperty.cs" />
-    <Compile Include="Components\Ui\ViewModels\DoubleProperty.cs" />
+    <Compile Include="Components\Ui\ViewModels\Properties\BoolProperty.cs" />
+    <Compile Include="Components\Ui\Controls\DoubleNumberFormatter.cs" />
+    <Compile Include="Components\Ui\ViewModels\Properties\DoubleProperty.cs" />
     <Compile Include="Components\Ui\ViewModels\InputViewModel.cs" />
-    <Compile Include="Components\Ui\ViewModels\IntProperty.cs" />
-    <Compile Include="Components\Ui\ViewModels\IProperty.cs" />
-    <Compile Include="Components\Ui\ViewModels\PropertyBase.cs" />
+    <Compile Include="Components\Ui\ViewModels\Properties\IntProperty.cs" />
+    <Compile Include="Components\Ui\ViewModels\Properties\IProperty.cs" />
+    <Compile Include="Components\Ui\ViewModels\Properties\PropertyBase.cs" />
     <Compile Include="Components\Ui\ViewModels\StatusViewModel.cs" />
-    <Compile Include="Components\Ui\ViewModels\StringProperty.cs" />
+    <Compile Include="Components\Ui\ViewModels\Properties\StringProperty.cs" />
     <Compile Include="Startup.cs" />
     <Page Include="Components\Ui\Controls\NumericSliderControl.xaml">
       <SubType>Designer</SubType>
@@ -165,6 +168,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Components\Ui\PageDisplay.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Components\Ui\PageGeneral.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

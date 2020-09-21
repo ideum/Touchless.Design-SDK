@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace TouchlessDesign.Components.Ui.ViewModels {
+namespace TouchlessDesign.Components.Ui.ViewModels.Properties {
   public class StringProperty : PropertyBase<string> {
 
     public static readonly DependencyProperty ValueProperty = DependencyProperty.Register(

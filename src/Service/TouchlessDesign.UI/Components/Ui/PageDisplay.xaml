@@ -6,21 +6,22 @@
              xmlns:local="clr-namespace:TouchlessDesign.Components.Ui"
              xmlns:ui="http://schemas.modernwpf.com/2019"
              xmlns:c="clr-namespace:TouchlessDesign.Components.Ui.Controls"
+             xmlns:viewModels="clr-namespace:TouchlessDesign.Components.Ui.ViewModels"
+             xmlns:properties="clr-namespace:TouchlessDesign.Components.Ui.ViewModels.Properties"
              mc:Ignorable="d" 
              d:DesignHeight="523" d:DesignWidth="718" FontFamily="/TouchlessDesign;component/Resources/#TeX Gyre Heros" Foreground="White">
   <Grid Margin="8">
-    <!--<StackPanel>
-      <GroupBox
-       Header="Default Look"
-       Margin="16">
-        <TextBox Width="100" DockPanel.Dock="Right" Margin="8 0 0 0"/>
-      </GroupBox>
-      <ui:ToggleSwitch ui:ControlHelper.Header="Use Add-On"/>
-      <ComboBox Background="Transparent" ui:ControlHelper.Header="Target Display">
+    <StackPanel>
+      <ui:ToggleSwitch x:Name="UseAddOnSwitch" Margin="8" ui:ControlHelper.Header="Use Add-On"/>
+      <ComboBox Margin="8" Background="Transparent" ui:ControlHelper.Header="Target Display" IsEnabled="{Binding ElementName=UseAddOnSwitch, Path=IsOn}">
         <ComboBoxItem>1</ComboBoxItem>
         <ComboBoxItem>2</ComboBoxItem>
       </ComboBox>
-    </StackPanel>-->
-    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Coming Soon.</TextBlock>
+      <c:NumericSliderControl Margin="8" IsEnabled="{Binding IsOn, ElementName=UseAddOnSwitch}">
+        <c:NumericSliderControl.DataContext>
+          <properties:ClampedDoubleProperty Name="LED Intensity" Minimum="0" Maximum="1" Value="0.5"/>
+        </c:NumericSliderControl.DataContext>
+      </c:NumericSliderControl>
+    </StackPanel>
   </Grid>
 </UserControl>

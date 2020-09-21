@@ -406,7 +406,7 @@ namespace TouchlessDesign.Components.Lighting {
 
       public static Settings Defaults() {
         return new Settings {
-          ServerDirectory = "bin/Service/FadeCandyServer/",
+          ServerDirectory = "bin/Service/Components/LEDs/FadeCandyServer/",
           Server = new IpInfo {
             Loopback = true,
             Port = 7890

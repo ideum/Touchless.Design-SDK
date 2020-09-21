@@ -5,14 +5,15 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:controls="http://schemas.modernwpf.com/2019"
              xmlns:viewModels="clr-namespace:TouchlessDesign.Components.Ui.ViewModels"
+             xmlns:properties="clr-namespace:TouchlessDesign.Components.Ui.ViewModels.Properties"
              mc:Ignorable="d" 
              d:DesignHeight="32" d:DesignWidth="710">
   <d:UserControl.DataContext>
-    <viewModels:ClampedDoubleProperty Name="X-Min" Minimum="-1" Maximum="1" Value="-0.222"/>
+    <properties:ClampedDoubleProperty Name="X-Min" Minimum="-1" Maximum="1" Value="-0.222"/>
   </d:UserControl.DataContext>
   <DockPanel>
-    <TextBlock DockPanel.Dock="Left" FontSize="16" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" Text="{Binding Name}" />
-    <controls:NumberBox Width="160" DockPanel.Dock="Right" SpinButtonPlacementMode="Inline" Minimum="{Binding Minimum}" Maximum="{Binding Maximum}" Value="{Binding Value}" SmallChange="{Binding SmallChange}" LargeChange="{Binding LargeChange}"/>
+    <Label DockPanel.Dock="Left" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Center" Content="{Binding Name}" />
+    <controls:NumberBox Width="160" DockPanel.Dock="Right" SpinButtonPlacementMode="Inline" Minimum="{Binding Minimum}" Maximum="{Binding Maximum}" Value="{Binding Value}" SmallChange="{Binding SmallChange}" LargeChange="{Binding LargeChange}" NumberFormatter="{StaticResource DefaultDoubleNumberFormatter}"/>
     <Slider VerticalAlignment="Center" Margin="8 0" Minimum="{Binding Minimum}" Maximum="{Binding Maximum}" Value="{Binding Value}" SmallChange="{Binding SmallChange}" LargeChange="{Binding LargeChange}" />
   </DockPanel>
 </UserControl>

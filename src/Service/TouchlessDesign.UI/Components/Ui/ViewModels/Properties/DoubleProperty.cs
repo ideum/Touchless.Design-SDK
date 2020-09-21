@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace TouchlessDesign.Components.Ui.ViewModels {
+namespace TouchlessDesign.Components.Ui.ViewModels.Properties {
   public class DoubleProperty : PropertyBase<double> {
 
     public static readonly DependencyProperty ValueProperty = DependencyProperty.Register(

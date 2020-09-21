@@ -2,7 +2,8 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:ui="http://schemas.modernwpf.com/2019"
-             xmlns:vm="clr-namespace:TouchlessDesign.Components.Ui.ViewModels">
+             xmlns:vm="clr-namespace:TouchlessDesign.Components.Ui.ViewModels"
+             xmlns:controls="clr-namespace:TouchlessDesign.Components.Ui.Controls">
   <Application.Resources>
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
@@ -291,7 +292,7 @@
           <vm:StatusViewModel x:Key="StatusViewModel"
                               NormalBrush="{StaticResource Ideum.Brush.AccentPrimary}"
                               SelectedBrush="{StaticResource Ideum.Brush.AccentSecondary1}"/>
-
+          <controls:DoubleNumberFormatter x:Key="DefaultDoubleNumberFormatter" />
         </ResourceDictionary>
       </ResourceDictionary.MergedDictionaries>
     </ResourceDictionary>

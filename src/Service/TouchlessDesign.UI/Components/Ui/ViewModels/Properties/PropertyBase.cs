@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 
-namespace TouchlessDesign.Components.Ui.ViewModels {
+namespace TouchlessDesign.Components.Ui.ViewModels.Properties {
   public abstract class PropertyBase : DependencyObject, IProperty {
     
     public event Action<IProperty> Changed;
@@ -30,14 +30,6 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
     public bool IsEditable {
       get { return (bool) GetValue(IsEditableProperty); }
       set { SetValue(IsEditableProperty, value); }
-    }
-
-    public static readonly DependencyProperty VisibilityProperty = DependencyProperty.Register(
-      "Visibility", typeof(Visibility), typeof(PropertyBase), new PropertyMetadata(Visibility.Visible));
-
-    public Visibility Visibility {
-      get { return (Visibility) GetValue(VisibilityProperty); }
-      set { SetValue(VisibilityProperty, value); }
     }
   }
 

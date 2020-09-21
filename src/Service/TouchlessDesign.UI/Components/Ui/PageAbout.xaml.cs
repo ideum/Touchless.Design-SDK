@@ -9,7 +9,9 @@ namespace TouchlessDesign.Components.Ui {
   public partial class PageAbout : UserControl {
     public PageAbout() {
       InitializeComponent();
-      VersionText.Text = $"v{Assembly.GetExecutingAssembly().GetName().Version}";
+
+      var v = Assembly.GetExecutingAssembly().GetName().Version;
+      VersionText.Text = $"v{v.Major}.{v.Minor}.{v.Build}";
     }
 
     private void HandleReleasesClicked(object sender, RoutedEventArgs e) {

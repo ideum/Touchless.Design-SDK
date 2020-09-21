@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 
-namespace TouchlessDesign.Components.Ui.ViewModels {
+namespace TouchlessDesign.Components.Ui.ViewModels.Properties {
   public interface IProperty {
 
     event Action<IProperty> Changed;
@@ -9,8 +9,6 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
     string Name { get; set; }
 
     bool IsEditable { get; set; }
-
-    Visibility Visibility { get; set; }
   }
 
   public interface IProperty<T> : IProperty {

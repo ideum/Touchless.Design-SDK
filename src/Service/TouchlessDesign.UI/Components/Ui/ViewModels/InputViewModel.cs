@@ -1,4 +1,6 @@
-﻿namespace TouchlessDesign.Components.Ui.ViewModels {
+﻿using TouchlessDesign.Components.Ui.ViewModels.Properties;
+
+namespace TouchlessDesign.Components.Ui.ViewModels {
   public class InputViewModel : PropertyBase {
 
     public BoolProperty MouseEmulation { get; } = new BoolProperty {Name = "Mouse Emulation"};
