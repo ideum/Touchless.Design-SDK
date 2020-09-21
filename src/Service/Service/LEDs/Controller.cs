@@ -6,7 +6,7 @@ using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.Threading;
 using TouchlessDesign.LEDs.Animation;
-using TouchlessDesign.Networking.Tcp;
+using TouchlessDesign.Components.Ipc.Networking.Tcp;
 
 namespace TouchlessDesign.LEDs {
   public class Controller : App.Component {

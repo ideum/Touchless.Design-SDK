@@ -1,0 +1,299 @@
+﻿<Application x:Class="TouchlessDesign.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="http://schemas.modernwpf.com/2019"
+             xmlns:vm="clr-namespace:TouchlessDesign.Components.Ui.ViewModels">
+  <Application.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ui:ThemeResources RequestedTheme="Dark" AccentColor="#FF2062e5"  />
+        <ui:XamlControlsResources />
+        <ResourceDictionary>
+          <!--Brushes-->
+          <Color x:Key="Ideum.Color.Background">#1e1d1a</Color>
+          <Color x:Key="Ideum.Color.Background2">#333333</Color>
+          <Color x:Key="Ideum.Color.Foreground">#ffffff</Color>
+          <Color x:Key="Ideum.Color.ForegroundError">#ff4136</Color>
+          <Color x:Key="Ideum.Color.ForegroundSecondary">#b3b3b3</Color>
+          <Color x:Key="Ideum.Color.ForegroundSecondary1">#4d4d4d</Color>
+          <Color x:Key="Ideum.Color.AccentPrimary">#fcf800</Color>
+          <Color x:Key="Ideum.Color.AccentSecondary">#2062e5</Color>
+          <Color x:Key="Ideum.Color.AccentSecondary1">#18ea3f</Color>
+          <Color x:Key="Ideum.Color.AccentSecondary2">#ef1ac6</Color>
+
+          <SolidColorBrush x:Key="Ideum.Brush.BackgroundColor" Color="{StaticResource Ideum.Color.Background}" />
+          <SolidColorBrush x:Key="Ideum.Brush.BackgroundColor2" Color="{StaticResource Ideum.Color.Background2}" />
+          <SolidColorBrush x:Key="Ideum.Brush.Foreground" Color="{StaticResource Ideum.Color.Foreground}" />
+          <SolidColorBrush x:Key="Ideum.Brush.ForegroundError" Color="{StaticResource Ideum.Color.ForegroundError}" />
+          <SolidColorBrush x:Key="Ideum.Brush.ForegroundSecondary" Color="{StaticResource Ideum.Color.ForegroundSecondary}" />
+          <SolidColorBrush x:Key="Ideum.Brush.ForegroundSecondary1" Color="{StaticResource Ideum.Color.ForegroundSecondary1}" />
+          <SolidColorBrush x:Key="Ideum.Brush.AccentPrimary" Color="{StaticResource Ideum.Color.AccentPrimary}" />
+          <SolidColorBrush x:Key="Ideum.Brush.AccentSecondary" Color="{StaticResource Ideum.Color.AccentSecondary}" />
+          <SolidColorBrush x:Key="Ideum.Brush.AccentSecondary1" Color="{StaticResource Ideum.Color.AccentSecondary1}" />
+          <SolidColorBrush x:Key="Ideum.Brush.AccentSecondary2" Color="{StaticResource Ideum.Color.AccentSecondary2}" />
+
+          <DrawingBrush x:Key="Ideum.Brush.ExitIcon">
+            <DrawingBrush.Drawing>
+              <DrawingGroup>
+                <DrawingGroup.ClipGeometry>
+                  <RectangleGeometry Rect="0,0,38.2,38.2" />
+                </DrawingGroup.ClipGeometry>
+                <DrawingGroup>
+                  <GeometryDrawing Brush="{StaticResource Ideum.Brush.Foreground}">
+                    <GeometryDrawing.Pen>
+                      <Pen Brush="{StaticResource Ideum.Brush.Foreground}" Thickness="4" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
+                    </GeometryDrawing.Pen>
+                    <GeometryDrawing.Geometry>
+                      <LineGeometry StartPoint="1.4,1.4" EndPoint="36.8,36.8" />
+                    </GeometryDrawing.Geometry>
+                  </GeometryDrawing>
+                </DrawingGroup>
+                <DrawingGroup>
+                  <GeometryDrawing Brush="{StaticResource Ideum.Brush.Foreground}">
+                    <GeometryDrawing.Pen>
+                      <Pen Brush="{StaticResource Ideum.Brush.Foreground}" Thickness="4" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
+                    </GeometryDrawing.Pen>
+                    <GeometryDrawing.Geometry>
+                      <LineGeometry StartPoint="36.8,1.4" EndPoint="1.4,36.8" />
+                    </GeometryDrawing.Geometry>
+                  </GeometryDrawing>
+                </DrawingGroup>
+              </DrawingGroup>
+            </DrawingBrush.Drawing>
+          </DrawingBrush>
+
+          <DrawingBrush x:Key="Ideum.Brush.HamburgerIcon">
+            <DrawingBrush.Drawing>
+              <DrawingGroup>
+                <DrawingGroup.ClipGeometry>
+                  <RectangleGeometry Rect="0,0,50,35" />
+                </DrawingGroup.ClipGeometry>
+                <DrawingGroup>
+                  <GeometryDrawing Brush="{StaticResource Ideum.Brush.Foreground}">
+                    <GeometryDrawing.Pen>
+                      <Pen Brush="{StaticResource Ideum.Brush.Foreground}" Thickness="4" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
+                    </GeometryDrawing.Pen>
+                    <GeometryDrawing.Geometry>
+                      <LineGeometry StartPoint="0,2" EndPoint="50,2" />
+                    </GeometryDrawing.Geometry>
+                  </GeometryDrawing>
+                </DrawingGroup>
+                <DrawingGroup>
+                  <GeometryDrawing Brush="{StaticResource Ideum.Brush.Foreground}">
+                    <GeometryDrawing.Pen>
+                      <Pen Brush="{StaticResource Ideum.Brush.Foreground}" Thickness="4" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
+                    </GeometryDrawing.Pen>
+                    <GeometryDrawing.Geometry>
+                      <LineGeometry StartPoint="0,17" EndPoint="50,17" />
+                    </GeometryDrawing.Geometry>
+                  </GeometryDrawing>
+                </DrawingGroup>
+                <DrawingGroup>
+                  <GeometryDrawing Brush="{StaticResource Ideum.Brush.Foreground}">
+                    <GeometryDrawing.Pen>
+                      <Pen Brush="{StaticResource Ideum.Brush.Foreground}" Thickness="4" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
+                    </GeometryDrawing.Pen>
+                    <GeometryDrawing.Geometry>
+                      <LineGeometry StartPoint="0,33" EndPoint="50,33" />
+                    </GeometryDrawing.Geometry>
+                  </GeometryDrawing>
+                </DrawingGroup>
+              </DrawingGroup>
+
+            </DrawingBrush.Drawing>
+          </DrawingBrush>
+
+          <!--Styles-->
+          <Style x:Key="Ideum.Button.Error" TargetType="{x:Type Button}">
+            <Setter Property="BorderBrush" Value="{StaticResource Ideum.Brush.ForegroundSecondary}"/>
+            <Setter Property="Foreground" Value="{StaticResource Ideum.Brush.Foreground}" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="2" />
+            <Setter Property="Padding" Value="12" />
+            <Setter Property="MinWidth" Value="100" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="TextElement.FontSize" Value="16" />
+            <Setter Property="FontFamily" Value="/Touchless.Design;component/Resources/#TeX Gyre Heros" />
+            <Setter Property="Template">
+              <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                  <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                    <ContentPresenter x:Name="contentPresenter" 
+                                Focusable="False" 
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                Margin="{TemplateBinding Padding}" 
+                                RecognizesAccessKey="True" 
+                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                  </Border>
+                  <ControlTemplate.Triggers>
+                    <Trigger Property="IsMouseOver" Value="true">
+                      <Setter Property="Background" TargetName="border" Value="{StaticResource Ideum.Brush.ForegroundError}"/>
+                      <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Ideum.Brush.ForegroundError}"/>
+                    </Trigger>
+                    <Trigger Property="IsPressed" Value="true">
+                      <Setter Property="Background" TargetName="border" Value="{StaticResource Ideum.Brush.ForegroundError}"/>
+                      <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Ideum.Brush.ForegroundError}"/>
+                    </Trigger>
+                  </ControlTemplate.Triggers>
+                </ControlTemplate>
+              </Setter.Value>
+            </Setter>
+          </Style>
+          <Style x:Key="Ideum.Button.Confirm" TargetType="{x:Type Button}">
+            <Setter Property="BorderBrush" Value="{StaticResource Ideum.Brush.AccentSecondary}"/>
+            <Setter Property="Foreground" Value="{StaticResource Ideum.Brush.Foreground}" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="2" />
+            <Setter Property="Padding" Value="12" />
+            <Setter Property="MinWidth" Value="100" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="TextElement.FontSize" Value="16" />
+            <Setter Property="FontFamily" Value="/Touchless.Design;component/Resources/#TeX Gyre Heros" />
+            <Setter Property="Template">
+              <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                  <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                    <ContentPresenter x:Name="contentPresenter" 
+                                Focusable="False" 
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                Margin="{TemplateBinding Padding}" 
+                                RecognizesAccessKey="True" 
+                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                  </Border>
+                  <ControlTemplate.Triggers>
+                    <Trigger Property="IsMouseOver" Value="true">
+                      <Setter Property="Background" TargetName="border" Value="{StaticResource Ideum.Brush.AccentSecondary}"/>
+                      <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Ideum.Brush.AccentSecondary}"/>
+                    </Trigger>
+                    <Trigger Property="IsPressed" Value="true">
+                      <Setter Property="Background" TargetName="border" Value="{StaticResource Ideum.Brush.AccentSecondary}"/>
+                      <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Ideum.Brush.AccentSecondary}"/>
+                    </Trigger>
+                  </ControlTemplate.Triggers>
+                </ControlTemplate>
+              </Setter.Value>
+            </Setter>
+          </Style>
+          <Style x:Key="Ideum.Button.Normal" TargetType="{x:Type Button}">
+            <Setter Property="BorderBrush" Value="{StaticResource Ideum.Brush.ForegroundSecondary}"/>
+            <Setter Property="Foreground" Value="{StaticResource Ideum.Brush.Foreground}" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="2" />
+            <Setter Property="Padding" Value="12" />
+            <Setter Property="MinWidth" Value="100" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="TextElement.FontSize" Value="16" />
+            <Setter Property="FontFamily" Value="/Touchless.Design;component/Resources/#TeX Gyre Heros" />
+            <Setter Property="Template">
+              <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                  <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                    <ContentPresenter x:Name="contentPresenter" 
+                                Focusable="False" 
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                Margin="{TemplateBinding Padding}" 
+                                RecognizesAccessKey="True" 
+                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                  </Border>
+                  <ControlTemplate.Triggers>
+                    <Trigger Property="IsMouseOver" Value="true">
+                      <Setter Property="Background" TargetName="border" Value="{StaticResource Ideum.Brush.Foreground}"/>
+                      <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Ideum.Brush.Foreground}"/>
+                      <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Ideum.Brush.BackgroundColor}" />
+                    </Trigger>
+                    <Trigger Property="IsPressed" Value="true">
+                      <Setter Property="Background" TargetName="border" Value="{StaticResource Ideum.Brush.Foreground}"/>
+                      <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Ideum.Brush.Foreground}"/>
+                    </Trigger>
+                  </ControlTemplate.Triggers>
+                </ControlTemplate>
+              </Setter.Value>
+            </Setter>
+          </Style>
+          <Style x:Key="FocusVisual">
+            <Setter Property="Control.Template">
+              <Setter.Value>
+                <ControlTemplate>
+                  <Rectangle Margin="2" SnapsToDevicePixels="true" Stroke="Transparent" StrokeThickness="0" Fill="Transparent"/>
+                </ControlTemplate>
+              </Setter.Value>
+            </Setter>
+          </Style>
+          <Style x:Key="Ideum.StyleMenuBarButton" TargetType="{x:Type Button}">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Template">
+              <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                  <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true" CornerRadius="0">
+                    <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                  </Border>
+                  <ControlTemplate.Triggers>
+                    <Trigger Property="IsDefaulted" Value="true">
+                      <!--<Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>-->
+                    </Trigger>
+                    <Trigger Property="IsMouseOver" Value="true">
+                      <Setter Property="Background" TargetName="border" Value="{StaticResource Ideum.Brush.BackgroundColor2}"/>
+                      <!--<Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border}"/>-->
+                    </Trigger>
+                    <Trigger Property="IsPressed" Value="true">
+                      <Setter Property="Background" TargetName="border" Value="{StaticResource Ideum.Brush.BackgroundColor2}"/>
+                      <!--<Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border}"/>-->
+                    </Trigger>
+                  </ControlTemplate.Triggers>
+                </ControlTemplate>
+              </Setter.Value>
+            </Setter>
+          </Style>
+          <Style x:Key="StyleLinkButton" TargetType="{x:Type Button}">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Template">
+              <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                  <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness=" 0 0 0 1" Background="{TemplateBinding Background}" SnapsToDevicePixels="true" CornerRadius="0">
+                    <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" TextBlock.Foreground="{TemplateBinding Foreground}"/>
+                  </Border>
+                  <ControlTemplate.Triggers>
+                    <Trigger Property="IsMouseOver" Value="true">
+                      <Setter Property="Foreground" Value="{StaticResource Ideum.Brush.AccentPrimary}"/>
+                      <Setter TargetName="contentPresenter" Property="TextBlock.Foreground" Value="{StaticResource Ideum.Brush.AccentPrimary}" />
+                      <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Ideum.Brush.AccentPrimary}"/>
+                    </Trigger>
+                    <Trigger Property="IsPressed" Value="true">
+                      <Setter Property="Foreground" Value="{StaticResource Ideum.Brush.AccentPrimary}"/>
+                      <Setter TargetName="contentPresenter" Property="TextBlock.Foreground" Value="{StaticResource Ideum.Brush.AccentPrimary}" />
+                      <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Ideum.Brush.AccentPrimary}"/>
+                    </Trigger>
+                  </ControlTemplate.Triggers>
+                </ControlTemplate>
+              </Setter.Value>
+            </Setter>
+          </Style>
+
+
+          <!--View Models-->
+          <vm:StatusViewModel x:Key="StatusViewModel"
+                              NormalBrush="{StaticResource Ideum.Brush.AccentPrimary}"
+                              SelectedBrush="{StaticResource Ideum.Brush.AccentSecondary1}"/>
+
+        </ResourceDictionary>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </Application.Resources>
+</Application>

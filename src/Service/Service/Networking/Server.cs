@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace TouchlessDesign.Networking {
+namespace TouchlessDesign.Components.Ipc.Networking {
   public abstract class Server : Client.IListener, IDisposable {
     
     #region Life Cycle

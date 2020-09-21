@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InputCore", "InputCore\Inpu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Providers.LeapMotion", "Providers.LeapMotion\Providers.LeapMotion.csproj", "{78E2E02E-770C-4ED6-B757-ECB540F58843}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TouchlessDesign.UI", "TouchlessDesign.UI\TouchlessDesign.UI.csproj", "{F10A515B-50C9-4A7E-B12F-8E0188D6EFD5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{78E2E02E-770C-4ED6-B757-ECB540F58843}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{78E2E02E-770C-4ED6-B757-ECB540F58843}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{78E2E02E-770C-4ED6-B757-ECB540F58843}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F10A515B-50C9-4A7E-B12F-8E0188D6EFD5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F10A515B-50C9-4A7E-B12F-8E0188D6EFD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F10A515B-50C9-4A7E-B12F-8E0188D6EFD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F10A515B-50C9-4A7E-B12F-8E0188D6EFD5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

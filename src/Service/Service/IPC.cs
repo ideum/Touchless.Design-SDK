@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using TouchlessDesign.LEDs;
-using TouchlessDesign.Networking;
-using TouchlessDesign.Networking.Tcp;
+using TouchlessDesign.Components.Ipc.Networking;
+using TouchlessDesign.Components.Ipc.Networking.Tcp;
 
 namespace TouchlessDesign {
   public class Ipc : App.Component, Server.IListener {

@@ -87,7 +87,6 @@ namespace TouchlessDesign {
           }
         }
       }
-
     }
 
     #region Notification Area

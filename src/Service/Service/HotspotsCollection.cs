@@ -85,7 +85,7 @@ namespace TouchlessDesign {
             a();
           }
           catch (Exception e) {
-            Log.Error($"Exception thrown while executing changed listener {a}");
+            Log.Error($"Exception thrown while executing changed listener {e}");
           }
         }
       }
