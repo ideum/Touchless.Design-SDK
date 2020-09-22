@@ -13,8 +13,6 @@ namespace Providers.LeapMotion {
 
     public ICursor Cursor { get; set; }
 
-    public IHotspotCollection Hotspots { get; set; }
-
     private LeapSettings _settings;
     private LeapTransform _xform;
     private Controller _controller;

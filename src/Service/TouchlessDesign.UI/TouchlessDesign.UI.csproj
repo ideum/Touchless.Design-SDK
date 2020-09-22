@@ -171,7 +171,6 @@
     <Compile Include="Components\Ui\Ui.cs" />
     <Compile Include="Core\ConcreteConfigFactory.cs" />
     <Compile Include="Core\ConcreteLog.cs" />
-    <Compile Include="Core\HotspotsCollection.cs" />
     <Compile Include="Components\Ipc\Msg.cs" />
     <Compile Include="Components\Ipc\Networking\Client.cs" />
     <Compile Include="Components\Ipc\Networking\Connection.cs" />

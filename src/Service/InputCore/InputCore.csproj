@@ -41,9 +41,7 @@
     <Compile Include="CursorExtensionMethods.cs" />
     <Compile Include="HoverStates.cs" />
     <Compile Include="ICursor.cs" />
-    <Compile Include="IHotspot.cs" />
     <Compile Include="IInputProvider.cs" />
-    <Compile Include="IHotspotCollection.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

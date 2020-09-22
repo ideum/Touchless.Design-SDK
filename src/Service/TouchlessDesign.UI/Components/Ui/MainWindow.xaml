@@ -23,16 +23,7 @@
   <Grid>
     <c:StatusView HorizontalAlignment="Left" VerticalAlignment="Bottom" DataContext="{StaticResource StatusViewModel}"/>
     <DockPanel>
-      <!--Title Bar-->
-      <!--<DockPanel HorizontalAlignment="Stretch" DockPanel.Dock="Top">
-        <Border x:Name="TitleBar" HorizontalAlignment="Stretch" Background="Transparent" BorderThickness="0">
-          <TextBlock Margin="8 6" VerticalAlignment="Center" FontSize="26" Foreground="{StaticResource Ideum.Brush.Foreground}" FontWeight="Bold" >
-            <Run>Touchless</Run><Run Foreground="{StaticResource Ideum.Brush.AccentPrimary}">.</Run><Run>Design</Run>
-          </TextBlock>
-        </Border>
-      </DockPanel>-->
       <Border Height="2" DockPanel.Dock="Top" Background="{StaticResource Ideum.Brush.ForegroundSecondary1}" />
-
       <!--Status Bar-->
       <!--<DockPanel x:Name="SaveConfirmationPanel" Visibility="Visible" DockPanel.Dock="Bottom">
         <Border Height="2" DockPanel.Dock="Top" Background="{StaticResource Ideum.Brush.ForegroundSecondary1}" />

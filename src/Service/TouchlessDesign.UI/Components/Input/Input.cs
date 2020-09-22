@@ -23,9 +23,7 @@ namespace TouchlessDesign.Components.Input {
     public Property<bool> IsButtonDown { get; } = new Property<bool>(false);
     
     public Property<bool> IsNoTouch { get; } = new Property<bool>(false);
-
-    public HotspotsCollection Hotspots { get; } = new HotspotsCollection();
-
+    
     private Rectangle? _bounds;
 
     public Rectangle Bounds {
@@ -153,7 +151,6 @@ namespace TouchlessDesign.Components.Input {
 
       _provider.Cursor = this;
       _provider.DataDir = DataDir;
-      _provider.Hotspots = Hotspots;
 
       try {
         _provider.Start();

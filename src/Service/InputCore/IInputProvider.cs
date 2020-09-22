@@ -4,7 +4,7 @@ namespace TouchlessDesign {
   /// <summary>
   /// Base interface for an input provider.
   /// Concrete implementations of this interface must define a public and parameter-less constructor.
-  /// The DataDir, Cursor, and Hotspots properties are set before the start method is called.
+  /// The DataDir and Cursor are set before the start method is called.
   /// The aforementioned properties values will not be changed while the input provider is started.
   /// </summary>
   public interface IInputProvider {
@@ -18,11 +18,6 @@ namespace TouchlessDesign {
     /// The ICursor interface associated with this input provider
     /// </summary>
     ICursor Cursor { get; set; }
-    
-    /// <summary>
-    /// The collection of currently active hotspots
-    /// </summary>
-    IHotspotCollection Hotspots { get; set; }
 
     /// <summary>
     /// Called to initialize and then start this input provider.
