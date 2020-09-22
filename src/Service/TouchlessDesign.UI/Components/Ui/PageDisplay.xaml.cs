@@ -1,17 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using TouchlessDesign.Components.Ui.ViewModels;
 
 namespace TouchlessDesign.Components.Ui {
   /// <summary>
@@ -20,6 +9,21 @@ namespace TouchlessDesign.Components.Ui {
   public partial class PageDisplay : UserControl {
     public PageDisplay() {
       InitializeComponent();
+      Loaded += PageDisplay_Loaded;
+    }
+
+    private void PageDisplay_Loaded(object sender, RoutedEventArgs e) {
+      DoRefreshDisplays();
+    }
+
+    private void RefreshDisplaysClicked(object sender, RoutedEventArgs e) {
+      DoRefreshDisplays();
+    }
+
+    private void DoRefreshDisplays() {
+      if (DataContext is DisplayViewModel vm) {
+        vm.RefreshDisplays();
+      }
     }
   }
 }

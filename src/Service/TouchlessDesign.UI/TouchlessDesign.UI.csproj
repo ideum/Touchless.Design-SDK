@@ -92,9 +92,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Components\Ui\Controls\NumericSliderControl.xaml.cs">
-      <DependentUpon>NumericSliderControl.xaml</DependentUpon>
+    <Compile Include="Components\Ui\Controls\BoolPropertyControl.xaml.cs">
+      <DependentUpon>BoolPropertyControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Components\Ui\Controls\ClampedPropertyControl.xaml.cs">
+      <DependentUpon>ClampedPropertyControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Components\Ui\Converters\BoolConverter.cs" />
+    <Compile Include="Components\Ui\Converters\BoolToBoolConverter.cs" />
+    <Compile Include="Components\Ui\Converters\BoolToGeometryConverter.cs" />
+    <Compile Include="Components\Ui\Converters\BoolToVisibilityConverterEx.cs" />
+    <Compile Include="Components\Ui\Converters\ListBoxItemToIndexConverter.cs" />
+    <Compile Include="Components\Ui\Converters\MultiBoolConverter.cs" />
+    <Compile Include="Components\Ui\Converters\MultiBoolToVisibilityConverter.cs" />
     <Compile Include="Components\Ui\PageAbout.xaml.cs">
       <DependentUpon>PageAbout.xaml</DependentUpon>
     </Compile>
@@ -107,20 +117,36 @@
     <Compile Include="Components\Ui\PageInput.xaml.cs">
       <DependentUpon>PageInput.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Components\Ui\PageNetwork.xaml.cs">
+      <DependentUpon>PageNetwork.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Components\Ui\StatusView.xaml.cs">
       <DependentUpon>StatusView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Components\Ui\ViewModels\DisplayViewModel.cs" />
+    <Compile Include="Components\Ui\ViewModels\GeneralViewModel.cs" />
+    <Compile Include="Components\Ui\ViewModels\NetworkViewModel.cs" />
     <Compile Include="Components\Ui\ViewModels\Properties\BoolProperty.cs" />
-    <Compile Include="Components\Ui\Controls\DoubleNumberFormatter.cs" />
+    <Compile Include="Components\Ui\Controls\GenericNumberFormatter.cs" />
+    <Compile Include="Components\Ui\ViewModels\Properties\DoubleClampedProperty.cs" />
+    <Compile Include="Components\Ui\ViewModels\Properties\IClampedProperty.cs" />
+    <Compile Include="Components\Ui\ViewModels\Properties\IntClampedProperty.cs" />
     <Compile Include="Components\Ui\ViewModels\Properties\DoubleProperty.cs" />
     <Compile Include="Components\Ui\ViewModels\InputViewModel.cs" />
     <Compile Include="Components\Ui\ViewModels\Properties\IntProperty.cs" />
     <Compile Include="Components\Ui\ViewModels\Properties\IProperty.cs" />
     <Compile Include="Components\Ui\ViewModels\Properties\PropertyBase.cs" />
+    <Compile Include="Components\Ui\ViewModels\ScreenObservableCollection.cs" />
+    <Compile Include="Components\Ui\ViewModels\ScreenViewModel.cs" />
     <Compile Include="Components\Ui\ViewModels\StatusViewModel.cs" />
     <Compile Include="Components\Ui\ViewModels\Properties\StringProperty.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Startup.cs" />
-    <Page Include="Components\Ui\Controls\NumericSliderControl.xaml">
+    <Page Include="Components\Ui\Controls\BoolPropertyControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Components\Ui\Controls\ClampedPropertyControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -176,6 +202,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Components\Ui\PageInput.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Components\Ui\PageNetwork.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

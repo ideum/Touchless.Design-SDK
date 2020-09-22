@@ -80,6 +80,7 @@ namespace Providers.LeapMotion {
 
         //click
         var isGrabbing = hand.GrabStrength > _settings.GrabClickThreshold;
+        Cursor.SetMouseDownConfidence(hand.GrabStrength);
         var hoverState = Cursor.GetHoverState();
         if (isGrabbing && !Cursor.IsButtonDown) {
           if (hoverState == HoverStates.Click) {

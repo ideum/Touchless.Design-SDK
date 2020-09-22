@@ -135,13 +135,16 @@
           <c:PageAbout />
         </TabItem>
         <TabItem Header="General" Foreground="{StaticResource Ideum.Brush.ForegroundSecondary}">
-          <c:PageGeneral />
+          <c:PageGeneral DataContext="{StaticResource GeneralViewModel}"/>
         </TabItem>
         <TabItem Header="Input" Foreground="{StaticResource Ideum.Brush.ForegroundSecondary}">
-          <c:PageInput />
+          <c:PageInput DataContext="{StaticResource InputViewModel}"/>
         </TabItem>
         <TabItem Header="Display" Foreground="{StaticResource Ideum.Brush.ForegroundSecondary}">
-          <c:PageDisplay />
+          <c:PageDisplay DataContext="{StaticResource DisplayViewModel}" />
+        </TabItem>
+        <TabItem Header="Network" Foreground="{StaticResource Ideum.Brush.ForegroundSecondary}">
+          <c:PageNetwork DataContext="{StaticResource NetworkViewModel}" />
         </TabItem>
       </TabControl>
     </DockPanel>

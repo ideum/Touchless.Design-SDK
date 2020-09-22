@@ -18,6 +18,10 @@
         <Run Foreground="{Binding MouseDownStatusColor}" Text="{Binding MouseDownStatus}" />
       </TextBlock>
       <TextBlock>
+        <Run>Pos: </Run>
+        <Run Foreground="{StaticResource Ideum.Brush.Foreground}" Text="{Binding MousePosition}" />
+      </TextBlock>
+      <TextBlock>
         <Run>Hover State: </Run>
         <Run Foreground="{StaticResource Ideum.Brush.Foreground}" Text="{Binding HoverState}" />
       </TextBlock>

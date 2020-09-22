@@ -282,8 +282,13 @@ namespace TouchlessDesign.Components.Input {
       if (x > b.Right) x = b.Right;
       if (y > b.Bottom) y = b.Bottom;
       if (y < b.Top) y = b.Top;
+      PosX = x;
+      PosY = y;
       SetCursorPos(x, y);
     }
+
+    public int PosX { get; private set; }
+    public int PosY { get; private set; }
 
     void ICursor.SetMouseButtonDown(bool isDown) {
       if (!IsEmulationEnabled.Value) return;
@@ -313,6 +318,15 @@ namespace TouchlessDesign.Components.Input {
 
     bool ICursor.GetClickingEnabled() {
       return _settings.ClickEnabled;
+    }
+
+    public double MouseDownConfidence { get; private set; }
+    public void SetMouseDownConfidence(double value) {
+      MouseDownConfidence = value;
+    }
+
+    public void GetComputedPosition(out int x, out int y) {
+      GetPosition(out x, out y);
     }
 
     #endregion

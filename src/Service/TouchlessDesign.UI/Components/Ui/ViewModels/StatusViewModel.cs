@@ -85,6 +85,15 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
       set { SetValue(ConnectedClientsProperty, value); }
     }
 
+
+    public static readonly DependencyProperty MousePositionProperty = DependencyProperty.Register(
+      "MousePosition", typeof(string), typeof(StatusViewModel), new PropertyMetadata(default(string)));
+
+    public string MousePosition {
+      get { return (string) GetValue(MousePositionProperty); }
+      set { SetValue(MousePositionProperty, value); }
+    }
+
     private DispatcherTimer _dispatcher;
 
     public void Start() {
@@ -108,10 +117,13 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
       var i = AppComponent.Input;
       var n = AppComponent.Ipc;
       var em = i.IsEmulationEnabled.Value;
+      var mc = $"{i.MouseDownConfidence:0.000}";
+      i.GetComputedPosition(out var x, out var y);
       OverallOpacity = em ? 1 : 0.5;
       HoverState = i.HoverState.Value.ToString();
       MouseEmulation = em ? "Enabled" : "Disabled";
-      MouseDownStatus = i.IsButtonDown.Value ? "Down" : "Up";
+      MouseDownStatus = i.IsButtonDown.Value ? $"Down ({mc})" : $"Up ({mc})";
+      MousePosition = $"x:{x,5}, y:{y,5}";
       MouseDownStatusColor = i.IsButtonDown.Value ? SelectedBrush : NormalBrush;
       ClickStatus = i.Cursor.GetIsClicking() ? "True" : "False";
       ClickStatusBrush = i.Cursor.GetIsClicking() ? SelectedBrush : NormalBrush;

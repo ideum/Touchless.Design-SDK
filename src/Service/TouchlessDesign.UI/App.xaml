@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:ui="http://schemas.modernwpf.com/2019"
              xmlns:vm="clr-namespace:TouchlessDesign.Components.Ui.ViewModels"
-             xmlns:controls="clr-namespace:TouchlessDesign.Components.Ui.Controls">
+             xmlns:controls="clr-namespace:TouchlessDesign.Components.Ui.Controls"
+             xmlns:converters="clr-namespace:TouchlessDesign.Components.Ui.Converters">
   <Application.Resources>
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
@@ -292,7 +293,23 @@
           <vm:StatusViewModel x:Key="StatusViewModel"
                               NormalBrush="{StaticResource Ideum.Brush.AccentPrimary}"
                               SelectedBrush="{StaticResource Ideum.Brush.AccentSecondary1}"/>
-          <controls:DoubleNumberFormatter x:Key="DefaultDoubleNumberFormatter" />
+          <vm:InputViewModel x:Key="InputViewModel" />
+          <vm:NetworkViewModel x:Key="NetworkViewModel" />
+          <vm:DisplayViewModel x:Key="DisplayViewModel" />
+          <vm:GeneralViewModel x:Key="GeneralViewModel" />
+
+
+          <!--Formatters-->
+          <controls:GenericNumberFormatter x:Key="DefaultDoubleNumberFormatter" Format="0.000"/>
+          <controls:GenericNumberFormatter x:Key="IntNumberFormatter" Format="0" />
+
+          <!--Converters-->
+          <BooleanToVisibilityConverter x:Key="BoolToVis" />
+          <converters:BoolToVisibilityConverterEx x:Key="BoolToVisNegated" True="Collapsed" False="Visible"/>
+          <converters:MultiBoolToVisibilityConverter x:Key="MultiBoolToVis" />
+          <converters:MultiBoolToVisibilityConverter x:Key="MultiBoolToVisNegated" True="Collapsed" False="Visible" />
+          <converters:BoolToBoolConverter x:Key="BoolToBoolNegated" True="False" False="True" />
+
         </ResourceDictionary>
       </ResourceDictionary.MergedDictionaries>
     </ResourceDictionary>

@@ -4,9 +4,9 @@ namespace TouchlessDesign.Components.Ui.Controls {
   /// <summary>
   /// Interaction logic for NumericSliderControl.xaml
   /// </summary>
-  public partial class ClampedValueControl : UserControl {
+  public partial class ClampedPropertyControl : UserControl {
 
-    public ClampedValueControl() {
+    public ClampedPropertyControl() {
       InitializeComponent();
     }
   }

@@ -6,14 +6,52 @@
              xmlns:local="clr-namespace:TouchlessDesign.Components.Ui"
              xmlns:ui="http://schemas.modernwpf.com/2019"
              xmlns:vm="clr-namespace:TouchlessDesign.Components.Ui.ViewModels"
+             xmlns:c="clr-namespace:TouchlessDesign.Components.Ui.Controls"
              mc:Ignorable="d" 
-             d:DesignHeight="523" d:DesignWidth="718" FontFamily="/TouchlessDesign;component/Resources/#TeX Gyre Heros" Foreground="White">
-  <UserControl.Resources>
-  </UserControl.Resources>
+             d:DesignHeight="523" d:DesignWidth="718" Foreground="White">
+  <d:UserControl.DataContext>
+    <vm:InputViewModel />
+  </d:UserControl.DataContext>
   <Grid Margin="8">
     <ui:SimpleStackPanel Spacing="8">
-
+      <ui:SimpleStackPanel Spacing="8" Orientation="Horizontal">
+        <ui:ToggleSwitch IsOn="{Binding MouseEmulation.Value}" Header="{Binding MouseEmulation.Name}" />
+        <TextBlock Foreground="#66FFFFFF" FontSize="14" FontStyle="Italic" FontFamily="Courier New" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="-30 0 0 8" Text="{Binding MouseEmulationKeyboardShortcut.Value, FallbackValue=Control+Alt+I}" />
+      </ui:SimpleStackPanel>
+      <c:ClampedPropertyControl DataContext="{Binding ClickThreshold}"/>
+      <!--<ui:ToggleSwitch IsOn="{Binding ClickEmulation.Value}" Header="{Binding ClickEmulation.Name}" />-->
+      <c:BoolPropertyControl DataContext="{Binding ClickEmulation}"/>
+      <c:ClampedPropertyControl DataContext="{Binding ClickEmulationDuration}"/>
+      <c:BoolPropertyControl DataContext="{Binding FlipYAxis}" />
+      <ui:ToggleSwitch x:Name="UseXyToggle" IsOn="{Binding UseXy.Value}" Header="{Binding UseXy.Name}" />
+      <Grid HorizontalAlignment="Stretch">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition />
+          <ColumnDefinition Width="8" />
+          <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <c:ClampedPropertyControl DataContext="{Binding MinX}"/>
+        <c:ClampedPropertyControl Grid.Column="2" DataContext="{Binding MaxX}"/>
+      </Grid>
+      <Grid HorizontalAlignment="Stretch">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition />
+          <ColumnDefinition Width="8" />
+          <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <c:ClampedPropertyControl DataContext="{Binding MinZ}" IsEnabled="{Binding ElementName=UseXyToggle, Path=IsOn, Converter={StaticResource BoolToBoolNegated}}"/>
+        <c:ClampedPropertyControl Grid.Column="2" DataContext="{Binding MaxZ}" IsEnabled="{Binding ElementName=UseXyToggle, Path=IsOn, Converter={StaticResource BoolToBoolNegated}}"/>
+      </Grid>
+      <Grid HorizontalAlignment="Stretch">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition />
+          <ColumnDefinition Width="8" />
+          <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <c:ClampedPropertyControl DataContext="{Binding MinY}" IsEnabled="{Binding ElementName=UseXyToggle, Path=IsOn}"/>
+        <c:ClampedPropertyControl Grid.Column="2" DataContext="{Binding MaxY}" IsEnabled="{Binding ElementName=UseXyToggle, Path=IsOn}"/>
+      </Grid>
+      <c:ClampedPropertyControl DataContext="{Binding TickRate}"/>
     </ui:SimpleStackPanel>
-    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Coming Soon.</TextBlock>
   </Grid>
 </UserControl>

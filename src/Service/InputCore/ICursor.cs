@@ -48,6 +48,10 @@
     /// <param name="y"></param>
     void SetPosition(int x, int y);
 
+    int PosX { get; }
+
+    int PosY { get; }
+
     /// <summary>
     /// Sets the cursor's down state
     /// </summary>
@@ -76,5 +80,9 @@
     /// </summary>
     /// <returns></returns>
     bool GetClickingEnabled();
+
+    double MouseDownConfidence { get; }
+
+    void SetMouseDownConfidence(double value);
   }
 }

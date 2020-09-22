@@ -2,26 +2,30 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:TouchlessDesign.Components.Ui"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:ui="http://schemas.modernwpf.com/2019"
              xmlns:c="clr-namespace:TouchlessDesign.Components.Ui.Controls"
-             xmlns:viewModels="clr-namespace:TouchlessDesign.Components.Ui.ViewModels"
-             xmlns:properties="clr-namespace:TouchlessDesign.Components.Ui.ViewModels.Properties"
+             xmlns:p="clr-namespace:TouchlessDesign.Components.Ui.ViewModels.Properties"
+             xmlns:vm="clr-namespace:TouchlessDesign.Components.Ui.ViewModels"
              mc:Ignorable="d" 
-             d:DesignHeight="523" d:DesignWidth="718" FontFamily="/TouchlessDesign;component/Resources/#TeX Gyre Heros" Foreground="White">
+             d:DesignHeight="523" d:DesignWidth="718" Foreground="White">
+  <d:UserControl.DataContext>
+    <vm:DisplayViewModel />
+  </d:UserControl.DataContext>
+  <UserControl.Resources>
+    <DataTemplate x:Key="DisplayComboBoxItemTemplateStyle" DataType="{x:Type vm:ScreenViewModel}">
+      <TextBlock Text="{Binding Name}" />
+    </DataTemplate>
+  </UserControl.Resources>
   <Grid Margin="8">
-    <StackPanel>
-      <ui:ToggleSwitch x:Name="UseAddOnSwitch" Margin="8" ui:ControlHelper.Header="Use Add-On"/>
-      <ComboBox Margin="8" Background="Transparent" ui:ControlHelper.Header="Target Display" IsEnabled="{Binding ElementName=UseAddOnSwitch, Path=IsOn}">
-        <ComboBoxItem>1</ComboBoxItem>
-        <ComboBoxItem>2</ComboBoxItem>
-      </ComboBox>
-      <c:NumericSliderControl Margin="8" IsEnabled="{Binding IsOn, ElementName=UseAddOnSwitch}">
-        <c:NumericSliderControl.DataContext>
-          <properties:ClampedDoubleProperty Name="LED Intensity" Minimum="0" Maximum="1" Value="0.5"/>
-        </c:NumericSliderControl.DataContext>
-      </c:NumericSliderControl>
-    </StackPanel>
+    <ui:SimpleStackPanel Spacing="8">
+      <ui:ToggleSwitch x:Name="UseOverlaySwitch" ui:ControlHelper.Header="{Binding OverlayEnabled.Name}" IsOn="{Binding OverlayEnabled.Value}"/>
+      <ComboBox Width="220" Background="Transparent" ui:ControlHelper.Header="Overlay Target Display" IsEnabled="{Binding ElementName=UseOverlaySwitch, Path=IsOn}" ItemTemplate="{StaticResource DisplayComboBoxItemTemplateStyle}" ItemsSource="{Binding Displays}" SelectedIndex="{Binding OverlayIndex.Value}"/>
+      <ui:ToggleSwitch x:Name="UseAddOnSwitch" ui:ControlHelper.Header="{Binding AddOnEnabled.Name}" IsOn="{Binding AddOnEnabled.Value}"/>
+      <ComboBox Width="220" Background="Transparent" ui:ControlHelper.Header="Add-On Target Display" IsEnabled="{Binding ElementName=UseAddOnSwitch, Path=IsOn}" ItemTemplate="{StaticResource DisplayComboBoxItemTemplateStyle}" ItemsSource="{Binding Displays}" SelectedIndex="{Binding AddOnIndex.Value}"/>
+      <ui:ToggleSwitch x:Name="UseLEDsSwitch" ui:ControlHelper.Header="{Binding LEDsEnabled.Name}" IsOn="{Binding LEDsEnabled.Value}" />
+      <c:ClampedPropertyControl IsEnabled="{Binding IsOn, ElementName=UseLEDsSwitch}" DataContext="{Binding LEDIntensity}"/>
+      <Button Click="RefreshDisplaysClicked">Refresh Displays</Button>
+    </ui:SimpleStackPanel>
   </Grid>
 </UserControl>
