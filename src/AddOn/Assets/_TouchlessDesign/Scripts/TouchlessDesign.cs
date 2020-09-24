@@ -9,7 +9,7 @@ namespace Ideum {
 
     #region General
 
-    private const string DefaultDirectory = "%appdata%/Ideum/TouchlessDesignService";
+    private const string DefaultDirectory = "%appdata%/Ideum/TouchlessDesign";
 
     private static bool _isInitialized;
 
