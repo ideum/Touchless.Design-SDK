@@ -97,6 +97,11 @@
     <Compile Include="Components\Input\Providers\IInputProvider.cs" />
     <Compile Include="Components\Input\Providers\LeapMotion\LeapMotionProvider.cs" />
     <Compile Include="Components\Input\Providers\LeapMotion\LeapSettings.cs" />
+    <Compile Include="Components\Input\Providers\RealSense\HSVValues.cs" />
+    <Compile Include="Components\Input\Providers\RealSense\RealSenseMessage.cs" />
+    <Compile Include="Components\Input\Providers\RealSense\RealSenseProvider.cs" />
+    <Compile Include="Components\Input\Providers\RealSense\RealSenseSettings.cs" />
+    <Compile Include="Components\Input\Providers\RealSense\UDPListener.cs" />
     <Compile Include="Components\Ui\Controls\BoolPropertyControl.xaml.cs">
       <DependentUpon>BoolPropertyControl.xaml</DependentUpon>
     </Compile>
