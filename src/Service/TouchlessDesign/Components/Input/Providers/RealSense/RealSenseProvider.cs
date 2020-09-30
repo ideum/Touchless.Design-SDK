@@ -11,7 +11,7 @@ namespace TouchlessDesign.Components.Input.Providers.RealSense {
     public string DataDir { get; set; }
     public Action<HSVValues> HSVUpdate;
 
-    private const float MillimetersToMeters = 1f;
+    private const float Conversion = 10f;
 
     private RealSenseSettings _settings;
     private UDPListener _listener;
@@ -27,7 +27,7 @@ namespace TouchlessDesign.Components.Input.Providers.RealSense {
 
     public void Start() {
       _lock = new object();
-      _xform = new LeapTransform(Vector.Zero, LeapQuaternion.Identity, new Vector(MillimetersToMeters, MillimetersToMeters, MillimetersToMeters));
+      _xform = new LeapTransform(Vector.Zero, LeapQuaternion.Identity, new Vector(Conversion, Conversion, Conversion));
       _xform.MirrorZ();
       Log.Debug("Starting RealSense UDP listener.");
       _settings = RealSenseSettings.Get(DataDir);

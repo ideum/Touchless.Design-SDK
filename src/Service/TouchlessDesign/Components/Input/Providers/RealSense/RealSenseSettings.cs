@@ -22,58 +22,58 @@ namespace TouchlessDesign {
     public int BroadcastPort = 4998;
     public int BroadcastIntervalMillis = 1000;
 
-    //public float Width() {
-    //  return Math.Abs(WorldBoundsRight - WorldBoundsLeft);
-    //}
+    public float Width() {
+      return Math.Abs(WorldBoundsRight - WorldBoundsLeft);
+    }
 
-    //public float Height() {
-    //  return Math.Abs(WorldBoundsTop - WorldBoundsBottom);
-    //}
+    public float Height() {
+      return Math.Abs(WorldBoundsTop - WorldBoundsBottom);
+    }
 
-    //public float Depth() {
-    //  return Math.Abs(WorldBoundsFront - WorldBoundsBack);
-    //}
+    public float Depth() {
+      return Math.Abs(WorldBoundsFront - WorldBoundsBack);
+    }
 
-    //public float ClampX(float x) {
-    //  return Clamp(x, WorldBoundsLeft, WorldBoundsRight);
-    //}
+    public float ClampX(float x) {
+      return Clamp(x, WorldBoundsLeft, WorldBoundsRight);
+    }
 
-    //public float ClampY(float y) {
-    //  return Clamp(y, WorldBoundsBottom, WorldBoundsTop);
-    //}
+    public float ClampY(float y) {
+      return Clamp(y, WorldBoundsBottom, WorldBoundsTop);
+    }
 
-    //public float ClampZ(float z) {
-    //  return Clamp(z, WorldBoundsBack, WorldBoundsFront);
-    //}
+    public float ClampZ(float z) {
+      return Clamp(z, WorldBoundsBack, WorldBoundsFront);
+    }
 
-    //private static float Clamp(float value, float min, float max) {
-    //  if (value < min) return min;
-    //  if (value > max) return max;
-    //  return value;
-    //}
+    private static float Clamp(float value, float min, float max) {
+      if (value < min) return min;
+      if (value > max) return max;
+      return value;
+    }
 
-    //public float NormalizedX(float worldX) {
-    //  worldX = ClampX(worldX);
-    //  return (worldX - WorldBoundsLeft) / Width();
-    //}
+    public float NormalizedX(float worldX) {
+      worldX = ClampX(worldX);
+      return (worldX - WorldBoundsLeft) / Width();
+    }
 
-    //public float NormalizedY(float worldY) {
-    //  worldY = ClampY(worldY);
-    //  return (worldY - WorldBoundsBottom) / Height();
-    //}
+    public float NormalizedY(float worldY) {
+      worldY = ClampY(worldY);
+      return (worldY - WorldBoundsBottom) / Height();
+    }
 
-    //public float NormalizedZ(float worldZ) {
-    //  worldZ = ClampZ(worldZ);
-    //  return (worldZ - WorldBoundsBack) / Depth();
-    //}
+    public float NormalizedZ(float worldZ) {
+      worldZ = ClampZ(worldZ);
+      return (worldZ - WorldBoundsBack) / Depth();
+    }
 
-    //public void NormalizedPosition(Vector p, out float horizontal, out float vertical) {
-    //  horizontal = NormalizedX(p.x);
-    //  vertical = UseXY ? NormalizedY(p.y) : NormalizedZ(p.z);
-    //  if (FlipYAxis) {
-    //    vertical = 1 - vertical;
-    //  }
-    //}
+    public void NormalizedPosition(Leap.Vector p, out float horizontal, out float vertical) {
+      horizontal = NormalizedX(p.x);
+      vertical = UseXY ? NormalizedY(p.y) : NormalizedZ(p.z);
+      if (FlipYAxis) {
+        vertical = 1 - vertical;
+      }
+    }
 
     public static RealSenseSettings Get(string dir) {
       var path = Path.Combine(dir, Filename);

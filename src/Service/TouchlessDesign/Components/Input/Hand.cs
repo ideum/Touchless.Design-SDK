@@ -62,7 +62,7 @@ namespace TouchlessDesign.Components.Input {
       Confidence = 1.0f;
 
       Vector position = new Vector {
-        x = hand.X,
+        x = -hand.X,
         y = hand.Y,
         z = hand.Z
       };
