@@ -1,24 +1,12 @@
 ﻿using System;
-using System.CodeDom;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Windows;
-using TouchlessDesign.Annotations;
 
 namespace TouchlessDesign.Components.Ui.ViewModels.Properties {
   public abstract class PropertyBase : DependencyObject, IProperty {
     
-    public event Action<IProperty> Changed;
-
-    public abstract object BaseValue { get; set; }
-
     protected static void ValuePropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e) {
       var i = d as PropertyBase;
-      i?.InvokeChanged();
-    }
-
-    protected void InvokeChanged() {
-      Changed?.Invoke(this);
+      i?.OnPropertyChanged();
     }
 
 
@@ -33,26 +21,29 @@ namespace TouchlessDesign.Components.Ui.ViewModels.Properties {
       }
     }
 
-    public event PropertyChangedEventHandler PropertyChanged;
+    public event Action<IProperty> PropChanged;
 
-    [NotifyPropertyChangedInvocator]
-    protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) {
-      PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+
+    //public event PropertyChangedEventHandler PropertyChanged;
+
+    //protected void DoOnPropertyChanged(string name) {
+    //  PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+
+    //}
+
+    //[NotifyPropertyChangedInvocator]
+    //protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) {
+    //  PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    //}
+
+    public virtual void OnPropertyChanged() {
+      PropChanged?.Invoke(this);
     }
   }
 
   public abstract class PropertyBase<T> : PropertyBase, IProperty<T> {
-    public override object BaseValue {
-      get { return Value; }
-      set {
-        if (value is T a) {
-          Value = a;
-        }
-      }
-    }
 
-    public abstract T Value { get; set; }
+    public abstract T Prop { get; set; }
   }
-
-
 }

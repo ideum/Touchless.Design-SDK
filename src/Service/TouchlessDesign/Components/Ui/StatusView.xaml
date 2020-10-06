@@ -5,38 +5,47 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TouchlessDesign.Components.Ui"
              xmlns:vm="clr-namespace:TouchlessDesign.Components.Ui.ViewModels"
+             xmlns:ui="http://schemas.modernwpf.com/2019"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="18" d:DesignWidth="726">
   <d:UserControl.DataContext>
     <vm:StatusViewModel NormalBrush="{StaticResource Ideum.Brush.AccentPrimary}" SelectedBrush="{StaticResource Ideum.Brush.AccentSecondary1}" MouseDownStatus="Down" MouseDownStatusColor="{StaticResource Ideum.Brush.AccentSecondary1}" MouseEmulation="Enabled" OverallOpacity="1" ConnectedClients="1" ClickStatus="True" ClickStatusBrush="{StaticResource Ideum.Brush.AccentPrimary}"/>
   </d:UserControl.DataContext>
-  <Expander Margin="8" Width="216" ExpandDirection="Up" Header="Status" IsExpanded="True" HorizontalAlignment="Left" VerticalAlignment="Bottom">
-    <StackPanel Margin="0 0 0 4" TextElement.Foreground="{StaticResource Ideum.Brush.ForegroundSecondary}" TextElement.FontSize="14" Opacity="{Binding OverallOpacity}">
-      <Separator Margin="0 6" Foreground="{StaticResource Ideum.Brush.ForegroundSecondary1}" Background="{StaticResource Ideum.Brush.ForegroundSecondary1}" />
-      <TextBlock>
-        <Run>Mouse: </Run>
-        <Run Foreground="{Binding MouseDownStatusColor}" Text="{Binding MouseDownStatus}" />
-      </TextBlock>
-      <TextBlock>
-        <Run>Pos: </Run>
-        <Run Foreground="{StaticResource Ideum.Brush.Foreground}" Text="{Binding MousePosition}" />
-      </TextBlock>
-      <TextBlock>
-        <Run>Hover State: </Run>
-        <Run Foreground="{StaticResource Ideum.Brush.Foreground}" Text="{Binding HoverState}" />
-      </TextBlock>
-      <TextBlock>
-        <Run>Is Clicking: </Run>
-        <Run Foreground="{Binding ClickStatusBrush}" Text="{Binding ClickStatus}"/>
-      </TextBlock>
-      <TextBlock>
-        <Run>Mouse Emulation: </Run>
+  <Border Height="30" BorderThickness="0 1 0 0" BorderBrush="{StaticResource Ideum.Brush.ForegroundSecondary1}">
+    <Grid TextElement.Foreground="{StaticResource Ideum.Brush.ForegroundSecondary}" 
+          TextElement.FontSize="12"
+          Opacity="{Binding OverallOpacity}">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="140" />
+        <ColumnDefinition />
+        <ColumnDefinition />
+        <ColumnDefinition />
+        <ColumnDefinition />
+        <ColumnDefinition Width="80"/>
+      </Grid.ColumnDefinitions>
+      <TextBlock Grid.Column="0" Margin="10 0" HorizontalAlignment="Left" VerticalAlignment="Center">
+        <Run FontWeight="Bold" Foreground="{StaticResource Ideum.Brush.Foreground}">STATUS:</Run>
         <Run Foreground="{StaticResource Ideum.Brush.Foreground}" Text="{Binding MouseEmulation}" />
       </TextBlock>
-      <TextBlock>
-        <Run>Connected Clients: </Run>
+      <TextBlock Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Run>Mouse:</Run>
+        <Run Foreground="{Binding MouseDownStatusColor}" Text="{Binding MouseDownStatus}" />
+      </TextBlock>
+      <TextBlock Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Run Foreground="{StaticResource Ideum.Brush.Foreground}" Text="{Binding MousePosition}" />
+      </TextBlock>
+      <TextBlock Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Run>State:</Run>
+        <Run Foreground="{StaticResource Ideum.Brush.Foreground}" Text="{Binding HoverState}" />
+      </TextBlock>
+      <TextBlock Grid.Column="4" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Run>Clicking: </Run>
+        <Run Foreground="{Binding ClickStatusBrush}" Text="{Binding ClickStatus}"/>
+      </TextBlock>
+      <TextBlock Grid.Column="5" HorizontalAlignment="Right" Margin="10 0" VerticalAlignment="Center">
+        <Run>Clients: </Run>
         <Run Foreground="{StaticResource Ideum.Brush.Foreground}" Text="{Binding ConnectedClients}" />
       </TextBlock>
-    </StackPanel>
-  </Expander>
+    </Grid>
+  </Border>
 </UserControl>

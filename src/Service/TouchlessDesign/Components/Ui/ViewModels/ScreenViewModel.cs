@@ -25,7 +25,12 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
     public void SetScreen(int index, Screen screen) {
       Id = index + 1;
       var s = Screen = screen;
-      Name = $"{Id}: {s.Bounds.Width}x{s.Bounds.Height} - {s.DeviceName}";
+      if (s.Primary) {
+        Name = $"{s.Bounds.Width}x{s.Bounds.Height} - Primary";
+      }
+      else {
+        Name = $"{s.Bounds.Width}x{s.Bounds.Height}";
+      }
     }
   }
 }

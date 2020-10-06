@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:ui="http://schemas.modernwpf.com/2019"
              xmlns:vm="clr-namespace:TouchlessDesign.Components.Ui.ViewModels"
-             xmlns:controls="clr-namespace:TouchlessDesign.Components.Ui.Controls"
+             xmlns:c="clr-namespace:TouchlessDesign.Components.Ui.Controls"
              xmlns:converters="clr-namespace:TouchlessDesign.Components.Ui.Converters">
   <Application.Resources>
     <ResourceDictionary>
@@ -297,11 +297,15 @@
           <vm:NetworkViewModel x:Key="NetworkViewModel" />
           <vm:DisplayViewModel x:Key="DisplayViewModel" />
           <vm:GeneralViewModel x:Key="GeneralViewModel" />
-
+          <vm:AppViewModel x:Key="AppViewModel" 
+                           Input="{StaticResource InputViewModel}"
+                           Display="{StaticResource DisplayViewModel}"
+                           General="{StaticResource GeneralViewModel}"
+                           Network="{StaticResource NetworkViewModel}"/>
 
           <!--Formatters-->
-          <controls:GenericNumberFormatter x:Key="DefaultDoubleNumberFormatter" Format="0.000"/>
-          <controls:GenericNumberFormatter x:Key="IntNumberFormatter" Format="0" />
+          <c:GenericNumberFormatter x:Key="DefaultDoubleNumberFormatter" Format="0.000"/>
+          <c:GenericNumberFormatter x:Key="IntNumberFormatter" Format="0" />
 
           <!--Converters-->
           <BooleanToVisibilityConverter x:Key="BoolToVis" />
@@ -309,6 +313,11 @@
           <converters:MultiBoolToVisibilityConverter x:Key="MultiBoolToVis" />
           <converters:MultiBoolToVisibilityConverter x:Key="MultiBoolToVisNegated" True="Collapsed" False="Visible" />
           <converters:BoolToBoolConverter x:Key="BoolToBoolNegated" True="False" False="True" />
+
+          <RelativeSource x:Key="RS_NC" Mode="FindAncestor" AncestorType="{x:Type c:NumberControl}" />
+          <RelativeSource x:Key="RS_BC" Mode="FindAncestor" AncestorType="{x:Type c:BoolControl}" />
+          <RelativeSource x:Key="RS_SC" Mode="FindAncestor" AncestorType="{x:Type c:StringControl}" />
+          <RelativeSource x:Key="RS_DC" Mode="FindAncestor" AncestorType="{x:Type c:DropdownControl}" />
 
         </ResourceDictionary>
       </ResourceDictionary.MergedDictionaries>

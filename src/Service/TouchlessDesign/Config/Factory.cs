@@ -6,16 +6,18 @@ namespace TouchlessDesign.Config {
 
   public class Factory {
 
-    public static T Get<T>(string path) where T : new() {
+    public static T Get<T>(string path) where T : IConfig, new() {
       return Get(path, () => new T());
     }
 
-    public static T Get<T>(string path, Func<T> defaults) {
+    public static T Get<T>(string path, Func<T> defaults) where T: IConfig {
       try {
         if (File.Exists(path)) {
           var raw = File.ReadAllText(path);
           Log.Info($"Loaded Config at {path}. Parsing...");
-          return JsonConvert.DeserializeObject<T>(raw);
+          var i = JsonConvert.DeserializeObject<T>(raw);
+          i.FilePath = path;
+          return i;
         }
       }
       catch (Exception e) {
@@ -23,6 +25,7 @@ namespace TouchlessDesign.Config {
       }
 
       var d = defaults();
+      d.FilePath = path;
       Log.Warn($"Could not load {d.GetType().Name} from {path}. Creating and using defaults.");
       try {
         var s = JsonConvert.SerializeObject(d, Formatting.Indented);

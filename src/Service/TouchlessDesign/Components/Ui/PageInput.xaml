@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:TouchlessDesign.Components.Ui"
              xmlns:ui="http://schemas.modernwpf.com/2019"
              xmlns:vm="clr-namespace:TouchlessDesign.Components.Ui.ViewModels"
              xmlns:c="clr-namespace:TouchlessDesign.Components.Ui.Controls"
@@ -12,46 +11,117 @@
   <d:UserControl.DataContext>
     <vm:InputViewModel />
   </d:UserControl.DataContext>
-  <Grid Margin="8">
-    <ui:SimpleStackPanel Spacing="8">
-      <ui:SimpleStackPanel Spacing="8" Orientation="Horizontal">
-        <ui:ToggleSwitch IsOn="{Binding MouseEmulation.Value}" Header="{Binding MouseEmulation.Name}" />
-        <TextBlock Foreground="#66FFFFFF" FontSize="14" FontStyle="Italic" FontFamily="Courier New" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="-30 0 0 8" Text="{Binding MouseEmulationKeyboardShortcut.Value, FallbackValue=Control+Alt+I}" />
-      </ui:SimpleStackPanel>
-      <c:ClampedPropertyControl DataContext="{Binding ClickThreshold}"/>
-      <!--<ui:ToggleSwitch IsOn="{Binding ClickEmulation.Value}" Header="{Binding ClickEmulation.Name}" />-->
-      <c:BoolPropertyControl DataContext="{Binding ClickEmulation}"/>
-      <c:ClampedPropertyControl DataContext="{Binding ClickEmulationDuration}"/>
-      <c:BoolPropertyControl DataContext="{Binding FlipYAxis}" />
-      <ui:ToggleSwitch x:Name="UseXyToggle" IsOn="{Binding UseXy.Value}" Header="{Binding UseXy.Name}" />
-      <Grid HorizontalAlignment="Stretch">
-        <Grid.ColumnDefinitions>
-          <ColumnDefinition />
-          <ColumnDefinition Width="8" />
-          <ColumnDefinition />
-        </Grid.ColumnDefinitions>
-        <c:ClampedPropertyControl DataContext="{Binding MinX}"/>
-        <c:ClampedPropertyControl Grid.Column="2" DataContext="{Binding MaxX}"/>
-      </Grid>
-      <Grid HorizontalAlignment="Stretch">
-        <Grid.ColumnDefinitions>
-          <ColumnDefinition />
-          <ColumnDefinition Width="8" />
-          <ColumnDefinition />
-        </Grid.ColumnDefinitions>
-        <c:ClampedPropertyControl DataContext="{Binding MinZ}" IsEnabled="{Binding ElementName=UseXyToggle, Path=IsOn, Converter={StaticResource BoolToBoolNegated}}"/>
-        <c:ClampedPropertyControl Grid.Column="2" DataContext="{Binding MaxZ}" IsEnabled="{Binding ElementName=UseXyToggle, Path=IsOn, Converter={StaticResource BoolToBoolNegated}}"/>
-      </Grid>
-      <Grid HorizontalAlignment="Stretch">
-        <Grid.ColumnDefinitions>
-          <ColumnDefinition />
-          <ColumnDefinition Width="8" />
-          <ColumnDefinition />
-        </Grid.ColumnDefinitions>
-        <c:ClampedPropertyControl DataContext="{Binding MinY}" IsEnabled="{Binding ElementName=UseXyToggle, Path=IsOn}"/>
-        <c:ClampedPropertyControl Grid.Column="2" DataContext="{Binding MaxY}" IsEnabled="{Binding ElementName=UseXyToggle, Path=IsOn}"/>
-      </Grid>
-      <c:ClampedPropertyControl DataContext="{Binding TickRate}"/>
-    </ui:SimpleStackPanel>
-  </Grid>
+  <ui:SimpleStackPanel Spacing="5" Margin="8">
+    <Label Margin="0 0 0 0" FontSize="16" FontWeight="Bold" Content="General"/>
+    <Grid>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition />
+        <ColumnDefinition />
+      </Grid.ColumnDefinitions>
+      <c:BoolControl x:Name="ModeButton" 
+                     Value="True" 
+                     Header="Mode"
+                     OnContent="Remote (UDP)"
+                     OffContent="Local"
+                     LabelMinWidth="120"/>
+      <Button Grid.Column="1" Content="Network Settings" HorizontalAlignment="Right" Width="160" Click="OpenNetworkSettingsButtonClicked" Visibility="{Binding ElementName=ModeButton, Path=Value, Converter={StaticResource BoolToVis}}" />
+    </Grid>
+    <Grid>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition />
+        <ColumnDefinition />
+      </Grid.ColumnDefinitions>
+      <c:BoolControl Value="{Binding MouseEmulation, Mode=TwoWay}" 
+                         Header="Mouse Emulation"
+                         LabelMinWidth="120"/>
+      <c:StringControl Grid.Column="1" Value="{Binding MouseEmulationKeyboardShortcut, Mode=TwoWay}" 
+                           Header="Keyboard Shortcut"
+                           HorizontalAlignment="Right" VerticalAlignment="Center"
+                           ValueMinWidth="160"/>
+    </Grid>
+    <c:NumberControl Value="{Binding ClickThreshold, Mode=TwoWay}" 
+                         Header="Grab Threshold"
+                         Min="0" Max="1"
+                         LabelMinWidth="120"/>
+    <c:NumberControl Value="{Binding MinHandConfidence, Mode=TwoWay}" 
+                         Header="Hand Confidence"
+                         Min="0" Max="1" 
+                         LabelMinWidth="120" />
+    <Grid>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition />
+        <ColumnDefinition />
+      </Grid.ColumnDefinitions>
+      <c:BoolControl Value="{Binding ClickEmulation, Mode=TwoWay}" 
+                     Header="Click Emulation"
+                     LabelMinWidth="120"/>
+      <c:NumberControl Grid.Column="1" Value="{Binding ClickEmulationDuration, Mode=TwoWay}" 
+                       Header="Click Duration (ms)"
+                       Min="5" Max="2000"
+                       LabelMinWidth="125"
+                       ShowSlider="False"
+                       HorizontalAlignment="Right"
+                       NumberFormatter="{StaticResource IntNumberFormatter}"/>
+    </Grid>
+    <Label Margin="0 6 0 0">
+      <Label.Content>
+        <TextBlock>
+              <Run FontSize="16" FontWeight="Bold">Horizontal Axis</Run>
+              <Run FontSize="13">(Left / Right)</Run>
+        </TextBlock>
+      </Label.Content>
+    </Label>
+    <c:NumberControl Value="{Binding MinX, Mode=TwoWay}" 
+                         Min="-0.6" Max="0.6" 
+                         Header="Min (m)" 
+                         LabelMinWidth="80"/>
+    <c:NumberControl Value="{Binding MaxX, Mode=TwoWay}" 
+                         Min="-0.6" Max="0.6" 
+                         Header="Max (m)" 
+                         LabelMinWidth="80"/>
+    <Label Margin="0 6 0 0" Visibility="{Binding UseXy, Converter={StaticResource BoolToVis}}">
+      <Label.Content>
+        <TextBlock>
+              <Run FontSize="16" FontWeight="Bold">Vertical Axis</Run>
+              <Run FontSize="13">(Up / Down)</Run>
+        </TextBlock>
+      </Label.Content>
+    </Label>
+    <Label Margin="0 6 0 0" Visibility="{Binding UseXy, Converter={StaticResource BoolToVisNegated}}">
+      <Label.Content>
+        <TextBlock>
+              <Run FontSize="16" FontWeight="Bold">Vertical Axis</Run>
+              <Run FontSize="13">(Forwards / Backwards)</Run>
+        </TextBlock>
+      </Label.Content>
+    </Label>
+    <c:BoolControl Value="{Binding UseXy, Mode=TwoWay}" 
+                       Header="Orientation"
+                       OnContent="Y-Axis (Up / Down)"
+                       OffContent="Z-Axis (Forwards / Backwards)"
+                       LabelMinWidth="80"/>
+    <c:BoolControl Value="{Binding FlipYAxis, Mode=TwoWay}" 
+                       Header="Invert"
+                       LabelMinWidth="80"/>
+    <c:NumberControl Value="{Binding MinZ, Mode=TwoWay}" 
+                         Min="-0.6" Max="0.6" 
+                         Header="Min (m)" 
+                         LabelMinWidth="80"
+                         Visibility="{Binding UseXy, Converter={StaticResource BoolToVisNegated}}"/>
+    <c:NumberControl Value="{Binding MaxZ, Mode=TwoWay}" 
+                         Min="-0.6" Max="0.6" 
+                         Header="Max (m)" 
+                         LabelMinWidth="80"
+                         Visibility="{Binding UseXy, Converter={StaticResource BoolToVisNegated}}"/>
+    <c:NumberControl Value="{Binding MinY, Mode=TwoWay}" 
+                         Min="0.1" Max="1" 
+                         Header="Min (m)" 
+                         LabelMinWidth="80"
+                         Visibility="{Binding UseXy, Converter={StaticResource BoolToVis}}"/>
+    <c:NumberControl Value="{Binding MaxY, Mode=TwoWay}" 
+                         Min="0.1" Max="1" 
+                         Header="Max (m)" 
+                         LabelMinWidth="80"
+                         Visibility="{Binding UseXy, Converter={StaticResource BoolToVis}}"/>
+  </ui:SimpleStackPanel>
 </UserControl>

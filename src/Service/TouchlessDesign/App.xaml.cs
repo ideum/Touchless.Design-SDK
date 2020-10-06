@@ -25,10 +25,16 @@ namespace TouchlessDesign {
 
     public StatusViewModel StatusViewModel;
 
+    public AppViewModel AppViewModel;
+
     public static void Close() {
       Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() => {
         Current.Shutdown(0);
       }));
+    }
+
+    public static App Instance {
+      get { return Current as App; }
     }
 
     protected override void OnStartup(StartupEventArgs e) {
@@ -44,6 +50,7 @@ namespace TouchlessDesign {
       Log.Init(DataDir);
       AppComponent.InitializeComponents(this);
       StatusViewModel = TryFindResource("StatusViewModel") as StatusViewModel;
+      AppViewModel = TryFindResource("AppViewModel") as AppViewModel;
     }
 
     protected override void OnExit(ExitEventArgs e) {

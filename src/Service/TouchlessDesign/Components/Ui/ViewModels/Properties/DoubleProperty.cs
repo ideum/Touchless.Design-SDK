@@ -3,13 +3,13 @@
 namespace TouchlessDesign.Components.Ui.ViewModels.Properties {
   public class DoubleProperty : PropertyBase<double> {
 
-    public static readonly DependencyProperty ValueProperty = DependencyProperty.Register(
-      "Value", typeof(double), typeof(DoubleProperty), new PropertyMetadata(default(double), ValuePropertyChangedCallback));
+    public static readonly DependencyProperty PropProperty = DependencyProperty.Register(
+      "Prop", typeof(double), typeof(DoubleProperty), new PropertyMetadata(default(double), ValuePropertyChangedCallback));
 
-    public override double Value {
-      get { return (double) GetValue(ValueProperty); }
+    public override double Prop {
+      get { return (double) GetValue(PropProperty); }
       set {
-        SetValue(ValueProperty, value);
+        SetValue(PropProperty, value);
         OnPropertyChanged();
       }
     }

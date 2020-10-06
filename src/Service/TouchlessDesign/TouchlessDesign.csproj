@@ -97,11 +97,17 @@
     <Compile Include="Components\Input\Providers\IInputProvider.cs" />
     <Compile Include="Components\Input\Providers\LeapMotion\LeapMotionProvider.cs" />
     <Compile Include="Components\Input\Providers\LeapMotion\LeapSettings.cs" />
-    <Compile Include="Components\Ui\Controls\BoolPropertyControl.xaml.cs">
-      <DependentUpon>BoolPropertyControl.xaml</DependentUpon>
+    <Compile Include="Components\Ui\Controls\BoolControl.xaml.cs">
+      <DependentUpon>BoolControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Components\Ui\Controls\ClampedPropertyControl.xaml.cs">
-      <DependentUpon>ClampedPropertyControl.xaml</DependentUpon>
+    <Compile Include="Components\Ui\Controls\DropdownControl.xaml.cs">
+      <DependentUpon>DropdownControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Components\Ui\Controls\NumberControl.xaml.cs">
+      <DependentUpon>NumberControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Components\Ui\Controls\StringControl.xaml.cs">
+      <DependentUpon>StringControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Components\Ui\Converters\BoolConverter.cs" />
     <Compile Include="Components\Ui\Converters\BoolToBoolConverter.cs" />
@@ -128,6 +134,8 @@
     <Compile Include="Components\Ui\StatusView.xaml.cs">
       <DependentUpon>StatusView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Components\Ui\ViewModels\AppViewModel.cs" />
+    <Compile Include="Components\Ui\ViewModels\AppViewModelBase.cs" />
     <Compile Include="Components\Ui\ViewModels\DisplayViewModel.cs" />
     <Compile Include="Components\Ui\ViewModels\GeneralViewModel.cs" />
     <Compile Include="Components\Ui\ViewModels\NetworkViewModel.cs" />
@@ -145,6 +153,8 @@
     <Compile Include="Components\Ui\ViewModels\ScreenViewModel.cs" />
     <Compile Include="Components\Ui\ViewModels\StatusViewModel.cs" />
     <Compile Include="Components\Ui\ViewModels\Properties\StringProperty.cs" />
+    <Compile Include="Components\Ui\ViewModels\TestVM.cs" />
+    <Compile Include="Components\Ui\ViewModels\VM.cs" />
     <Compile Include="Config\Config.cs" />
     <Compile Include="Config\DisplayInfo.cs" />
     <Compile Include="Config\ConfigDisplay.cs" />
@@ -186,11 +196,19 @@
     <Compile Include="Components\Input\Providers\LeapMotion\LeapCSharp\Vector.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Startup.cs" />
-    <Page Include="Components\Ui\Controls\BoolPropertyControl.xaml">
+    <Page Include="Components\Ui\Controls\BoolControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Components\Ui\Controls\ClampedPropertyControl.xaml">
+    <Page Include="Components\Ui\Controls\DropdownControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Components\Ui\Controls\NumberControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Components\Ui\Controls\StringControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

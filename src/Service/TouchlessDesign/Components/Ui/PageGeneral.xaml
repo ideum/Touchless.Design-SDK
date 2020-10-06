@@ -4,17 +4,19 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TouchlessDesign.Components.Ui"
-             xmlns:controls="http://schemas.modernwpf.com/2019"
+             xmlns:ui="http://schemas.modernwpf.com/2019"
              xmlns:viewModels="clr-namespace:TouchlessDesign.Components.Ui.ViewModels"
+             xmlns:c="clr-namespace:TouchlessDesign.Components.Ui.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
   <d:UserControl.DataContext>
     <viewModels:GeneralViewModel />
   </d:UserControl.DataContext>
   <Grid Margin="8">
-    <controls:SimpleStackPanel Spacing="16">
-      <controls:ToggleSwitch controls:ControlHelper.Header="Start Touchless.Design On Start Up" IsOn="{Binding StartOnStartup.Value}" />
+    <ui:SimpleStackPanel Spacing="5">
+      <c:BoolControl Value="{Binding StartOnStartup}" 
+                     Header="Start When Windows Starts" />
       <Button Click="HandleOpenDirectoryClicked">Open Directory</Button>
-    </controls:SimpleStackPanel>
+    </ui:SimpleStackPanel>
   </Grid>
 </UserControl>

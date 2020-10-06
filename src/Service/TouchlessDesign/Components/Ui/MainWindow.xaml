@@ -21,62 +21,54 @@
         Closing="MainWindow_OnClosing"
         BorderBrush="Transparent" BorderThickness="0" >
   <Grid>
-    <c:StatusView HorizontalAlignment="Left" VerticalAlignment="Bottom" DataContext="{StaticResource StatusViewModel}"/>
     <DockPanel>
-      <Border Height="2" DockPanel.Dock="Top" Background="{StaticResource Ideum.Brush.ForegroundSecondary1}" />
-      <!--Status Bar-->
-      <!--<DockPanel x:Name="SaveConfirmationPanel" Visibility="Visible" DockPanel.Dock="Bottom">
-        <Border Height="2" DockPanel.Dock="Top" Background="{StaticResource Ideum.Brush.ForegroundSecondary1}" />
-        <DockPanel DockPanel.Dock="Bottom" Height="51" Margin="12 8" LastChildFill="False">
-          <Button DockPanel.Dock="Right" Width="100" Style="{StaticResource Ideum.Button.Confirm}" Content="SAVE" />
-          <Button DockPanel.Dock="Right" Margin="0 0 12 0" Style="{StaticResource Ideum.Button.Error}" Content="DISCARD" />
-          <TextBlock FontSize="16" VerticalAlignment="Center">You have unsaved changes, would you like to save?</TextBlock>
-        </DockPanel>
-      </DockPanel>-->
-
-      <!--Body-->
-      <TabControl TabStripPlacement="Left" BorderThickness="0" Padding="0" Margin="0" Background="Transparent" SelectedIndex="0">
-        <TabControl.Resources>
-          <Style TargetType="TabItem">
-            <Setter Property="Template">
-              <Setter.Value>
-                <ControlTemplate TargetType="{x:Type TabItem}">
-                  <Border Name="Panel" Height="40">
-                    <TextBlock x:Name="ContentSite" 
+      <c:StatusView DataContext="{StaticResource StatusViewModel}" DockPanel.Dock="Bottom"/>
+      <Grid>
+        <DockPanel>
+          <Border Height="2" DockPanel.Dock="Top" Background="{StaticResource Ideum.Brush.ForegroundSecondary1}" />
+          <TabControl TabStripPlacement="Left" BorderThickness="0" Padding="0" Margin="0" Background="Transparent" SelectedIndex="0">
+            <TabControl.Resources>
+              <Style TargetType="TabItem">
+                <Setter Property="Template">
+                  <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TabItem}">
+                      <Border Name="Panel" Height="40">
+                        <TextBlock x:Name="ContentSite" 
                                Text="{TemplateBinding Header}" 
                                Foreground="{TemplateBinding Foreground}" 
                                VerticalAlignment="Center" 
                                HorizontalAlignment="Left" 
                                Margin="12 0 0 0"
                                FontSize="17" FontFamily="/TouchlessDesign;component/Resources/#TeX Gyre Heros" />
-                  </Border>
-                  <ControlTemplate.Triggers>
-                    <Trigger Property="IsSelected" Value="True">
-                      <Setter TargetName="Panel" Property="Background" Value="{StaticResource Ideum.Brush.BackgroundColor2}" />
-                      <Setter TargetName="ContentSite" Property="Foreground" Value="{StaticResource Ideum.Brush.Foreground}" />
-                    </Trigger>
-                    <Trigger Property="IsSelected" Value="False">
-                      <Setter TargetName="Panel" Property="Background" Value="Transparent" />
-                    </Trigger>
-                  </ControlTemplate.Triggers>
-                </ControlTemplate>
-              </Setter.Value>
-            </Setter>
-          </Style>
-          <Style TargetType="{x:Type TabControl}">
-            <Setter Property="TabStripPlacement" Value="Left" />
-            <Setter Property="Padding" Value="0"/>
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="Background" Value="{StaticResource Ideum.Brush.BackgroundColor}"/>
-            <Setter Property="Foreground" Value="{StaticResource Ideum.Brush.Foreground}"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Template">
-              <Setter.Value>
-                <ControlTemplate TargetType="{x:Type TabControl}">
-                  <DockPanel x:Name="templateRoot" ClipToBounds="true" SnapsToDevicePixels="true" KeyboardNavigation.TabNavigation="Local">
-                    <DockPanel LastChildFill="False">
-                      <TabPanel x:Name="headerPanel" 
+                      </Border>
+                      <ControlTemplate.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                          <Setter TargetName="Panel" Property="Background" Value="{StaticResource Ideum.Brush.BackgroundColor2}" />
+                          <Setter TargetName="ContentSite" Property="Foreground" Value="{StaticResource Ideum.Brush.Foreground}" />
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="False">
+                          <Setter TargetName="Panel" Property="Background" Value="Transparent" />
+                        </Trigger>
+                      </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                  </Setter.Value>
+                </Setter>
+              </Style>
+              <Style TargetType="{x:Type TabControl}">
+                <Setter Property="TabStripPlacement" Value="Left" />
+                <Setter Property="Padding" Value="0"/>
+                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                <Setter Property="Background" Value="{StaticResource Ideum.Brush.BackgroundColor}"/>
+                <Setter Property="Foreground" Value="{StaticResource Ideum.Brush.Foreground}"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="Template">
+                  <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TabControl}">
+                      <DockPanel x:Name="templateRoot" ClipToBounds="true" SnapsToDevicePixels="true" KeyboardNavigation.TabNavigation="Local">
+
+                        <DockPanel LastChildFill="False">
+                          <TabPanel x:Name="headerPanel" 
                                 Background="Transparent" 
                                 DockPanel.Dock="Top"
                                 Margin="0" 
@@ -84,68 +76,104 @@
                                 KeyboardNavigation.TabIndex="1"
                                 Panel.ZIndex="1"
                                 Width="232" />
-                      <Separator DockPanel.Dock="Top" Margin="12 8 12 8" Foreground="{StaticResource Ideum.Brush.ForegroundSecondary1}" Background="{StaticResource Ideum.Brush.ForegroundSecondary1}"/>
-                      <Button DockPanel.Dock="Top" Opacity="1" Height="40" Click="HandleRestartClicked" HorizontalContentAlignment="Left" Width="232" Style="{StaticResource Ideum.StyleMenuBarButton}">
-                        <TextBlock Text="Restart"
-                                   Foreground="{StaticResource Ideum.Brush.ForegroundSecondary}"
-                                   VerticalAlignment="Center" 
-                                   HorizontalAlignment="Left" 
-                                   Margin="12 0 0 0"
-                                   FontSize="17" TextElement.FontFamily="/TouchlessDesign;component/Resources/#TeX Gyre Heros"/>
-                      </Button>
-                      <Button DockPanel.Dock="Top" Opacity="1" Height="40" Click="HandleExitButtonClicked" HorizontalContentAlignment="Left" Width="232" Style="{StaticResource Ideum.StyleMenuBarButton}">
-                        <TextBlock Text="Close"
+                          <Separator DockPanel.Dock="Top" Margin="12 8 12 8" Foreground="{StaticResource Ideum.Brush.ForegroundSecondary1}" Background="{StaticResource Ideum.Brush.ForegroundSecondary1}"/>
+                          <Button DockPanel.Dock="Top" Opacity="1" Height="40" Click="HandleSaveButtonClicked" HorizontalContentAlignment="Left" Width="232" Style="{StaticResource Ideum.StyleMenuBarButton}">
+                            <StackPanel Margin="12 0 0 0" Orientation="Horizontal">
+                              <TextBlock Text="Save"
+                                         Foreground="{StaticResource Ideum.Brush.ForegroundSecondary}"
+                                         VerticalAlignment="Center" HorizontalAlignment="Left" 
+                                         FontSize="17" 
+                                         TextElement.FontFamily="/TouchlessDesign;component/Resources/#TeX Gyre Heros"/>
+                            </StackPanel>
+                          </Button>
+                          <Button DockPanel.Dock="Top" Opacity="1" Height="40" Click="HandleRevertButtonClicked" HorizontalContentAlignment="Left" Width="232" Style="{StaticResource Ideum.StyleMenuBarButton}">
+                            <StackPanel Margin="12 0 0 0" Orientation="Horizontal">
+                              <TextBlock Text="Revert Changes"
+                                         Foreground="{StaticResource Ideum.Brush.ForegroundSecondary}"
+                                         VerticalAlignment="Center" HorizontalAlignment="Left" 
+                                         FontSize="17" 
+                                         TextElement.FontFamily="/TouchlessDesign;component/Resources/#TeX Gyre Heros"/>
+                            </StackPanel>
+                          </Button>
+                          <Separator DockPanel.Dock="Top" Margin="12 8 12 8" Foreground="{StaticResource Ideum.Brush.ForegroundSecondary1}" Background="{StaticResource Ideum.Brush.ForegroundSecondary1}"/>
+                          <Button DockPanel.Dock="Top" Opacity="1" Height="40" Click="HandleRestartClicked" HorizontalContentAlignment="Left" Width="232" Style="{StaticResource Ideum.StyleMenuBarButton}">
+                            <StackPanel Margin="12 0 0 0" Orientation="Horizontal">
+                              <Rectangle Width="8" Height="8" Margin="0 2 6 0" Fill="{StaticResource Ideum.Brush.AccentPrimary}" Visibility="{Binding Source={StaticResource AppViewModel}, Path=RestartNeeded, Converter={StaticResource BoolToVis}}"/>
+                              <TextBlock Text="Restart"
+                                       Foreground="{StaticResource Ideum.Brush.ForegroundSecondary}"
+                                       VerticalAlignment="Center" 
+                                       HorizontalAlignment="Left" 
+                                       FontSize="17" TextElement.FontFamily="/TouchlessDesign;component/Resources/#TeX Gyre Heros"/>
+                            </StackPanel>
+                          </Button>
+                          <Button DockPanel.Dock="Top" Opacity="1" Height="40" Click="HandleExitButtonClicked" HorizontalContentAlignment="Left" Width="232" Style="{StaticResource Ideum.StyleMenuBarButton}">
+                            <TextBlock Text="Close"
                                    Foreground="{StaticResource Ideum.Brush.ForegroundError}"
                                    VerticalAlignment="Center" 
                                    HorizontalAlignment="Left" 
                                    Margin="12 0 0 0"
                                    FontSize="17" TextElement.FontFamily="/TouchlessDesign;component/Resources/#TeX Gyre Heros" />
-                      </Button>
-                    </DockPanel>
-                    <Border Background="{StaticResource Ideum.Brush.ForegroundSecondary1}"
+                          </Button>
+                        </DockPanel>
+                        <Border Background="{StaticResource Ideum.Brush.ForegroundSecondary1}"
                             DockPanel.Dock="Left"
                             Width="2"/>
-                    <Border x:Name="contentPanel" 
+                        <Border x:Name="contentPanel" 
                             BorderBrush="{TemplateBinding BorderBrush}" 
                             BorderThickness="{TemplateBinding BorderThickness}" 
                             Background="{TemplateBinding Background}" 
                             KeyboardNavigation.DirectionalNavigation="Contained" 
                             KeyboardNavigation.TabIndex="2" 
                             KeyboardNavigation.TabNavigation="Local">
-                      <ContentPresenter x:Name="PART_SelectedContentHost" 
+                          <ContentPresenter x:Name="PART_SelectedContentHost" 
                                         ContentSource="SelectedContent" 
                                         Margin="0 0 0 0"/>
-                    </Border>
-                  </DockPanel>
-                </ControlTemplate>
-              </Setter.Value>
-            </Setter>
-          </Style>
-        </TabControl.Resources>
-        <TabItem Header="About" Foreground="{StaticResource Ideum.Brush.ForegroundSecondary}">
-          <c:PageAbout />
-        </TabItem>
-        <TabItem Header="General" Foreground="{StaticResource Ideum.Brush.ForegroundSecondary}">
-          <c:PageGeneral DataContext="{StaticResource GeneralViewModel}"/>
-        </TabItem>
-        <TabItem Header="Input" Foreground="{StaticResource Ideum.Brush.ForegroundSecondary}">
-          <c:PageInput DataContext="{StaticResource InputViewModel}"/>
-        </TabItem>
-        <TabItem Header="Display" Foreground="{StaticResource Ideum.Brush.ForegroundSecondary}">
-          <c:PageDisplay DataContext="{StaticResource DisplayViewModel}" />
-        </TabItem>
-        <TabItem Header="Network" Foreground="{StaticResource Ideum.Brush.ForegroundSecondary}">
-          <c:PageNetwork DataContext="{StaticResource NetworkViewModel}" />
-        </TabItem>
-      </TabControl>
+                        </Border>
+                      </DockPanel>
+                    </ControlTemplate>
+                  </Setter.Value>
+                </Setter>
+              </Style>
+            </TabControl.Resources>
+            <TabItem Header="About" Foreground="{StaticResource Ideum.Brush.ForegroundSecondary}">
+              <c:PageAbout />
+            </TabItem>
+            <TabItem Header="General" Foreground="{StaticResource Ideum.Brush.ForegroundSecondary}">
+              <c:PageGeneral DataContext="{StaticResource GeneralViewModel}"/>
+            </TabItem>
+            <TabItem Header="Input" Foreground="{StaticResource Ideum.Brush.ForegroundSecondary}">
+              <c:PageInput DataContext="{StaticResource InputViewModel}"/>
+            </TabItem>
+            <TabItem Header="Display" Foreground="{StaticResource Ideum.Brush.ForegroundSecondary}">
+              <c:PageDisplay DataContext="{StaticResource DisplayViewModel}" />
+            </TabItem>
+            <TabItem IsSelected="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type c:MainWindow}}, Path=SelectNetworkTab}" Header="Network" Foreground="{StaticResource Ideum.Brush.ForegroundSecondary}">
+              <c:PageNetwork DataContext="{StaticResource NetworkViewModel}" />
+            </TabItem>
+          </TabControl>
+        </DockPanel>
+        <!--Modals-->
+      </Grid>
     </DockPanel>
-    <!--Modals-->
-    <Grid x:Name="ExitPrompt" Visibility="Collapsed" Background="#AA000000">
-      <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-        <DockPanel>
+    <Grid x:Name="ExitPrompt" Visibility="Collapsed" Background="#EE1e1d1a">
+      <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 -60 0 0">
+        <DockPanel Visibility="{Binding Source={StaticResource AppViewModel}, Path=SaveNeeded, Converter={StaticResource BoolToVis}}">
           <TextBlock DockPanel.Dock="Top" FontSize="16" Foreground="{StaticResource Ideum.Brush.Foreground}" HorizontalAlignment="Center" Margin="12" Text="Are you sure?" />
           <Button Content="NO" DockPanel.Dock="Right" Style="{StaticResource Ideum.Button.Normal}" />
           <Button Content="YES" DockPanel.Dock="Right" Margin="0 0 12 0" Style="{StaticResource Ideum.Button.Error}" />
+        </DockPanel>
+        <DockPanel Visibility="{Binding Source={StaticResource AppViewModel}, Path=SaveNeeded, Converter={StaticResource BoolToVisNegated}}">
+          <TextBlock DockPanel.Dock="Top" FontSize="16" Foreground="{StaticResource Ideum.Brush.Foreground}" HorizontalAlignment="Center" Margin="12" Text="There are unsaved changes." />
+          <Button Content="CANCEL" DockPanel.Dock="Right" Style="{StaticResource Ideum.Button.Normal}" />
+          <Button Content="CLOSE" DockPanel.Dock="Right" Margin="0 0 12 0" Style="{StaticResource Ideum.Button.Error}" />
+          <Button DockPanel.Dock="Right" Margin="0 0 12 0" Style="{StaticResource Ideum.Button.Confirm}">
+            <Button.Content>
+              <TextBlock>
+                <Run>SAVE AND</Run>
+                <Run>CLOSE</Run>
+              </TextBlock>
+            </Button.Content>
+          </Button>
         </DockPanel>
       </StackPanel>
     </Grid>
