@@ -1,8 +1,6 @@
 ﻿using Leap;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 //NOTE: Setting HSV values is still in development
 
@@ -13,7 +11,6 @@ namespace TouchlessDesign.Components.Input.Providers.RealSense {
 
     private const float Conversion = 10f;
 
-    private RealSenseSettings _settings;
     private UDPListener _listener;
     private LeapTransform _xform;
     private bool _handUpdateFlag = false;
@@ -30,8 +27,7 @@ namespace TouchlessDesign.Components.Input.Providers.RealSense {
       _xform = new LeapTransform(Vector.Zero, LeapQuaternion.Identity, new Vector(Conversion, Conversion, Conversion));
       _xform.MirrorZ();
       Log.Debug("Starting RealSense UDP listener.");
-      _settings = RealSenseSettings.Get(DataDir);
-      _listener = new UDPListener(_settings);
+      _listener = new UDPListener(AppComponent.Config.Input.UpdateRate_ms, AppComponent.Config.Network.UdpBroadcastInterval_ms, AppComponent.Config.Network.UdpBroadcast, AppComponent.Config.Network.UdpData);
       _listener.MessageReceived = HandleMessageReceived;
       _listener.Start();
     }
