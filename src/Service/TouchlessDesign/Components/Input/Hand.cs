@@ -1,4 +1,5 @@
 ﻿using Leap;
+using TouchlessDesign.Components.Input.Providers.RealSense;
 
 namespace TouchlessDesign.Components.Input {
   public class Hand {
@@ -41,11 +42,31 @@ namespace TouchlessDesign.Components.Input {
       Apply(hand, xform);
     }
 
+    public Hand(RealSenseHand hand, Leap.LeapTransform? xform = null) {
+      Apply(hand, xform);
+    }
+
     public void Apply(Leap.Hand hand, Leap.LeapTransform? xform = null) {
       Id = hand.Id;
       GrabStrength = hand.GrabStrength;
       Confidence = hand.Confidence;
       var p = xform?.TransformPoint(hand.PalmPosition) ?? hand.PalmPosition;
+      X = p.x;
+      Y = p.y;
+      Z = p.z;
+    }
+
+    public void Apply(RealSenseHand hand, Leap.LeapTransform? xform = null) {
+      Id = hand.Id;
+      GrabStrength = hand.Grabbing;
+      Confidence = 1.0f;
+
+      Vector position = new Vector {
+        x = -hand.X,
+        y = hand.Y,
+        z = hand.Z
+      };
+      var p = xform?.TransformPoint(position) ?? position;
       X = p.x;
       Y = p.y;
       Z = p.z;
