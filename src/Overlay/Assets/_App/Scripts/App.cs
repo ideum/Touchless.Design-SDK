@@ -15,6 +15,8 @@ namespace Ideum {
 
     public Cursor Cursor;
     public CanvasGroup WarningBackground;
+    public TransparentWindow Window;
+    public Onboarding Onboarding;
 
     private bool _connected;
     private float _queryInterval = 0.25f;
@@ -28,6 +30,9 @@ namespace Ideum {
       TouchlessDesign.Initialize(AppSettings.Get().DataDirectory.GetPath());
       TouchlessDesign.Connected += OnConnected;
       TouchlessDesign.Disconnected += OnDisconnected;
+
+      Onboarding.Initialize();
+      Onboarding.Activate();
     }
 
     // Deinitialize TouchlessDesign

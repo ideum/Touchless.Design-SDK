@@ -26,6 +26,9 @@ public class TransparentWindow : MonoBehaviour {
   [Tooltip("The framerate the overlay should try to run at")] //
   [SerializeField] int targetFrameRate = 30;
 
+  [Tooltip("If true, gameobjects will recover focus")]
+  public bool clickable = false;
+
 
   /////////////////////
   //Windows DLL stuff//
@@ -113,7 +116,7 @@ public class TransparentWindow : MonoBehaviour {
 
   //Returns true if the cursor is over a UI element or 2D physics object
   bool FocusForInput() {
-    return false;
+    return clickable;
     //EventSystem eventSystem = EventSystem.current;
     //if (eventSystem && eventSystem.IsPointerOverGameObject()) {
     //  return true;
