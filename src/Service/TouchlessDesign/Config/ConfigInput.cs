@@ -2,7 +2,7 @@
 using System.IO;
 
 namespace TouchlessDesign.Config {
-  public class ConfigInput {
+  public class ConfigInput : ConfigBase<ConfigInput> {
 
 
     public string ToggleEmulationKeyCombination = "Control+Alt+I";
@@ -30,6 +30,14 @@ namespace TouchlessDesign.Config {
 
     public float MinConfidence = 0.0f;
 
+    public int MinH = 0;
+    public int MaxH = 255;
+
+    public int MinS = 0;
+    public int MaxS = 255;
+
+    public int MinV = 0;
+    public int MaxV = 255;
 
     #region Utility Methods
 
@@ -92,15 +100,12 @@ namespace TouchlessDesign.Config {
 
     public static ConfigInput Get(string dir) {
       var path = Path.Combine(dir, Filename);
-      return Factory.Get(path, ()=>new ConfigInput());
+      return Factory.Get(path, ()=>new ConfigInput {
+        FilePath = path
+      });
     }
 
-    public void Save(string dir) {
-      var path = Path.Combine(dir, Filename);
-      Factory.Save(path, this);
-    }
-
-    public void Apply(ConfigInput i) {
+    public override void Apply(ConfigInput i) {
       ToggleEmulationKeyCombination = i.ToggleEmulationKeyCombination;
       ToggleEmulationToggleSpeed_ms = i.ToggleEmulationToggleSpeed_ms;
       GrabClickThreshold = i.GrabClickThreshold;
@@ -115,6 +120,12 @@ namespace TouchlessDesign.Config {
       MinY = i.MinY;
       MaxY = i.MaxY;
       MinConfidence = i.MinConfidence;
+      MinH = i.MinH;
+      MaxH = i.MaxH;
+      MinS = i.MinS;
+      MaxS = i.MaxS;
+      MinV = i.MinV;
+      MaxV = i.MaxV;
     }
   }
 }

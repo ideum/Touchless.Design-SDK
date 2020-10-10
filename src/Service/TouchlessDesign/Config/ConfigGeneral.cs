@@ -1,7 +1,7 @@
 ﻿using System.IO;
 
 namespace TouchlessDesign.Config {
-  public class ConfigGeneral {
+  public class ConfigGeneral : ConfigBase<ConfigGeneral> {
 
     public bool StartOnStartup = true;
 
@@ -9,7 +9,9 @@ namespace TouchlessDesign.Config {
 
     public static ConfigGeneral Get(string dir) {
       var path = Path.Combine(dir, Filename);
-      return Factory.Get(path, () => new ConfigGeneral());
+      return Factory.Get(path, () => new ConfigGeneral {
+        FilePath = path
+      });
     }
 
     public void Save(string dir) {
@@ -17,7 +19,7 @@ namespace TouchlessDesign.Config {
       Factory.Save(path, this);
     }
 
-    public void Apply(ConfigGeneral i) {
+    public override void Apply(ConfigGeneral i) {
       StartOnStartup = i.StartOnStartup;
     }
   }

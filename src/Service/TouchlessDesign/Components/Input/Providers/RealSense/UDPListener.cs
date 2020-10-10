@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using TouchlessDesign.Config;
 
 namespace TouchlessDesign.Components.Input.Providers.RealSense {
   public class UDPListener : IDisposable {
@@ -21,7 +22,6 @@ namespace TouchlessDesign.Components.Input.Providers.RealSense {
     private AutoResetEvent _endEvt;
     private AutoResetEvent _msgEvt;
     private WaitHandle[] _waitHandles;
-    private RealSenseSettings _settings;
 
     private UdpClient _receiveClient;
     private UdpClient _broadcastClient;
@@ -32,8 +32,15 @@ namespace TouchlessDesign.Components.Input.Providers.RealSense {
     private int _broadcastInterval;
     private Timer _broadcastTimer;
 
-    public UDPListener(RealSenseSettings settings) {
-      _settings = settings;
+
+    private readonly int _tickRate, _broadcastRate;
+    private readonly IpInfo _broadcastInfo, _commInfo;
+
+    public UDPListener(int tickRate, int broadcastInterval_ms, IpInfo broadcastInfo, IpInfo commInfo) {
+      _tickRate = tickRate;
+      _broadcastRate = broadcastInterval_ms;
+      _broadcastInfo = broadcastInfo;
+      _commInfo = commInfo;
     }
 
     public void Start() {
@@ -41,11 +48,11 @@ namespace TouchlessDesign.Components.Input.Providers.RealSense {
       _msgEvt = new AutoResetEvent(false);
       _waitHandles = new WaitHandle[] { _endEvt, _msgEvt };
 
-      var tickRate = _settings.UpdateRate_ms;
+      var tickRate = _tickRate;
       if(tickRate <= 0) {
-        tickRate = RealSenseSettings.Defaults().UpdateRate_ms;
+        tickRate = 16;
       }
-      _broadcastInterval = _settings.BroadcastIntervalMillis;
+      _broadcastInterval = _broadcastRate;
 
       _thread = new Thread(ListenWork);
       _thread.Start();
@@ -63,7 +70,7 @@ namespace TouchlessDesign.Components.Input.Providers.RealSense {
       _receiveClient = new UdpClient();
       _receiveClient.ExclusiveAddressUse = false;
       _receiveClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
-      _receiveClient.Client.Bind(new IPEndPoint(IPAddress.Any, _settings.CommunicationPort));
+      _receiveClient.Client.Bind(new IPEndPoint(IPAddress.Any, _commInfo.Port));
 
       _broadcastClient = new UdpClient();
       _broadcastClient.EnableBroadcast = true;
@@ -85,16 +92,16 @@ namespace TouchlessDesign.Components.Input.Providers.RealSense {
     private void SendBroadcast(object state) {
       //Log.Debug("Sending discovery broadcast...");
 
-      var data = Encoding.UTF8.GetBytes("Touchless_discovery " + _settings.CommunicationPort);
+      var data = Encoding.UTF8.GetBytes("Touchless_discovery " + _commInfo.Port);
       try {
-        _broadcastClient.Send(data, data.Length, new IPEndPoint(IPAddress.Broadcast, _settings.BroadcastPort));
+        _broadcastClient.Send(data, data.Length, new IPEndPoint(IPAddress.Broadcast, _broadcastInfo.Port));
       } catch(SocketException e) {
         Log.Error("Socket exception caught: " + e.ToString());
       }
     }
 
     private void HandleMessageReceived(IAsyncResult result) {
-      IPEndPoint clientEndpoint = new IPEndPoint(IPAddress.Any, _settings.CommunicationPort);
+      IPEndPoint clientEndpoint = new IPEndPoint(IPAddress.Any, _commInfo.Port);
       try {
         var rawResponse = _receiveClient.EndReceive(result, ref clientEndpoint);
 

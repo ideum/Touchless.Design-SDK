@@ -4,16 +4,25 @@ using System.Windows;
 namespace TouchlessDesign.Components.Ui {
   public partial class MainWindow : Window {
 
-    private bool _trueClose = false;
+    public static readonly DependencyProperty SelectNetworkTabProperty = DependencyProperty.Register(
+      "SelectNetworkTab", typeof(bool), typeof(MainWindow), new PropertyMetadata(default(bool)));
 
+    public bool SelectNetworkTab {
+      get { return (bool) GetValue(SelectNetworkTabProperty); }
+      set { SetValue(SelectNetworkTabProperty, value); }
+    }
+
+    public static MainWindow Instance { get; private set; }
+
+    private bool _trueClose = false;
 
     public App App {
       get { return Application.Current as App; }
     }
 
     public MainWindow() {
+      Instance = this;
       InitializeComponent();
-      
     }
 
     private void HandleRestartClicked(object sender, RoutedEventArgs e) {
@@ -33,6 +42,10 @@ namespace TouchlessDesign.Components.Ui {
       HideWindow();
     }
 
+    public void DoSelectNetworkTab() {
+      SelectNetworkTab = true;
+    }
+
     public void ShowWindow() {
       App.StatusViewModel.UpdateValues();
       App.StatusViewModel.Start();
@@ -42,6 +55,14 @@ namespace TouchlessDesign.Components.Ui {
     public void HideWindow() {
       App.StatusViewModel.Stop();
       Hide();
+    }
+
+    private void HandleRevertButtonClicked(object sender, RoutedEventArgs e) {
+      App.AppViewModel.RevertChanges();
+    }
+
+    private void HandleSaveButtonClicked(object sender, RoutedEventArgs e) {
+      App.AppViewModel.SaveChanges();
     }
   }
 }

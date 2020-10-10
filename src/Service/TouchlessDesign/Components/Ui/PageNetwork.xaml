@@ -13,15 +13,70 @@
     <vm:NetworkViewModel />
   </d:UserControl.DataContext>
   <Grid Margin="8">
-    <ui:SimpleStackPanel Spacing="8" Width="300" HorizontalAlignment="Left">
-      <c:BoolPropertyControl x:Name="TcpEnabledSwitch" DataContext="{Binding TcpEnabled}"/>
-      <c:ClampedPropertyControl ShowSlider="false" DataContext="{Binding TcpPort}" NumberFormatter="{StaticResource IntNumberFormatter}" IsEnabled="{Binding ElementName=TcpEnabledSwitch, Path=DataContext.Value}"/>
-      <!--<c:BoolPropertyControl x:Name="WsEnabledSwitch" DataContext="{Binding WsEnabled}"/>
-      <c:ClampedPropertyControl ShowSlider="false" DataContext="{Binding WsPort}" NumberFormatter="{StaticResource IntNumberFormatter}" IsEnabled="{Binding ElementName=WsEnabledSwitch, Path=DataContext.Value}"/>-->
+    <ui:SimpleStackPanel Spacing="5" HorizontalAlignment="Left">
+      <Label Margin="0 0 0 0" FontSize="16" FontWeight="Bold" Content="General"/>
+      <c:NumberControl Value="{Binding ClientReconnectInterval, Mode=TwoWay}" 
+                       Header="Reconnect Interval (ms)"
+                       LabelMinWidth="150"
+                       ShowSlider="False"
+                       Min="1" Max="15000"
+                       SmallChange="1" LargeChange="10"
+                       NumberFormatter="{StaticResource IntNumberFormatter}"/>
+      <Label Margin="0 6 0 0" FontSize="16" FontWeight="Bold" Content="TCP"/>
+      <c:BoolControl Value="{Binding TcpEnabled, Mode=TwoWay}" 
+                     Header="Enabled"
+                     LabelMinWidth="150"/>
+      <c:NumberControl Value="{Binding TcpPort, Mode=TwoWay}" 
+                       Header="Port"
+                       LabelMinWidth="150"
+                       ShowSlider="False"
+                       Min="1" Max="65535"
+                       SmallChange="1" LargeChange="10"
+                       NumberFormatter="{StaticResource IntNumberFormatter}"/>
+      <Label Margin="0 6 0 0" FontSize="16" FontWeight="Bold" Content="Web Socket"/>
+      <c:BoolControl Value="{Binding WsEnabled, Mode=TwoWay}" 
+                     Header="Enabled"
+                     LabelMinWidth="150"/>
+      <c:NumberControl Value="{Binding WsPort, Mode=TwoWay}" 
+                       Header="Port"
+                       LabelMinWidth="150"
+                       ShowSlider="False"
+                       Min="1" Max="65535"
+                       SmallChange="1" LargeChange="10"
+                       NumberFormatter="{StaticResource IntNumberFormatter}"/>
+      <Label Margin="0 6 0 0" FontSize="16" FontWeight="Bold" Content="UDP"/>
+      <c:BoolControl Value="{Binding UdpEnabled, Mode=TwoWay}" 
+                     Header="Enabled"
+                     LabelMinWidth="150"/>
+      <c:NumberControl Value="{Binding UdpBroadcastRate, Mode=TwoWay}" 
+                       Header="Broadcast Rate (ms)"
+                       LabelMinWidth="150"
+                       ShowSlider="False"
+                       Min="1" Max="15000"
+                       SmallChange="1" LargeChange="10"
+                       NumberFormatter="{StaticResource IntNumberFormatter}"/>
+      <c:NumberControl Value="{Binding UdpBroadcastPort, Mode=TwoWay}" 
+                       Header="Broadcast Port"
+                       LabelMinWidth="150"
+                       ShowSlider="False"
+                       Min="1" Max="65535"
+                       SmallChange="1" LargeChange="10"
+                       NumberFormatter="{StaticResource IntNumberFormatter}"/>
+      <c:NumberControl Value="{Binding UdpDataPort, Mode=TwoWay}" 
+                       Header="Data Port"
+                       LabelMinWidth="150"
+                       ShowSlider="False"
+                       Min="1" Max="65535"
+                       SmallChange="1" LargeChange="10"
+                       NumberFormatter="{StaticResource IntNumberFormatter}"/>
+      <!--<c:BoolPropertyControl x:Name="TcpEnabledSwitch" DataContext="{Binding TcpEnabled}"/>
+      <c:ClampedPropertyControl ShowSlider="false" DataContext="{Binding TcpPort}" NumberFormatter="{StaticResource IntNumberFormatter}" IsEnabled="{Binding ElementName=TcpEnabledSwitch, Path=DataContext.Prop}"/>
+      <c:BoolPropertyControl x:Name="WsEnabledSwitch" DataContext="{Binding WsEnabled}"/>
+      <c:ClampedPropertyControl ShowSlider="false" DataContext="{Binding WsPort}" NumberFormatter="{StaticResource IntNumberFormatter}" IsEnabled="{Binding ElementName=WsEnabledSwitch, Path=DataContext.Value}"/>
       <c:BoolPropertyControl x:Name="UdpEnabledSwitch" DataContext="{Binding UdpEnabled}" />
-      <c:ClampedPropertyControl ShowSlider="false" DataContext="{Binding UdpBroadcastRate}" NumberFormatter="{StaticResource IntNumberFormatter}" IsEnabled="{Binding ElementName=UdpEnabledSwitch, Path=DataContext.Value}"/>
-      <c:ClampedPropertyControl ShowSlider="false" DataContext="{Binding UdpBroadcastPort}" NumberFormatter="{StaticResource IntNumberFormatter}" IsEnabled="{Binding ElementName=UdpEnabledSwitch, Path=DataContext.Value}"/>
-      <c:ClampedPropertyControl ShowSlider="false" DataContext="{Binding UdpDataPort}" NumberFormatter="{StaticResource IntNumberFormatter}" IsEnabled="{Binding ElementName=UdpEnabledSwitch, Path=DataContext.Value}"/>
+      <c:ClampedPropertyControl ShowSlider="false" DataContext="{Binding UdpBroadcastRate}" NumberFormatter="{StaticResource IntNumberFormatter}" IsEnabled="{Binding ElementName=UdpEnabledSwitch, Path=DataContext.Prop}"/>
+      <c:ClampedPropertyControl ShowSlider="false" DataContext="{Binding UdpBroadcastPort}" NumberFormatter="{StaticResource IntNumberFormatter}" IsEnabled="{Binding ElementName=UdpEnabledSwitch, Path=DataContext.Prop}"/>
+      <c:ClampedPropertyControl ShowSlider="false" DataContext="{Binding UdpDataPort}" NumberFormatter="{StaticResource IntNumberFormatter}" IsEnabled="{Binding ElementName=UdpEnabledSwitch, Path=DataContext.Prop}"/>-->
     </ui:SimpleStackPanel>
   </Grid>
 </UserControl>

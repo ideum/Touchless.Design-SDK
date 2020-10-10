@@ -2,18 +2,15 @@
 using System.ComponentModel;
 
 namespace TouchlessDesign.Components.Ui.ViewModels.Properties {
-  public interface IProperty : INotifyPropertyChanged {
-
-    event Action<IProperty> Changed;
+  public interface IProperty {
 
     string Name { get; set; }
 
-    object BaseValue { get; set; }
-
+    event Action<IProperty> PropChanged;
   }
 
   public interface IProperty<T> : IProperty {
-     T Value { get; set; }
+     T Prop { get; set; }
   }
 
 }

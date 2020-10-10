@@ -1,7 +1,7 @@
 ﻿using System.IO;
 
 namespace TouchlessDesign.Config {
-  public class ConfigNetwork {
+  public class ConfigNetwork : ConfigBase<ConfigNetwork> {
     
     public int ReconnectClientInterval_ms = 1000;
 
@@ -57,7 +57,9 @@ namespace TouchlessDesign.Config {
 
     public static ConfigNetwork Get(string dir) {
       var path = Path.Combine(dir, Filename);
-      return Factory.Get(path, () => new ConfigNetwork());
+      return Factory.Get(path, () => new ConfigNetwork {
+        FilePath = path
+      });
     }
 
     public void Save(string dir) {
@@ -65,7 +67,7 @@ namespace TouchlessDesign.Config {
       Factory.Save(path, this);
     }
 
-    public void Apply(ConfigNetwork i) {
+    public override void Apply(ConfigNetwork i) {
       ReconnectClientInterval_ms = i.ReconnectClientInterval_ms;
       PingInterval_ms = i.PingInterval_ms;
       TcpEnabled = i.TcpEnabled;

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace TouchlessDesign.Components {
 
@@ -41,6 +42,16 @@ namespace TouchlessDesign.Components {
 
     protected abstract void DoStop();
 
+    private static bool _isLoaded = false;
+    private static readonly List<Action> OnLoadedHandlers = new List<Action>();
+
+    public static void OnLoaded(Action onLoaded) {
+      if (_isLoaded) {
+        onLoaded?.Invoke();
+        return;
+      }
+      OnLoadedHandlers.Add(onLoaded);
+    }
 
     public static void InitializeComponents(App app) {
       Config = new Config.Config(app.DataDir);
@@ -63,6 +74,11 @@ namespace TouchlessDesign.Components {
           Log.Error($"Error starting AppComponent of type {c.GetType().Name}: {e}");
         }
       }
+      _isLoaded = true;
+      foreach (var onLoadedHandler in OnLoadedHandlers) {
+        onLoadedHandler?.Invoke();
+      }
+      OnLoadedHandlers.Clear();
     }
 
 
