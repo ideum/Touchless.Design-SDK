@@ -32,6 +32,7 @@ namespace Ideum {
       TouchlessDesign.Disconnected += OnDisconnected;
 
       Onboarding.Initialize();
+      //Window.clickable = true;
       Onboarding.Activate();
     }
 
@@ -87,6 +88,7 @@ namespace Ideum {
 
     // Method delegate to handle TouchlessDesign response to QueryClickAndHoverState. Passes both values on to the cursor.
     private void HandleQueryResponse(bool clickState, HoverStates hoverState) {
+      Log.Debug("HI");
       Cursor.DoStateChange(hoverState, clickState);
     }
 

@@ -40,7 +40,7 @@ public class App : MonoBehaviour {
     }
 
 #if !UNITY_EDITOR
-        if(Display.displays.Length > 1)
+        if(Display.displays.Length > 0)
         {
             PlayerPrefs.SetInt("UnitySelectMonitor", screen);
 
