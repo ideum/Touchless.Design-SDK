@@ -21,6 +21,8 @@ namespace TouchlessDesign.Components.Input {
     public Property<bool> IsButtonDown { get; } = new Property<bool>(false);
     
     public Property<bool> IsNoTouch { get; } = new Property<bool>(false);
+
+    public Property<int> HandCount { get; } = new Property<int>(0);
     
     private Rectangle? _bounds;
 
@@ -170,6 +172,7 @@ namespace TouchlessDesign.Components.Input {
           if (_hands.Count <= 0) {
             if (IsButtonDown.Value) {
               SetMouseButtonDown(false);
+              HandCount.Value = 0;
             }
 
             if (_hasClicked) {
@@ -178,6 +181,7 @@ namespace TouchlessDesign.Components.Input {
           }
           else {
             var hand = _hands.Values.First();
+            HandCount.Value = _hands.Values.Count;
             
             //position
             Config.Input.NormalizedPosition(hand.X,hand.Y,hand.Z, out var h, out var v);

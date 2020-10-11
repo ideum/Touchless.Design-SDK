@@ -8,6 +8,7 @@
 
 using DG.Tweening;
 using Ideum.Data;
+using System;
 using UnityEngine;
 
 namespace Ideum {
@@ -21,6 +22,7 @@ namespace Ideum {
     private bool _connected;
     private float _queryInterval = 0.25f;
     private float _timer;
+    private int _handCount = 0;
 
     private Sequence _seq;
     bool _touchWarningActive = false;
@@ -44,11 +46,13 @@ namespace Ideum {
     private void OnDisconnected() {
       Log.Info("Disconnected. Suspending queries");
       Cursor.DoStateChange(HoverStates.None, false);
+      TouchlessDesign.SettingChanged -= HandleSettingChanged;
       _connected = false;
     }
 
     private void OnConnected() {
       Log.Info("Connected. Starting to query...");
+      TouchlessDesign.SettingChanged += HandleSettingChanged;
       _connected = true;
     }
 
@@ -59,8 +63,23 @@ namespace Ideum {
         if(_timer > _queryInterval) {
           TouchlessDesign.QueryClickAndHoverState(HandleQueryResponse);
           TouchlessDesign.QueryNoTouchState(HandleNoTouch);
+          TouchlessDesign.QueryHandCount(HandleHandCount);
           _timer = 0f;
         }
+      }
+    }
+
+    private void HandleSettingChanged(Msg msg) {
+      string settingName = msg.S;
+
+      Log.Debug("SETTING CHANGED: " + settingName);
+    }
+
+    private void HandleHandCount(int handCount) {
+      Log.Debug("HAND COUNT: " + handCount);
+      if(_handCount != handCount) {
+        _handCount = handCount;
+        Log.Debug("HAND COUNT CHANGED: " + handCount);
       }
     }
 
@@ -88,7 +107,6 @@ namespace Ideum {
 
     // Method delegate to handle TouchlessDesign response to QueryClickAndHoverState. Passes both values on to the cursor.
     private void HandleQueryResponse(bool clickState, HoverStates hoverState) {
-      Log.Debug("HI");
       Cursor.DoStateChange(hoverState, clickState);
     }
 

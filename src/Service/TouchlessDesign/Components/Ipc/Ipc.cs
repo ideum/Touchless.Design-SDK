@@ -2,17 +2,21 @@
 using System.Collections.Generic;
 using TouchlessDesign.Components.Ipc.Networking;
 using TouchlessDesign.Components.Ipc.Networking.Tcp;
+using TouchlessDesign.Config;
 
 namespace TouchlessDesign.Components.Ipc {
   public class Ipc : AppComponent, Server.IListener {
 
     protected override void DoStart() {
       InitializeServers();
+      _settingsInterestedClients = new List<Client>();
     }
 
     protected override void DoStop() {
       DeInitializeServers();
     }
+
+    private List<Client> _settingsInterestedClients;
 
     #region Message Processing
 
@@ -21,7 +25,7 @@ namespace TouchlessDesign.Components.Ipc {
     /// </summary>
     /// <param name="msg">The message to process</param>
     /// <param name="send">Invoked to send a Msg instance to the desired end point</param>
-    public void ProcessMsg(Msg msg, Action<Msg> send) {
+    public void ProcessMsg(Msg msg, Client c) {
       try {
         switch (msg.Type) {
           case Msg.Types.None:
@@ -33,7 +37,7 @@ namespace TouchlessDesign.Components.Ipc {
             }
             break;
           case Msg.Types.HoverQuery:
-            send(Msg.Factories.HoverQuery(Input.HoverState.Value));
+            c.Send(Msg.Factories.HoverQuery(Input.HoverState.Value));
             break;
           case Msg.Types.Quit:
 
@@ -42,7 +46,7 @@ namespace TouchlessDesign.Components.Ipc {
 
             break;
           case Msg.Types.DimensionsQuery:
-            send(Msg.Factories.DimensionsQuery(Input.Bounds.Left, Input.Bounds.Top, Input.Bounds.Width, Input.Bounds.Height));
+            c.Send(Msg.Factories.DimensionsQuery(Input.Bounds.Left, Input.Bounds.Top, Input.Bounds.Width, Input.Bounds.Height));
             break;
           case Msg.Types.Position:
             if (msg.ContainsIncomingServerSideData) {
@@ -55,13 +59,13 @@ namespace TouchlessDesign.Components.Ipc {
             }
             break;
           case Msg.Types.ClickQuery:
-            send(Msg.Factories.ClickQuery(Input.IsButtonDown.Value));
+            c.Send(Msg.Factories.ClickQuery(Input.IsButtonDown.Value));
             break;
           case Msg.Types.ClickAndHoverQuery:
-            send(Msg.Factories.ClickAndHoverQuery(Input.IsButtonDown.Value, Input.HoverState.Value));
+            c.Send(Msg.Factories.ClickAndHoverQuery(Input.IsButtonDown.Value, Input.HoverState.Value));
             break;
           case Msg.Types.Ping:
-            send(Msg.Factories.Ping());
+            c.Send(Msg.Factories.Ping());
             break;
           case Msg.Types.NoTouch:
             if (msg.ContainsIncomingServerSideData) {
@@ -69,17 +73,28 @@ namespace TouchlessDesign.Components.Ipc {
             }
             break;
           case Msg.Types.NoTouchQuery:
-            send(Msg.Factories.NoTouchQuery(Input.IsNoTouch.Value));
+            c.Send(Msg.Factories.NoTouchQuery(Input.IsNoTouch.Value));
             break;
           case Msg.Types.AddOnQuery:
             var dims_px = Ui.AddOnScreenBounds;
-            send(Msg.Factories.AddOnQuery(
+            c.Send(Msg.Factories.AddOnQuery(
               Ui.HasAddOnScreen, 
               Lighting.NetworkState == TouchlessDesign.Components.Lighting.Lighting.NetworkStates.Connected, 
               dims_px.Width, 
               dims_px.Height, 
               Ui.AddOnWidth_mm,
               Ui.AddOnHeight_mm));
+            break;
+          case Msg.Types.SubscribeToSettings:
+            if (!_settingsInterestedClients.Contains(c)) {
+              _settingsInterestedClients.Add(c);
+            }
+            break;
+          case Msg.Types.Settings:
+            break;
+          case Msg.Types.HandCountQuery:
+            int handCount = Input.HandCount.Value;
+            c.Send(Msg.Factories.HandCountQuery(handCount));
             break;
           default:
             throw new ArgumentOutOfRangeException();
@@ -131,6 +146,13 @@ namespace TouchlessDesign.Components.Ipc {
       }
     }
 
+    public void SendSettingsMessage(string settingName, int? intVal1 = null, int? intVal2 = null, float? floatVal1 = null, float? floatVal2 = null) {
+      Msg msg = Msg.Factories.SettingsMessage(settingName, intVal1, intVal2, floatVal1, floatVal2);
+      foreach(Client c in _settingsInterestedClients) {
+        c.Send(msg);
+      }
+    }
+
     public void ServerStarted(Server s) {
     }
 
@@ -141,10 +163,13 @@ namespace TouchlessDesign.Components.Ipc {
     }
 
     public void ClientDisconnected(Client c) {
+      if (_settingsInterestedClients.Contains(c)) {
+        _settingsInterestedClients.Remove(c);
+      }
     }
 
     public void MessageReceived(Client c, Msg msg) {
-      ProcessMsg(msg, c.Send);
+      ProcessMsg(msg, c);
     }
 
     public void OnClientException(Client c, Exception e) {

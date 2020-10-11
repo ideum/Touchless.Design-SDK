@@ -9,6 +9,8 @@ namespace Ideum {
 
     #region General
 
+    public static event Action<Msg> SettingChanged;
+
     private const string DefaultDirectory = "%appdata%/Ideum/TouchlessDesign";
 
     private static bool _isInitialized;
@@ -111,9 +113,21 @@ namespace Ideum {
             AddOnQueries.SyncClearInvoke(msg);
           }
           break;
+        case Msg.Types.SubscribeToSettings:
+          break;
+        case Msg.Types.Settings:
+          SettingChanged.Invoke(msg);
+          break;
+        case Msg.Types.HandCountQuery:
+          HandQueries.SyncClearInvoke(msg);
+          break;
         default:
           throw new ArgumentOutOfRangeException();
       }
+    }
+
+    internal static void QuertyHandCOunt(object handleHandCount) {
+      throw new NotImplementedException();
     }
 
     private static void SyncClearInvoke(this Msg.Callback c, Msg msg) {
@@ -132,6 +146,7 @@ namespace Ideum {
     private static readonly Msg.Callback ClickAndHoverQueries = new Msg.Callback(Msg.Types.ClickAndHoverQuery);
     private static readonly Msg.Callback NoTouchQueries = new Msg.Callback(Msg.Types.NoTouchQuery);
     private static readonly Msg.Callback AddOnQueries = new Msg.Callback(Msg.Types.AddOnQuery);
+    private static readonly Msg.Callback HandQueries = new Msg.Callback(Msg.Types.HandCountQuery);
 
     public static void QueryDimensions(Msg.QueryDimsDelegate callback) {
       DimsQueries.Add(callback);
@@ -199,6 +214,11 @@ namespace Ideum {
     public static void QueryAddOn(Msg.AddOnQueryDelegate callback) {
       AddOnQueries.Add(callback);
       _connectionManager.Send(Msg.Factories.AddOnQuery());
+    }
+
+    public static void QueryHandCount(Msg.HandCountQueryDelegate callback) {
+      HandQueries.Add(callback);
+      _connectionManager.Send(Msg.Factories.HandCountQuery());
     }
 
     #endregion
