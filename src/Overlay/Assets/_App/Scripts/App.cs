@@ -118,7 +118,7 @@ namespace Ideum {
     // Method delegate to handle a change in the number of tracked hands. This is used to manage the timeout, and reset of the onboarding.
     private void HandleHandCount(int handCount) {
       if(_handCount != handCount) {
-        if(_handCount == 0 && handCount > 0 && _onboardingResetFlag) {
+        if(_handCount == 0 && handCount > 0 && _onboardingResetFlag && Onboarding.Enabled) {
           SetOnboarding(true);
           _onboardingResetTimer = 0f;
           _onboardingResetFlag = false;

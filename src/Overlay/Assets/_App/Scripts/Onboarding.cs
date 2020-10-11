@@ -31,6 +31,10 @@ namespace Ideum {
       get { return _active; }
     }
 
+    public bool Enabled {
+      get { return _enabled; }
+    }
+
     private bool _active = false;
     private bool _complete = false;
     private float _progress = 0.0f;
