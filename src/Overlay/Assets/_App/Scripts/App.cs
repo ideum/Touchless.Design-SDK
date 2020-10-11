@@ -24,6 +24,13 @@ namespace Ideum {
     private float _timer;
     private int _handCount = 0;
 
+    private bool _onboardingResetFlag = true;
+    private float _onboardingResetInterval = 15f;
+    private float _onboardingResetTimer = 0f;
+
+    private float _onboardingTimeoutInterval = 30f;
+    private float _onboardingTimeoutTimer = 0f;
+
     private Sequence _seq;
     bool _touchWarningActive = false;
 
@@ -32,10 +39,8 @@ namespace Ideum {
       TouchlessDesign.Initialize(AppSettings.Get().DataDirectory.GetPath());
       TouchlessDesign.Connected += OnConnected;
       TouchlessDesign.Disconnected += OnDisconnected;
-
+      Onboarding.SetActive += SetOnboarding;
       Onboarding.Initialize();
-      //Window.clickable = true;
-      Onboarding.Activate();
     }
 
     // Deinitialize TouchlessDesign
@@ -50,14 +55,45 @@ namespace Ideum {
       _connected = false;
     }
 
+    private void HandleSettingChanged(Msg msg) {
+      switch (msg.S) {
+        case "NewUserTimeout":
+          _onboardingResetInterval = (float)msg.X;
+          break;
+        case "NoHandTimeout":
+          _onboardingTimeoutInterval = (float)msg.X;
+          break;
+        default:
+          Onboarding.SettingChanged(msg);
+          break;
+      }
+    }
+
     private void OnConnected() {
       Log.Info("Connected. Starting to query...");
       TouchlessDesign.SettingChanged += HandleSettingChanged;
       _connected = true;
     }
 
-    // At a regular interval, query the click and hover states, as well as the no touch state, passing respective method delegates.
+    // At a regular interval, query the click and hover states, as well as the no touch state, passing respective method delegates. Also manages onboarding timeout
     private void Update() {
+      if (!_onboardingResetFlag && !Onboarding.Active) {
+        _onboardingResetTimer += Time.deltaTime;
+        if(_onboardingResetTimer > _onboardingResetInterval) {
+          _onboardingResetFlag = true;
+          _onboardingResetTimer = 0f;
+          Log.Debug("Onboarding reset. It will now activate when a new hand is detected.");
+        }
+      }
+
+      if (Onboarding.Active) {
+        _onboardingTimeoutTimer += Time.deltaTime;
+        if(_onboardingTimeoutTimer > _onboardingTimeoutInterval) {
+          SetOnboarding(false);
+          _onboardingTimeoutTimer = 0f;
+        }
+      }
+
       if (_connected) {
         _timer += Time.deltaTime;
         if(_timer > _queryInterval) {
@@ -69,17 +105,29 @@ namespace Ideum {
       }
     }
 
-    private void HandleSettingChanged(Msg msg) {
-      string settingName = msg.S;
+    private void SetOnboarding(bool active) {
+      if (active) {
+        Onboarding.Activate();
+      } else {
+        Onboarding.Deactivate();
+      }
 
-      Log.Debug("SETTING CHANGED: " + settingName);
+      Window.clickable = active;
     }
 
+    // Method delegate to handle a change in the number of tracked hands. This is used to manage the timeout, and reset of the onboarding.
     private void HandleHandCount(int handCount) {
-      Log.Debug("HAND COUNT: " + handCount);
       if(_handCount != handCount) {
+        if(_handCount == 0 && handCount > 0 && _onboardingResetFlag) {
+          SetOnboarding(true);
+          _onboardingResetTimer = 0f;
+          _onboardingResetFlag = false;
+        }
         _handCount = handCount;
-        Log.Debug("HAND COUNT CHANGED: " + handCount);
+      }
+
+      if(_handCount > 0) {
+        _onboardingTimeoutTimer = 0f;
       }
     }
 

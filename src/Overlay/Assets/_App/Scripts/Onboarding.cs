@@ -1,15 +1,15 @@
 ﻿using DG.Tweening;
+using Ideum.Data;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using TMPro;
-using Unity.VectorGraphics;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Ideum {
   public class Onboarding : MonoBehaviour {
+
+    public Action<bool> SetActive;
 
     public Button CloseBar;
     public OnboardingSteps Steps;
@@ -27,6 +27,10 @@ namespace Ideum {
     public SensorBar Sensor;
     public RectTransform Scalar;
 
+    public bool Active {
+      get { return _active; }
+    }
+
     private bool _active = false;
     private bool _complete = false;
     private float _progress = 0.0f;
@@ -41,8 +45,8 @@ namespace Ideum {
     private float _finishTimeout = 5f;
     private float _finishTimer = 0f;
 
-    private float _timeout = 10f;
-    private float _timeoutTimer = 0f;
+    private bool _enabled = true;
+    private List<int> _activeSections;
 
     private void Awake() {
       _cg = GetComponent<CanvasGroup>();
@@ -51,7 +55,7 @@ namespace Ideum {
       _cg.interactable = false;
 
       CloseBar.onClick.AddListener(() => {
-        Deactivate();
+        SetActive?.Invoke(false);
       });
 
       _activities = new List<Activity>();
@@ -61,45 +65,67 @@ namespace Ideum {
       if (_complete && _active) {
         _finishTimer += Time.deltaTime;
         if(_finishTimer > _finishTimeout) {
-          Deactivate();
+          SetActive?.Invoke(false);
           _finishTimer = 0f;
         }
       }
     }
 
-    public void Rescale(float newScale) {
-      Scalar.sizeDelta = new Vector2(newScale, newScale);
-    }
-
-    public void ResizeSensorBar(Vector2 size) {
-      Sensor.Resize(size);
-    }
-
-    public void MoveSensorBar(Vector2 newPosition) {
-      Sensor.GetComponent<RectTransform>().anchoredPosition = newPosition;
+    public void SettingChanged(Msg message) {
+      switch (message.S) {
+        case "Enabled":
+          _enabled = (bool)message.Bool;
+          if(!_enabled && _active) {
+            SetActive?.Invoke(false);
+          }
+          break;
+        case "Hover&Point":
+          if((bool)message.Bool && !_activeSections.Contains(0)) {
+            _activeSections[0] = 1;
+            SetupActivities();
+          } else if((bool)message.Bool && _activeSections.Contains(0)) {
+            _activeSections[0] = 0;
+            SetupActivities();
+          }
+          break;
+        case "Point&Click":
+          if ((bool)message.Bool && !_activeSections.Contains(0)) {
+            _activeSections[1] = 1;
+            SetupActivities();
+          } else if ((bool)message.Bool && _activeSections.Contains(0)) {
+            _activeSections[1] = 0;
+            SetupActivities();
+          }
+          break;
+        case "Hold&Drag":
+          if ((bool)message.Bool && !_activeSections.Contains(0)) {
+            _activeSections[2] = 1;
+            SetupActivities();
+          } else if ((bool)message.Bool && _activeSections.Contains(0)) {
+            _activeSections[2] = 0;
+            SetupActivities();
+          }
+          break;
+        case "UIScale":
+          Rescale((float)message.F1);
+          break;
+        case "StatusBarScale":
+          ResizeSensorBar((float)message.F1);
+          break;
+        case "StatusBarXOffset":
+          Vector2 newPosition = new Vector2((float)message.F1, 0);
+          MoveSensorBar(newPosition);
+          break;
+      }
     }
 
     public void Initialize() {
-      List<int> activeSections = new List<int> { 0, 1, 2 };
-      Steps.Initialize(activeSections);
-      EndWindow.Initialize(activeSections);
-
-      if (activeSections.Contains(0)) {
-        Activity activity = Instantiate(PointActivityPrefab, ActivityRect).GetComponent<Activity>();
-        _activities.Add(activity);
-      }
-      if (activeSections.Contains(1)) {
-        Activity activity = Instantiate(ClickActivityPrefab, ActivityRect).GetComponent<Activity>();
-        _activities.Add(activity);
-      }
-      if (activeSections.Contains(2)) {
-        Activity activity = Instantiate(DragActivityPrefab, ActivityRect).GetComponent<Activity>();
-        _activities.Add(activity);
-      }
+      _activeSections = new List<int> { 1, 1, 1 };
+      SetupActivities();
     }
 
     public void Activate() {
-      if (_active) return;
+      if (_active || !_enabled) return;
 
       _active = true;
       _complete = false;
@@ -141,6 +167,36 @@ namespace Ideum {
       _seq.Append(_cg.DOFade(0.0f, 0.5f));
     }
 
+    private void SetupActivities() {
+      _activities.Clear();
+      Steps.Initialize(_activeSections);
+      EndWindow.Initialize(_activeSections);
+
+      if (_activeSections[0] == 1) {
+        Activity activity = Instantiate(PointActivityPrefab, ActivityRect).GetComponent<Activity>();
+        _activities.Add(activity);
+      }
+      if (_activeSections[1] == 1) {
+        Activity activity = Instantiate(ClickActivityPrefab, ActivityRect).GetComponent<Activity>();
+        _activities.Add(activity);
+      }
+      if (_activeSections[2] == 1) {
+        Activity activity = Instantiate(DragActivityPrefab, ActivityRect).GetComponent<Activity>();
+        _activities.Add(activity);
+      }
+    }
+
+    private void Rescale(float newScale) {
+      Scalar.sizeDelta = new Vector2(newScale, newScale);
+    }
+
+    private void ResizeSensorBar(float scale) {
+      Sensor.Resize(scale);
+    }
+
+    private void MoveSensorBar(Vector2 newPosition) {
+      Sensor.GetComponent<RectTransform>().anchoredPosition = newPosition;
+    }
 
     private void StartActivity() {
       if (!_active) return;

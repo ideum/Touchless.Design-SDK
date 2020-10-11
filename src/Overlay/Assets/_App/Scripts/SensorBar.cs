@@ -20,8 +20,8 @@ namespace Ideum {
       Background.color = InactiveColor;
     }
 
-    public void Resize(Vector2 Size) {
-      _rect.sizeDelta = Size;
+    public void Resize(float scale) {
+      _rect.localScale = new Vector3(scale, scale, scale);
     }
 
     public void SetStatus(bool active) {

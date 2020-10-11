@@ -170,9 +170,9 @@ namespace TouchlessDesign.Components.Input {
           }
 
           if (_hands.Count <= 0) {
+            HandCount.Value = 0;
             if (IsButtonDown.Value) {
               SetMouseButtonDown(false);
-              HandCount.Value = 0;
             }
 
             if (_hasClicked) {
