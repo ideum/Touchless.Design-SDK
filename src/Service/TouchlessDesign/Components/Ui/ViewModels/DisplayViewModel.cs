@@ -136,10 +136,15 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
       Displays = new ScreenObservableCollection();
     }
 
+    private bool _preventMessagesSending = false;
 
     protected override void DoPropertyValueChanged(string name, object value) {
       base.DoPropertyValueChanged(name, value);
-      if (Model == null) return;
+      SendMessage();
+    }
+
+    private void SendMessage() {
+      if (Model == null || _preventMessagesSending) return;
       UpdateRealTimeProperties();
       AppComponent.Ipc.SendSettingsMessage(AppComponent.Config.Display);
     }
@@ -209,6 +214,7 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
 
     public override void UpdateValuesFromModel() {
       RefreshDisplays();
+      _preventMessagesSending = true;
       OverlayEnabled = Model.OverlayEnabled;
       OverlayIndex = FindClosestDisplay(Model.OverlayDisplay);
       CursorEnabled = Model.CursorEnabled;
@@ -226,6 +232,8 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
       AddOnIndex = FindClosestDisplay(Model.AddOnDisplay);
       LEDsEnabled = Model.LightingEnabled;
       LEDIntensity = Model.LightingIntensity;
+      _preventMessagesSending = false;
+      SendMessage();
     }
 
     private int FindClosestDisplay(DisplayInfo d) {
