@@ -13,7 +13,7 @@ namespace TouchlessDesign.Config {
     public bool ClickEnabled = true;
 
     public int UpdateRate_ms = 9;
-    public string InputProvider = "LeapMotionProvider";
+    public int InputProvider = 0;
 
     public bool FlipYAxis = true;
     

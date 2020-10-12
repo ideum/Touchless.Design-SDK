@@ -34,7 +34,8 @@ namespace TouchlessDesign.Components.Ui.Controls {
     }
 
     public static readonly DependencyProperty ValueProperty = DependencyProperty.Register(
-      "Value", typeof(bool), typeof(BoolControl), new PropertyMetadata(default(bool)));
+      "Value", typeof(bool), typeof(BoolControl), new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+
 
     public bool Value {
       get { return (bool)GetValue(ValueProperty); }

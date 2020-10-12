@@ -17,8 +17,11 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
         default(TDataType),
         FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
         (d, e) => {
-          if (!(d is TViewModelType i)) return;
-          i.PropertyValueChanged(type);
+          if (!(d is TViewModelType i)) {
+            Log.Error($"Failed to cast to {typeof(TViewModelType).Name}");
+            return;
+          }
+          i.PropertyValueChanged(name, type, e.NewValue);
         })
       );
     }
@@ -28,8 +31,11 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
         defaultValue,
         FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
         (d, e) => {
-          if (!(d is TViewModelType i)) return;
-          i.PropertyValueChanged(type);
+          if (!(d is TViewModelType i)) {
+            Log.Error($"Failed to cast to {typeof(TViewModelType).Name}");
+            return;
+          }
+          i.PropertyValueChanged(name, type, e.NewValue);
         })
       );
     }
@@ -52,7 +58,7 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
     public event Action SavePropertyChanged, ResetPropertyChanged;
 
     public bool SuppressSaveChanged = false;
-    public bool SuppressResetChanged = false;
+    public bool SuppressRestartChanged = false;
 
     protected VM() {
       AppComponent.OnLoaded(HandleAppComponentLoaded);
@@ -61,11 +67,11 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
     private void HandleAppComponentLoaded() {
       Log.Info($"Assigning Model for {GetType().Name}");
       AssignModel();
-      SuppressResetChanged = true;
+      SuppressRestartChanged = true;
       SuppressSaveChanged = true;
       Log.Info($"Updating values for {GetType().Name}");
       UpdateValuesFromModel();
-      SuppressResetChanged = false;
+      SuppressRestartChanged = false;
       SuppressSaveChanged = false;
       SavePropertyChanged += UpdateRealTimeProperties;
     }
@@ -78,24 +84,24 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
 
     }
 
-    public void PropertyValueChanged(PropertyTypes type) {
+    public void PropertyValueChanged(string name, PropertyTypes type, object newValue) {
       switch (type) {
         case PropertyTypes.None:
           break;
         case PropertyTypes.Save:
           if (!SuppressSaveChanged) {
-            SavePropertyChanged?.Invoke();
             NeedsSave = true;
+            SavePropertyChanged?.Invoke();
           }
           break;
         case PropertyTypes.Restart:
           if (!SuppressSaveChanged) {
+            NeedsSave = true;
             SavePropertyChanged?.Invoke();
-            NeedsSave = true;
           }
-          if (!SuppressResetChanged) {
+          if (!SuppressRestartChanged) {
+            NeedsRestart = true;
             ResetPropertyChanged?.Invoke();
-            NeedsSave = true;
           }
           break;
         default:

@@ -80,9 +80,10 @@
                           <Button DockPanel.Dock="Top" Opacity="1" Height="40" Click="HandleSaveButtonClicked" HorizontalContentAlignment="Left" Width="232" Style="{StaticResource Ideum.StyleMenuBarButton}">
                             <StackPanel Margin="12 0 0 0" Orientation="Horizontal">
                               <TextBlock Text="Save"
-                                         Foreground="{StaticResource Ideum.Brush.ForegroundSecondary}"
+                                         Foreground="{Binding Source={StaticResource AppViewModel}, Path=SaveNeeded, Converter={StaticResource BoolToColor_ForegroundToSelected}}"
                                          VerticalAlignment="Center" HorizontalAlignment="Left" 
-                                         FontSize="17" 
+                                         FontSize="17"
+                                         FontWeight="{Binding Source={StaticResource AppViewModel}, Path=SaveNeeded, Converter={StaticResource BoolToFontWeight_NormalToBold}}"
                                          TextElement.FontFamily="/TouchlessDesign;component/Resources/#TeX Gyre Heros"/>
                             </StackPanel>
                           </Button>
@@ -96,17 +97,17 @@
                             </StackPanel>
                           </Button>
                           <Separator DockPanel.Dock="Top" Margin="12 8 12 8" Foreground="{StaticResource Ideum.Brush.ForegroundSecondary1}" Background="{StaticResource Ideum.Brush.ForegroundSecondary1}"/>
-                          <Button DockPanel.Dock="Top" Opacity="1" Height="40" Click="HandleRestartClicked" HorizontalContentAlignment="Left" Width="232" Style="{StaticResource Ideum.StyleMenuBarButton}">
+                          <Button DockPanel.Dock="Top" Opacity="1" Height="40" Click="ShowExitPromptForRestartClicked" HorizontalContentAlignment="Left" Width="232" Style="{StaticResource Ideum.StyleMenuBarButton}">
                             <StackPanel Margin="12 0 0 0" Orientation="Horizontal">
-                              <Rectangle Width="8" Height="8" Margin="0 2 6 0" Fill="{StaticResource Ideum.Brush.AccentPrimary}" Visibility="{Binding Source={StaticResource AppViewModel}, Path=RestartNeeded, Converter={StaticResource BoolToVis}}"/>
-                              <TextBlock Text="Restart"
-                                       Foreground="{StaticResource Ideum.Brush.ForegroundSecondary}"
-                                       VerticalAlignment="Center" 
-                                       HorizontalAlignment="Left" 
-                                       FontSize="17" TextElement.FontFamily="/TouchlessDesign;component/Resources/#TeX Gyre Heros"/>
+                              <TextBlock Text="Restart" 
+                                         Foreground="{Binding Source={StaticResource AppViewModel}, Path=RestartNeeded, Converter={StaticResource BoolToColor_ForegroundToSelected}}"
+                                         VerticalAlignment="Center" HorizontalAlignment="Left" 
+                                         FontSize="17"
+                                         FontWeight="{Binding Source={StaticResource AppViewModel}, Path=RestartNeeded, Converter={StaticResource BoolToFontWeight_NormalToBold}}"
+                                         TextElement.FontFamily="/TouchlessDesign;component/Resources/#TeX Gyre Heros"/>
                             </StackPanel>
                           </Button>
-                          <Button DockPanel.Dock="Top" Opacity="1" Height="40" Click="HandleExitButtonClicked" HorizontalContentAlignment="Left" Width="232" Style="{StaticResource Ideum.StyleMenuBarButton}">
+                          <Button DockPanel.Dock="Top" Opacity="1" Height="40" Click="ShowExitPromptForCloseClicked" HorizontalContentAlignment="Left" Width="232" Style="{StaticResource Ideum.StyleMenuBarButton}">
                             <TextBlock Text="Close"
                                    Foreground="{StaticResource Ideum.Brush.ForegroundError}"
                                    VerticalAlignment="Center" 
@@ -141,12 +142,13 @@
             <TabItem Header="General" Foreground="{StaticResource Ideum.Brush.ForegroundSecondary}">
               <c:PageGeneral DataContext="{StaticResource GeneralViewModel}"/>
             </TabItem>
-            <TabItem Header="Input" Foreground="{StaticResource Ideum.Brush.ForegroundSecondary}">
-              <c:PageInput DataContext="{StaticResource InputViewModel}"/>
-            </TabItem>
             <TabItem Header="Display" Foreground="{StaticResource Ideum.Brush.ForegroundSecondary}">
               <c:PageDisplay DataContext="{StaticResource DisplayViewModel}" />
             </TabItem>
+            <TabItem Header="Input" Foreground="{StaticResource Ideum.Brush.ForegroundSecondary}">
+              <c:PageInput DataContext="{StaticResource InputViewModel}"/>
+            </TabItem>
+            
             <TabItem IsSelected="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type c:MainWindow}}, Path=SelectNetworkTab}" Header="Network" Foreground="{StaticResource Ideum.Brush.ForegroundSecondary}">
               <c:PageNetwork DataContext="{StaticResource NetworkViewModel}" />
             </TabItem>
@@ -157,16 +159,16 @@
     </DockPanel>
     <Grid x:Name="ExitPrompt" Visibility="Collapsed" Background="#EE1e1d1a">
       <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 -60 0 0">
-        <DockPanel Visibility="{Binding Source={StaticResource AppViewModel}, Path=SaveNeeded, Converter={StaticResource BoolToVis}}">
-          <TextBlock DockPanel.Dock="Top" FontSize="16" Foreground="{StaticResource Ideum.Brush.Foreground}" HorizontalAlignment="Center" Margin="12" Text="Are you sure?" />
-          <Button Content="NO" DockPanel.Dock="Right" Style="{StaticResource Ideum.Button.Normal}" />
-          <Button Content="YES" DockPanel.Dock="Right" Margin="0 0 12 0" Style="{StaticResource Ideum.Button.Error}" />
-        </DockPanel>
         <DockPanel Visibility="{Binding Source={StaticResource AppViewModel}, Path=SaveNeeded, Converter={StaticResource BoolToVisNegated}}">
+          <TextBlock DockPanel.Dock="Top" FontSize="16" Foreground="{StaticResource Ideum.Brush.Foreground}" HorizontalAlignment="Center" Margin="12" Text="Are you sure?" />
+          <Button Content="NO" DockPanel.Dock="Right" Style="{StaticResource Ideum.Button.Normal}" Click="HideExitPromptClicked" />
+          <Button Content="YES" DockPanel.Dock="Right" Margin="0 0 12 0" Style="{StaticResource Ideum.Button.Error}" Click="TrueCloseClicked" />
+        </DockPanel>
+        <DockPanel Visibility="{Binding Source={StaticResource AppViewModel}, Path=SaveNeeded, Converter={StaticResource BoolToVis}}">
           <TextBlock DockPanel.Dock="Top" FontSize="16" Foreground="{StaticResource Ideum.Brush.Foreground}" HorizontalAlignment="Center" Margin="12" Text="There are unsaved changes." />
-          <Button Content="CANCEL" DockPanel.Dock="Right" Style="{StaticResource Ideum.Button.Normal}" />
-          <Button Content="CLOSE" DockPanel.Dock="Right" Margin="0 0 12 0" Style="{StaticResource Ideum.Button.Error}" />
-          <Button DockPanel.Dock="Right" Margin="0 0 12 0" Style="{StaticResource Ideum.Button.Confirm}">
+          <Button Content="CANCEL" DockPanel.Dock="Right" Style="{StaticResource Ideum.Button.Normal}" Click="HideExitPromptClicked" />
+          <Button Content="CLOSE" DockPanel.Dock="Right" Margin="0 0 12 0" Style="{StaticResource Ideum.Button.Error}" Click="TrueCloseClicked"/>
+          <Button DockPanel.Dock="Right" Margin="0 0 12 0" Style="{StaticResource Ideum.Button.Confirm}" Click="HandleSaveAndCloseClicked">
             <Button.Content>
               <TextBlock>
                 <Run>SAVE AND</Run>

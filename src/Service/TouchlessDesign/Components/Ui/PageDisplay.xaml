@@ -16,60 +16,6 @@
       <TextBlock Text="{Binding Name}" />
     </DataTemplate>
   </UserControl.Resources>
-  <!--<Grid Margin="8">
-    <ui:SimpleStackPanel Spacing="5">
-      <Label Margin="0 0 0 0" FontSize="16" FontWeight="Bold" Content="Overlay"/>
-      <c:BoolControl Value="{Binding OverlayEnabled, Mode=TwoWay}" 
-                     Header="Enabled"/>
-      <c:DropdownControl Value="{Binding OverlayIndex, Mode=TwoWay}" 
-                         ItemsSource="{Binding Displays, Mode=TwoWay}"
-                         Header="Display"/>
-      <c:BoolControl Value="{Binding CursorEnabled, Mode=TwoWay}" 
-                     Header="Cursor Enabled"/>
-      <c:BoolControl Value="{Binding NoTouchEnabled, Mode=TwoWay}" 
-                     Header="No Touch Warning Enabled"/>
-      
-      <Label Margin="0 6 0 0" FontSize="16" FontWeight="Bold" Content="Onboarding"/>
-      <c:BoolControl Value="{Binding OnboardingEnabled, Mode=TwoWay}" 
-                     Header="Onboarding Enabled"/>
-      <c:BoolControl Value="{Binding Onboarding1Enabled, Mode=TwoWay}" 
-                     Header="Onboarding Hover &amp; Point"/>
-      <c:BoolControl Value="{Binding Onboarding2Enabled, Mode=TwoWay}" 
-                     Header="Onboarding Point &amp; Click"/>
-      <c:BoolControl Value="{Binding Onboarding3Enabled, Mode=TwoWay}" 
-                     Header="Onboarding Hold &amp; Drag"/>
-      <c:NumberControl Value="{Binding OnboardingUIScale, Mode=TwoWay}"
-                       Header="Onboarding UI Scale"
-                       Min="0.1" Max="2"/>
-      <c:NumberControl Value="{Binding OnboardingStatusBarScale, Mode=TwoWay}"
-                       Header="Onboarding Status Bar Scale"
-                       Min="0.1" Max="2"/>
-      <c:NumberControl Value="{Binding OnboardingStatusBarXOffset, Mode=TwoWay}"
-                       Header="Onboarding Status Bar X-Offset"
-                       Min="-1920" Max="1920"/>
-
-      <Label Margin="0 6 0 0" FontSize="16" FontWeight="Bold" Content="Add On"/>
-      <c:BoolControl Value="{Binding AddOnEnabled, Mode=TwoWay}" 
-                     Header="Enabled"/>
-      <c:DropdownControl Value="{Binding AddOnIndex, Mode=TwoWay}" 
-                         ItemsSource="{Binding Displays, Mode=TwoWay}"
-                         Header="Display"/>
-      
-      <Label Margin="0 6 0 0" FontSize="16" FontWeight="Bold" Content="LEDs"/>
-      <c:BoolControl Value="{Binding LEDsEnabled, Mode=TwoWay}" 
-                     Header="Enabled"/>
-      <c:NumberControl Value="{Binding LEDIntensity}" 
-                       Header="Intensity"
-                       Min="0" Max="1" />
-      --><!--<ui:ToggleSwitch x:Name="UseOverlaySwitch" ui:ControlHelper.Header="{Binding OverlayEnabled.Name}" IsOn="{Binding OverlayEnabled.Prop}"/>
-      <ComboBox Width="220" Background="Transparent" ui:ControlHelper.Header="Overlay Target Display" IsEnabled="{Binding ElementName=UseOverlaySwitch, Path=IsOn}" ItemTemplate="{StaticResource DisplayComboBoxItemTemplateStyle}" ItemsSource="{Binding Displays}" SelectedIndex="{Binding OverlayIndex.Prop}"/>
-      <ui:ToggleSwitch x:Name="UseAddOnSwitch" ui:ControlHelper.Header="{Binding AddOnEnabled.Name}" IsOn="{Binding AddOnEnabled.Prop}"/>
-      <ui:ToggleSwitch x:Name="UseLEDsSwitch" ui:ControlHelper.Header="{Binding LEDsEnabled.Name}" IsOn="{Binding LEDsEnabled.Prop}" />
-      <c:ClampedPropertyControl IsEnabled="{Binding IsOn, ElementName=UseLEDsSwitch}" DataContext="{Binding LEDIntensity}"/>--><!--
-      <Button Click="RefreshDisplaysClicked">Refresh Displays</Button>
-    </ui:SimpleStackPanel>
-  </Grid>-->
-
   <TabControl Style="{StaticResource TabControlPivotStyle}">
     <TabItem Header="Overlay">
       <ui:SimpleStackPanel Spacing="5" Margin="0 6 0 0">
@@ -81,7 +27,7 @@
                            Header="Display"
                            LabelMinWidth="140"
                            ValueMinWidth="180"
-                           ItemTemplate="{StaticResource DisplayComboBoxItemTemplateStyle}"/>
+                           ItemTemplate="{StaticResource DisplayComboBoxItemTemplateStyle}" Loaded="FrameworkElement_OnLoaded"/>
         <c:BoolControl Value="{Binding CursorEnabled, Mode=TwoWay}" 
                        Header="Cursor"
                        LabelMinWidth="140"/>

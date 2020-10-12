@@ -12,6 +12,14 @@ namespace TouchlessDesign.Components.Ui {
       set { SetValue(SelectNetworkTabProperty, value); }
     }
 
+    public static readonly DependencyProperty EndSessionVerbProperty = DependencyProperty.Register(
+      "EndSessionVerb", typeof(string), typeof(MainWindow), new PropertyMetadata(default(string)));
+
+    public string EndSessionVerb {
+      get { return (string) GetValue(EndSessionVerbProperty); }
+      set { SetValue(EndSessionVerbProperty, value); }
+    }
+
     public static MainWindow Instance { get; private set; }
 
     private bool _trueClose = false;
@@ -25,16 +33,16 @@ namespace TouchlessDesign.Components.Ui {
       InitializeComponent();
     }
 
-    private void HandleRestartClicked(object sender, RoutedEventArgs e) {
-      Startup.Restart = true;
-      _trueClose = true;
-      App.Close();
-    }
+    //private void HandleRestartClicked(object sender, RoutedEventArgs e) {
+    //  Startup.Restart = true;
+    //  _trueClose = true;
+    //  App.Close();
+    //}
 
-    private void HandleExitButtonClicked(object sender, RoutedEventArgs e) {
-      _trueClose = true;
-      App.Close();
-    }
+    //private void HandleExitButtonClicked(object sender, RoutedEventArgs e) {
+    //  _trueClose = true;
+    //  App.Close();
+    //}
 
     private void MainWindow_OnClosing(object sender, CancelEventArgs e) {
       if (_trueClose) return;
@@ -63,6 +71,34 @@ namespace TouchlessDesign.Components.Ui {
 
     private void HandleSaveButtonClicked(object sender, RoutedEventArgs e) {
       App.AppViewModel.SaveChanges();
+    }
+
+    private void ShowExitPromptForCloseClicked(object sender, RoutedEventArgs e) {
+      ExitPrompt.Visibility = Visibility.Visible;
+      EndSessionVerb = "Close";
+    }
+
+    private void ShowExitPromptForRestartClicked(object sender, RoutedEventArgs e) {
+      ExitPrompt.Visibility = Visibility.Visible;
+      EndSessionVerb = "Restart";
+      Startup.Restart = true;
+    }
+
+    private void HideExitPromptClicked(object sender, RoutedEventArgs e) {
+      ExitPrompt.Visibility = Visibility.Collapsed;
+      EndSessionVerb = "";
+      Startup.Restart = false;
+    }
+
+    private void TrueCloseClicked(object sender, RoutedEventArgs e) {
+      _trueClose = true;
+      App.Close();
+    }
+
+    private void HandleSaveAndCloseClicked(object sender, RoutedEventArgs e) {
+      App.AppViewModel.SaveChanges();
+      _trueClose = true;
+      App.Close();
     }
   }
 }

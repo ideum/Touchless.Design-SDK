@@ -19,7 +19,7 @@
         <ColumnDefinition />
       </Grid.ColumnDefinitions>
       <c:BoolControl x:Name="ModeButton" 
-                     Value="True" 
+                     Value="{Binding InputProvider, Mode=TwoWay}" 
                      Header="Mode"
                      OnContent="Remote (UDP)"
                      OffContent="Local"
