@@ -18,9 +18,9 @@ namespace Ideum {
 
     private RectTransform _rect;
 
-    public void Initialize(List<int> Sections) {
+    public void Initialize(List<int> sections) {
       for(int i = 0; i < Tables.Count; i++) {
-        if (!Sections.Contains(i)) {
+        if (sections[i] == 0) {
           Tables[i].gameObject.SetActive(false);
           continue;
         }
@@ -35,14 +35,14 @@ namespace Ideum {
       }
 
       for(int j = 0; j < Markers.Count; j++) {
-        if (!Sections.Contains(j)) {
+        if (sections[j] == 0) {
           Markers[j].SetActive(false);
         } else {
           Markers[j].SetActive(true);
         }
       }
 
-      if(Sections.Count < 3) {
+      if(sections.Count < 3) {
         Dividers[1].SetActive(false);
         TopBar.sizeDelta = new Vector2(TopBar.rect.width, 210);
         foreach(TableSensorUI ui in Tables) {

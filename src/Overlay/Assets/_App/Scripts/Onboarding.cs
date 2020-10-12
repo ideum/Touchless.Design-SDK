@@ -238,6 +238,8 @@ namespace Ideum {
         _seq.OnComplete(() => {
           MainWindow.alpha = 0.0f;
         });
+        _currentActivity.Deactivate();
+        _currentActivity = null;
         return;
       }
 

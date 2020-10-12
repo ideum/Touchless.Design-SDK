@@ -46,7 +46,11 @@ namespace Ideum {
       _selectable.interactable = true;
     }
 
-    public void ResetRing() {
+    public void ResetRing(bool immediate = false) {
+      if (immediate) {
+        _target.anchoredPosition = _startPosition;
+      }
+
       _seq?.Kill();
       _seq = DOTween.Sequence();
 

@@ -91,6 +91,8 @@ namespace Ideum {
         if(_onboardingTimeoutTimer > _onboardingTimeoutInterval) {
           SetOnboarding(false);
           _onboardingTimeoutTimer = 0f;
+          _onboardingResetFlag = true;
+          _onboardingResetTimer = 0f;
         }
       }
 
@@ -125,9 +127,8 @@ namespace Ideum {
         }
         _handCount = handCount;
       }
-
-      if(_handCount > 0) {
-        _onboardingTimeoutTimer = 0f;
+      if (_handCount > 0) {
+        _onboardingResetTimer = 0f;
       }
     }
 

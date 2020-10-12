@@ -78,6 +78,11 @@ namespace Ideum {
       _leftRing.sizeDelta = new Vector2(_baseRingSize, _baseRingSize);
       _rightRing.sizeDelta = new Vector2(_baseRingSize, _baseRingSize);
       _instructionText.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+      DragCircle.ResetRing(true);
+      RightOuterRing.color = RingColorInactive;
+      RightInnerCirlce.color = RightCircleColorInactive;
+      LeftOuterRing.color = RingColorInactive;
+      LeftInnerCircle.color = LeftCircleColorInactive;
 
       _seq?.Kill();
       _seq = DOTween.Sequence();

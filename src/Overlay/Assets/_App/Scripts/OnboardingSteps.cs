@@ -26,11 +26,11 @@ namespace Ideum {
     }
 
     public void Initialize(List<int> ActiveSections) {
-      foreach(OnboardingStep s in Steps) {
-        if (!ActiveSections.Contains(s.Index)) {
-          s.gameObject.SetActive(false);
+      for(int i = 0; i < Steps.Count; i++) {
+        if (ActiveSections[i] == 0) {
+          Steps[i].gameObject.SetActive(false);
         } else {
-          s.gameObject.SetActive(true);
+          Steps[i].gameObject.SetActive(true);
         }
       }
     }
