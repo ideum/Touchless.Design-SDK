@@ -16,5 +16,6 @@ namespace TouchlessDesign.Config {
       Primary = screen.Primary;
       Index = index;
     }
+
   }
 }

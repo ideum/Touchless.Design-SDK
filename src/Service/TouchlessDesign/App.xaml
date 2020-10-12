@@ -313,6 +313,8 @@
           <converters:MultiBoolToVisibilityConverter x:Key="MultiBoolToVis" />
           <converters:MultiBoolToVisibilityConverter x:Key="MultiBoolToVisNegated" True="Collapsed" False="Visible" />
           <converters:BoolToBoolConverter x:Key="BoolToBoolNegated" True="False" False="True" />
+          <converters:BoolToFontWeightConverter x:Key="BoolToFontWeight_NormalToBold" True="Bold" False="Normal" />
+          <converters:BoolToBrushConverter x:Key="BoolToColor_ForegroundToSelected" True="{StaticResource Ideum.Brush.Foreground}" False="{StaticResource Ideum.Brush.ForegroundSecondary}" />
 
           <RelativeSource x:Key="RS_NC" Mode="FindAncestor" AncestorType="{x:Type c:NumberControl}" />
           <RelativeSource x:Key="RS_BC" Mode="FindAncestor" AncestorType="{x:Type c:BoolControl}" />

@@ -67,10 +67,10 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
       set { SetValue(MouseEmulationKeyboardShortcutProperty, value); }
     }
 
-    public static readonly DependencyProperty InputProviderProperty = Reg<InputViewModel, string>("InputProvider", "", PropertyTypes.Restart);
+    public static readonly DependencyProperty InputProviderProperty = Reg<InputViewModel, bool>("InputProvider", false, PropertyTypes.Restart);
 
-    public string InputProvider {
-      get { return (string)GetValue(InputProviderProperty); }
+    public bool InputProvider {
+      get { return (bool)GetValue(InputProviderProperty); }
       set { SetValue(InputProviderProperty, value); }
     }
 
@@ -253,7 +253,7 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
       Model.ClickDuration_ms = ClickEmulationDuration;
       Model.ClickEnabled = ClickEmulation;
       Model.UpdateRate_ms = TickRate;
-      Model.InputProvider = InputProvider;
+      Model.InputProvider = InputProvider ? 1 : 0;
 
       Model.FlipYAxis = FlipYAxis;
       Model.UseXY = UseXy;
@@ -279,7 +279,7 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
       ClickEmulationDuration = Model.ClickDuration_ms;
       ClickEmulation = Model.ClickEnabled;
       TickRate = Model.UpdateRate_ms;
-      InputProvider = Model.InputProvider;
+      InputProvider = Model.InputProvider==0 ? false : true;
       FlipYAxis = Model.FlipYAxis;
       UseXy = Model.UseXY;
       MinX = Model.MinX;

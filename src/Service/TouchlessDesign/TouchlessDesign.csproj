@@ -115,6 +115,8 @@
     </Compile>
     <Compile Include="Components\Ui\Converters\BoolConverter.cs" />
     <Compile Include="Components\Ui\Converters\BoolToBoolConverter.cs" />
+    <Compile Include="Components\Ui\Converters\BoolToBrushConverter.cs" />
+    <Compile Include="Components\Ui\Converters\BoolToFontWeightConverter.cs" />
     <Compile Include="Components\Ui\Converters\BoolToGeometryConverter.cs" />
     <Compile Include="Components\Ui\Converters\BoolToVisibilityConverterEx.cs" />
     <Compile Include="Components\Ui\Converters\ListBoxItemToIndexConverter.cs" />
@@ -139,7 +141,6 @@
       <DependentUpon>StatusView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Components\Ui\ViewModels\AppViewModel.cs" />
-    <Compile Include="Components\Ui\ViewModels\AppViewModelBase.cs" />
     <Compile Include="Components\Ui\ViewModels\DisplayViewModel.cs" />
     <Compile Include="Components\Ui\ViewModels\GeneralViewModel.cs" />
     <Compile Include="Components\Ui\ViewModels\NetworkViewModel.cs" />
@@ -198,6 +199,7 @@
     <Compile Include="Components\Input\Providers\LeapMotion\LeapCSharp\StructMarshal.cs" />
     <Compile Include="Components\Input\Providers\LeapMotion\LeapCSharp\TransformExtensions.cs" />
     <Compile Include="Components\Input\Providers\LeapMotion\LeapCSharp\Vector.cs" />
+    <Compile Include="ExtensionMethods.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Startup.cs" />
     <Page Include="Components\Ui\Controls\BoolControl.xaml">

@@ -162,20 +162,40 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
 
     public override void ApplyValuesToModel() {
       Model.OverlayEnabled = OverlayEnabled;
-      //TODO Overlay Display info
+      if (OverlayIndex >= 0 && OverlayIndex < Displays.Count) {
+        Model.OverlayDisplay = new DisplayInfo(Displays[OverlayIndex].Screen, OverlayIndex);
+      }
       Model.AddOnEnabled = AddOnEnabled;
-      //TODO Add On Display info
+      if (AddOnIndex >= 0 && AddOnIndex < Displays.Count) {
+        Model.AddOnDisplay = new DisplayInfo(Displays[AddOnIndex].Screen, AddOnIndex);
+      }
       Model.LightingEnabled = LEDsEnabled;
       Model.LightingIntensity = (float) LEDIntensity;
     }
 
     public override void UpdateValuesFromModel() {
+      RefreshDisplays();
       OverlayEnabled = Model.OverlayEnabled;
-      //TODO overlay display info
+      OverlayIndex = FindClosestDisplay(Model.OverlayDisplay);
       AddOnEnabled = Model.AddOnEnabled;
-      //TODO add On Display Info
+      AddOnIndex = FindClosestDisplay(Model.AddOnDisplay);
       LEDsEnabled = Model.LightingEnabled;
       LEDIntensity = Model.LightingIntensity;
+    }
+
+    private int FindClosestDisplay(DisplayInfo d) {
+      if (d != null) {
+        for (var i = 0; i < Displays.Count; i++) {
+          var sInfo = Displays[i];
+          var s = sInfo.Screen;
+          var b = s.Bounds;
+          if (d.Width == b.Width && d.Height == b.Height && d.Primary==s.Primary) {
+            return i;
+          }
+        }
+      }
+      Log.Error($"No matching display found.");
+      return -1;
     }
   }
 }

@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using Gma.System.MouseKeyHook;
 using TouchlessDesign.Components.Input.Providers;
 using TouchlessDesign.Components.Input.Providers.LeapMotion;
+using TouchlessDesign.Components.Input.Providers.RealSense;
 using Timer = System.Threading.Timer;
 
 namespace TouchlessDesign.Components.Input {
@@ -102,31 +103,21 @@ namespace TouchlessDesign.Components.Input {
     private void InitializeInputProvider() {
       var providerInterfaceType = typeof(IInputProvider);
 
-      var providerTypes = new List<Type>();
+      var providerTypes = new[]{typeof(LeapMotionProvider), typeof(RealSenseProvider)};
       Type providerType = null;
-      foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies()) {
-        foreach (var type in assembly.GetTypes()) {
-          if (!providerInterfaceType.IsAssignableFrom(type) || !type.IsClass || type.IsAbstract) continue;
-          Log.Trace($"Found provider type {type.Name}");
-          providerTypes.Add(type);
-          break;
-        }
-      }
 
-      if (providerTypes.Count <=0) {
+
+      if (providerTypes.Length <=0) {
         Log.Error($"No {providerInterfaceType.Name} implementation could be found.");
         return;
       }
 
-      foreach (var type in providerTypes) {
-        if (string.Equals(type.Name, Config.Input.InputProvider, StringComparison.InvariantCultureIgnoreCase)) {
-          providerType = type;
-          break;
-        }
+      if (Config.Input.InputProvider >= 0 && Config.Input.InputProvider < providerTypes.Length) {
+        providerType = providerTypes[Config.Input.InputProvider];
       }
 
       if (providerType == null) {
-        Log.Warn($"No matching input provider could be found with the class name {Config.Input.InputProvider}. The default will be used instead.");
+        Log.Warn($"No matching input provider could be found with the index {Config.Input.InputProvider}. The default will be used instead.");
         providerType = typeof(LeapMotionProvider);
       }
 

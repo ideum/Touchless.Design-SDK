@@ -5,7 +5,7 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
   public class AppViewModel : DependencyObject {
 
     public static readonly DependencyProperty SaveNeededProperty = DependencyProperty.Register(
-      "SaveNeeded", typeof(bool), typeof(AppViewModel), new PropertyMetadata(default(bool)));
+      "SaveNeeded", typeof(bool), typeof(AppViewModel), new FrameworkPropertyMetadata(default(bool), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
     public bool SaveNeeded {
       get { return (bool) GetValue(SaveNeededProperty); }
@@ -13,7 +13,7 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
     }
 
     public static readonly DependencyProperty RestartNeededProperty = DependencyProperty.Register(
-      "RestartNeeded", typeof(bool), typeof(AppViewModel), new PropertyMetadata(default(bool)));
+      "RestartNeeded", typeof(bool), typeof(AppViewModel), new FrameworkPropertyMetadata(default(bool), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
     public bool RestartNeeded {
       get { return (bool) GetValue(RestartNeededProperty); }
@@ -102,6 +102,7 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
       }
       Reverted?.Invoke();
       SaveNeeded = false;
+      RestartNeeded = false;
     }
   }
 }
