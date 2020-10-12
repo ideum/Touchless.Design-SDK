@@ -146,12 +146,12 @@ namespace TouchlessDesign.Components.Ipc {
       }
     }
 
-    //public void SendSettingsMessage(string settingName, int? intVal1 = null, int? intVal2 = null, float? floatVal1 = null) {
-    //  Msg msg = Msg.Factories.SettingsMessage(settingName, intVal1, intVal2, floatVal1);
-    //  foreach(Client c in _settingsInterestedClients) {
-    //    c.Send(msg);
-    //  }
-    //}
+    public void SendSettingsMessage(ConfigDisplay config) {
+      Msg msg = Msg.Factories.SettingsMessage(config);
+      foreach (Client c in _settingsInterestedClients) {
+        c.Send(msg);
+      }
+    }
 
     public void ServerStarted(Server s) {
     }
