@@ -87,9 +87,6 @@ namespace Ideum.Data {
     [JsonProperty("F1")]
     public float? F1 = null;
 
-    [JsonProperty("F2")]
-    public float? F2 = null;
-
     #endregion
 
     #region Constructors
@@ -98,7 +95,7 @@ namespace Ideum.Data {
 
     }
 
-    public Msg(Types type, bool? boolValue = null, int? x = null, int? y = null, int? w = null, int? h = null, string s = null, float? f1 = null, float? f2 = null) {
+    public Msg(Types type, bool? boolValue = null, int? x = null, int? y = null, int? w = null, int? h = null, string s = null, float? f1 = null) {
       Type = type;
       Bool = boolValue;
       X = x;
@@ -107,7 +104,6 @@ namespace Ideum.Data {
       H = h;
       S = s;
       F1 = f1;
-      F2 = f2;
     }
 
     #endregion
@@ -252,8 +248,8 @@ namespace Ideum.Data {
           {Type = Types.AddOnQuery, Bool = hasSecondScreen, Bool2 = hasLEDs, X = width_px, Y = height_px, W = width_mm, H = height_mm};
       }
 
-      public static Msg SettingsMessage(string settingName, int? intVal1 = null, int? intVal2 = null, float? floatVal1 = null, float? floatVal2 = null) {
-        return new Msg { Type = Types.Settings, S = settingName, X = intVal1, Y = intVal2, F1 = floatVal1, F2 = floatVal2 };
+      public static Msg SettingsMessage(string settingName, int? intVal1 = null, int? intVal2 = null, float? floatVal1 = null) {
+        return new Msg { Type = Types.Settings, S = settingName, X = intVal1, Y = intVal2, F1 = floatVal1 };
       }
 
       public static Msg HandCountQuery() {
