@@ -113,9 +113,9 @@ namespace Ideum {
             AddOnQueries.SyncClearInvoke(msg);
           }
           break;
-        case Msg.Types.SubscribeToSettings:
+        case Msg.Types.SubscribeToDisplaySettings:
           break;
-        case Msg.Types.Settings:
+        case Msg.Types.DisplaySettingsChanged:
           SettingChanged.Invoke(msg);
           break;
         case Msg.Types.HandCountQuery:

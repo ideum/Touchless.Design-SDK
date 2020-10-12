@@ -85,12 +85,12 @@ namespace TouchlessDesign.Components.Ipc {
               Ui.AddOnWidth_mm,
               Ui.AddOnHeight_mm));
             break;
-          case Msg.Types.SubscribeToSettings:
+          case Msg.Types.SubscribeToDisplaySettings:
             if (!_settingsInterestedClients.Contains(c)) {
               _settingsInterestedClients.Add(c);
             }
             break;
-          case Msg.Types.Settings:
+          case Msg.Types.DisplaySettingsChanged:
             break;
           case Msg.Types.HandCountQuery:
             int handCount = Input.HandCount.Value;
@@ -146,12 +146,12 @@ namespace TouchlessDesign.Components.Ipc {
       }
     }
 
-    public void SendSettingsMessage(string settingName, int? intVal1 = null, int? intVal2 = null, float? floatVal1 = null) {
-      Msg msg = Msg.Factories.SettingsMessage(settingName, intVal1, intVal2, floatVal1);
-      foreach(Client c in _settingsInterestedClients) {
-        c.Send(msg);
-      }
-    }
+    //public void SendSettingsMessage(string settingName, int? intVal1 = null, int? intVal2 = null, float? floatVal1 = null) {
+    //  Msg msg = Msg.Factories.SettingsMessage(settingName, intVal1, intVal2, floatVal1);
+    //  foreach(Client c in _settingsInterestedClients) {
+    //    c.Send(msg);
+    //  }
+    //}
 
     public void ServerStarted(Server s) {
     }

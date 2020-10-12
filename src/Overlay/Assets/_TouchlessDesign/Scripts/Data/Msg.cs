@@ -34,8 +34,8 @@ namespace Ideum.Data {
       NoTouch,
       NoTouchQuery,
       AddOnQuery,
-      SubscribeToSettings,
-      Settings,
+      SubscribeToDisplaySettings,
+      DisplaySettingsChanged,
       HandCountQuery
     }
 
@@ -249,7 +249,7 @@ namespace Ideum.Data {
       }
 
       public static Msg SettingsMessage(string settingName, int? intVal1 = null, int? intVal2 = null, float? floatVal1 = null) {
-        return new Msg { Type = Types.Settings, S = settingName, X = intVal1, Y = intVal2, F1 = floatVal1 };
+        return new Msg { Type = Types.DisplaySettingsChanged, S = settingName, X = intVal1, Y = intVal2, F1 = floatVal1 };
       }
 
       public static Msg HandCountQuery() {
@@ -406,9 +406,9 @@ namespace Ideum.Data {
                 )
               );
             break;
-          case Types.SubscribeToSettings:
+          case Types.SubscribeToDisplaySettings:
             break;
-          case Types.Settings:
+          case Types.DisplaySettingsChanged:
             break;
           case Types.HandCountQuery:
             Operate(collection.OfType<HandCountQueryDelegate>(), p => p(msg.X.Value));
@@ -535,9 +535,9 @@ namespace Ideum.Data {
             return true;
           case Types.AddOnQuery:
             return true;
-          case Types.SubscribeToSettings:
+          case Types.SubscribeToDisplaySettings:
             return false;
-          case Types.Settings:
+          case Types.DisplaySettingsChanged:
             return true;
           case Types.HandCountQuery:
             return true;
@@ -579,9 +579,9 @@ namespace Ideum.Data {
             return Bool.HasValue;
           case Types.AddOnQuery:
             return Bool.HasValue && Bool2.HasValue && X.HasValue && Y.HasValue && W.HasValue && H.HasValue;
-          case Types.SubscribeToSettings:
+          case Types.SubscribeToDisplaySettings:
             return true;
-          case Types.Settings:
+          case Types.DisplaySettingsChanged:
             return false;
           case Types.HandCountQuery:
             return false;

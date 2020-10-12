@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace TouchlessDesign.Components.Ipc {
   public class Msg {
-    
+
     #region Properties
 
     #region Type
@@ -25,8 +25,8 @@ namespace TouchlessDesign.Components.Ipc {
       NoTouch,
       NoTouchQuery,
       AddOnQuery,
-      SubscribeToSettings,
-      Settings,
+      SubscribeToDisplaySettings,
+      DisplaySettingsChanged,
       HandCountQuery
     }
 
@@ -240,7 +240,7 @@ namespace TouchlessDesign.Components.Ipc {
       }
 
       public static Msg SettingsMessage(string settingName, int? intVal1 = null, int? intVal2 = null, float? floatVal1 = null) {
-        return new Msg { Type = Types.Settings, S = settingName, X = intVal1, Y = intVal2, F1 = floatVal1};
+        return new Msg { Type = Types.DisplaySettingsChanged, S = settingName, X = intVal1, Y = intVal2, F1 = floatVal1};
       }
 
       public static Msg HandCountQuery(int handCount) {
@@ -397,9 +397,9 @@ namespace TouchlessDesign.Components.Ipc {
                 )
               );
             break;
-          case Types.SubscribeToSettings:
+          case Types.SubscribeToDisplaySettings:
             break;
-          case Types.Settings:
+          case Types.DisplaySettingsChanged:
             break;
           case Types.HandCountQuery:
             Operate(collection.OfType<HandCountQueryDelegate>(), p => p(msg.X.Value));
@@ -526,9 +526,9 @@ namespace TouchlessDesign.Components.Ipc {
             return true;
           case Types.AddOnQuery:
             return true;
-          case Types.SubscribeToSettings:
+          case Types.SubscribeToDisplaySettings:
             return false;
-          case Types.Settings:
+          case Types.DisplaySettingsChanged:
             return true;
           case Types.HandCountQuery:
             return true;
@@ -570,9 +570,9 @@ namespace TouchlessDesign.Components.Ipc {
             return Bool.HasValue;
           case Types.AddOnQuery:
             return Bool.HasValue && Bool2.HasValue && X.HasValue && Y.HasValue && W.HasValue && H.HasValue;
-          case Types.SubscribeToSettings:
+          case Types.SubscribeToDisplaySettings:
             return true;
-          case Types.Settings:
+          case Types.DisplaySettingsChanged:
             return false;
           case Types.HandCountQuery:
             return false;
