@@ -12,7 +12,7 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
 
   public abstract class VM : DependencyObject {
 
-    protected static DependencyProperty Reg<TViewModelType, TDataType>(string name, PropertyTypes type = PropertyTypes.None) where TViewModelType : VM {
+    protected static DependencyProperty Reg<TViewModelType, TDataType>(string name, PropertyTypes type = PropertyTypes.None, Action<TViewModelType, string, object> valueChangedHandler = null) where TViewModelType : VM {
       return DependencyProperty.Register(name, typeof(TDataType), typeof(TViewModelType), new FrameworkPropertyMetadata(
         default(TDataType),
         FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
@@ -22,11 +22,12 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
             return;
           }
           i.PropertyValueChanged(name, type, e.NewValue);
+          valueChangedHandler?.Invoke(i, name, e.NewValue);
         })
       );
     }
 
-    protected static DependencyProperty Reg<TViewModelType, TDataType>(string name, TDataType defaultValue, PropertyTypes type = PropertyTypes.None) where TViewModelType : VM {
+    protected static DependencyProperty Reg<TViewModelType, TDataType>(string name, TDataType defaultValue, PropertyTypes type = PropertyTypes.None, Action<TViewModelType, string, object> valueChangedHandler = null) where TViewModelType : VM {
       return DependencyProperty.Register(name, typeof(TDataType), typeof(TViewModelType), new FrameworkPropertyMetadata(
         defaultValue,
         FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
@@ -36,6 +37,7 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
             return;
           }
           i.PropertyValueChanged(name, type, e.NewValue);
+          valueChangedHandler?.Invoke(i, name, e.NewValue);
         })
       );
     }
@@ -43,7 +45,7 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
     public static readonly DependencyProperty NeedsSaveProperty = Reg<VM, bool>("NeedsSave", false);
 
     public bool NeedsSave {
-      get { return (bool) GetValue(NeedsSaveProperty); }
+      get { return (bool)GetValue(NeedsSaveProperty); }
       set { SetValue(NeedsSaveProperty, value); }
     }
 
@@ -85,6 +87,7 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
     }
 
     public void PropertyValueChanged(string name, PropertyTypes type, object newValue) {
+      DoPropertyValueChanged(name, newValue);
       switch (type) {
         case PropertyTypes.None:
           break;
@@ -107,6 +110,10 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
         default:
           throw new ArgumentOutOfRangeException(nameof(type), type, null);
       }
+    }
+
+    protected virtual void DoPropertyValueChanged(string name, object value) {
+
     }
 
     public abstract void ApplyValuesToModel();

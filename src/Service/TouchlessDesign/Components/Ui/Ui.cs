@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Threading;
 using IWshRuntimeLibrary;
@@ -59,6 +60,11 @@ namespace TouchlessDesign.Components.Ui {
     protected override void DoStart() {
       NotificationArea.Start(this);
       CheckStartup();
+      ThreadPool.QueueUserWorkItem(InitMe);
+    }
+
+    private void InitMe(object state) {
+      Thread.Sleep(10000);
       InitializeExternalApplications();
       _app.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() => {
         _mainWindow = new MainWindow();

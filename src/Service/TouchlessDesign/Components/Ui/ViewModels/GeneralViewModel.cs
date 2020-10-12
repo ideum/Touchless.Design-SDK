@@ -11,6 +11,13 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
       set { SetValue(StartOnStartUpProperty, value); }
     }
 
+    public static readonly DependencyProperty UiStartupDelayProperty = Reg<GeneralViewModel, int>("UiStartupDelay", 0, PropertyTypes.Restart);
+
+    public int UiStartupDelay {
+      get { return (int)GetValue(UiStartupDelayProperty); }
+      set { SetValue(UiStartupDelayProperty, value); }
+    }
+
     public GeneralViewModel() {
 
     }
@@ -21,10 +28,12 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
 
     public override void ApplyValuesToModel() {
       Model.StartOnStartup = StartOnStartup;
+      Model.UiStartUpDelay = UiStartupDelay;
     }
 
     public override void UpdateValuesFromModel() {
       StartOnStartup = Model.StartOnStartup;
+      UiStartupDelay = Model.UiStartUpDelay;
     }
   }
 }

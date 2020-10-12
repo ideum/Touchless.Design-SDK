@@ -12,6 +12,7 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
       set { SetValue(DisplaysProperty, value); }
     }
 
+
     public static readonly DependencyProperty OverlayEnabledProperty = Reg<DisplayViewModel, bool>("OverlayEnabled", true, PropertyTypes.Save);
 
     public bool OverlayEnabled {
@@ -68,7 +69,7 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
       set { SetValue(OnboardingStatusBarXOffsetProperty, value); }
     }
 
-    public static readonly DependencyProperty OnboardingNewUserTimeoutProperty = Reg<DisplayViewModel, int>("OnboardingNewUserTimeout", 60, PropertyTypes.Restart);
+    public static readonly DependencyProperty OnboardingNewUserTimeoutProperty = Reg<DisplayViewModel, int>("OnboardingNewUserTimeout", 60, PropertyTypes.Save);
 
     public int OnboardingNewUserTimeout {
       get { return (int)GetValue(OnboardingNewUserTimeoutProperty); }
@@ -135,6 +136,14 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
       Displays = new ScreenObservableCollection();
     }
 
+
+    protected override void DoPropertyValueChanged(string name, object value) {
+      base.DoPropertyValueChanged(name, value);
+      if (Model == null) return;
+      UpdateRealTimeProperties();
+      AppComponent.Ipc.SendSettingsMessage(AppComponent.Config.Display);
+    }
+
     public void RefreshDisplays() {
       Log.Info("Updating Screens");
       if (Displays == null) {
@@ -158,6 +167,17 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
     public override void UpdateRealTimeProperties() {
       base.UpdateRealTimeProperties();
       Model.LightingIntensity = (float) LEDIntensity;
+      Model.CursorEnabled = CursorEnabled;
+      Model.NoTouchEnabled = NoTouchEnabled;
+      Model.OnboardingEnabled = OnboardingEnabled;
+      Model.OnboardingUIScale = (float)OnboardingUIScale;
+      Model.OnboardingStatusBarScale = (float)OnboardingStatusBarScale;
+      Model.OnboardingStatusBarXOffset = (float)OnboardingStatusBarXOffset;
+      Model.OnboardingNewUserTimeout_s = OnboardingNewUserTimeout;
+      Model.OnboardingNoHandTimeout_s = OnboardingNoHandTimeout;
+      Model.Onboarding1Enabled = Onboarding1Enabled;
+      Model.Onboarding2Enabled = Onboarding2Enabled;
+      Model.Onboarding3Enabled = Onboarding3Enabled;
     }
 
     public override void ApplyValuesToModel() {
@@ -165,6 +185,20 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
       if (OverlayIndex >= 0 && OverlayIndex < Displays.Count) {
         Model.OverlayDisplay = new DisplayInfo(Displays[OverlayIndex].Screen, OverlayIndex);
       }
+
+      Model.CursorEnabled = CursorEnabled;
+      Model.NoTouchEnabled = NoTouchEnabled;
+      Model.OnboardingEnabled = OnboardingEnabled;
+      Model.OnboardingUIScale = (float) OnboardingUIScale;
+      Model.OnboardingStatusBarScale = (float) OnboardingStatusBarScale;
+      Model.OnboardingStatusBarXOffset = (float) OnboardingStatusBarXOffset;
+      Model.OnboardingNewUserTimeout_s = OnboardingNewUserTimeout;
+      Model.OnboardingNoHandTimeout_s = OnboardingNoHandTimeout;
+      Model.Onboarding1Enabled = Onboarding1Enabled;
+      Model.Onboarding2Enabled = Onboarding2Enabled;
+      Model.Onboarding3Enabled = Onboarding3Enabled;
+
+
       Model.AddOnEnabled = AddOnEnabled;
       if (AddOnIndex >= 0 && AddOnIndex < Displays.Count) {
         Model.AddOnDisplay = new DisplayInfo(Displays[AddOnIndex].Screen, AddOnIndex);
@@ -177,6 +211,17 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
       RefreshDisplays();
       OverlayEnabled = Model.OverlayEnabled;
       OverlayIndex = FindClosestDisplay(Model.OverlayDisplay);
+      CursorEnabled = Model.CursorEnabled;
+      NoTouchEnabled = Model.NoTouchEnabled;
+      OnboardingEnabled = Model.OnboardingEnabled;
+      OnboardingUIScale = Model.OnboardingUIScale;
+      OnboardingStatusBarScale = Model.OnboardingStatusBarScale;
+      OnboardingStatusBarXOffset = Model.OnboardingStatusBarXOffset;
+      OnboardingNewUserTimeout = Model.OnboardingNewUserTimeout_s;
+      OnboardingNoHandTimeout = Model.OnboardingNoHandTimeout_s;
+      Onboarding1Enabled = Model.Onboarding1Enabled;
+      Onboarding2Enabled = Model.Onboarding2Enabled;
+      Onboarding3Enabled = Model.Onboarding3Enabled;
       AddOnEnabled = Model.AddOnEnabled;
       AddOnIndex = FindClosestDisplay(Model.AddOnDisplay);
       LEDsEnabled = Model.LightingEnabled;

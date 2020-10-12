@@ -39,7 +39,9 @@ namespace TouchlessDesign.Components.Input.Providers.LeapMotion {
     }
 
     public bool Update(Dictionary<int, Hand> hands) {
-      if (_controller == null || !_controller.IsConnected) return false;
+      if (_controller == null || !_controller.IsConnected) {
+        return false;
+      }
       var f = _controller.Frame(0);
       _handsToRemoveBuffer.AddRange(hands.Values);
       foreach (var leapHand in f.Hands) {

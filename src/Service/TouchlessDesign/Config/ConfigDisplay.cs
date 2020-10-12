@@ -2,12 +2,35 @@
 
 namespace TouchlessDesign.Config {
   public class ConfigDisplay : ConfigBase<ConfigDisplay> {
+
     public bool OverlayEnabled = true;
 
     public DisplayInfo OverlayDisplay = new DisplayInfo {
       Primary = true,
       Index = 0
     };
+
+    public bool CursorEnabled = true;
+
+    public bool NoTouchEnabled = true;
+
+    public bool OnboardingEnabled = true;
+
+    public float OnboardingUIScale = 1.0f;
+
+    public float OnboardingStatusBarScale = 1.0f;
+
+    public float OnboardingStatusBarXOffset = 0.0f;
+
+    public int OnboardingNewUserTimeout_s = 60;
+
+    public int OnboardingNoHandTimeout_s = 15;
+
+    public bool Onboarding1Enabled = true;
+
+    public bool Onboarding2Enabled = true;
+
+    public bool Onboarding3Enabled = true;
 
     public bool AddOnEnabled = true;
 
