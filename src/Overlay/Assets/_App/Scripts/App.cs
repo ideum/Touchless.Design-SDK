@@ -129,6 +129,7 @@ namespace Ideum {
       }
       if (_handCount > 0) {
         _onboardingResetTimer = 0f;
+        _onboardingTimeoutTimer = 0f;
       }
     }
 
