@@ -150,7 +150,7 @@ namespace Ideum {
       Steps.Activate();
 
       _currentActivityIndex = 0;
-      _progress = (float)_currentActivityIndex / ((float)_activeActivities.Count - 1f);
+      _progress = _activeActivities.Count > 1 ? (float)_currentActivityIndex / ((float)_activeActivities.Count - 1f) : 0;
       Steps.SetProgress(_progress, _currentActivityIndex);
 
       _seq.OnComplete(() => {
@@ -192,7 +192,7 @@ namespace Ideum {
 
       if (_active) {
         _currentActivityIndex = 0;
-        _progress = (float)_currentActivityIndex / ((float)_activeActivities.Count - 1f);
+        _progress = _activeActivities.Count > 1 ? (float)_currentActivityIndex / ((float)_activeActivities.Count - 1f) : 0;
         Steps.SetProgress(_progress, _currentActivityIndex);
         StartActivity();
       }
@@ -233,7 +233,7 @@ namespace Ideum {
 
     private void HandleActivityCompleted() {
       _currentActivityIndex++;
-      _progress = (float)_currentActivityIndex / ((float)_activeActivities.Count - 1f);
+      _progress = _activeActivities.Count > 1 ? (float)_currentActivityIndex / ((float)_activeActivities.Count - 1f) : 0;
       Steps.SetProgress(_progress, _currentActivityIndex);
       if (_currentActivityIndex >= _activeActivities.Count) {
         _complete = true;
