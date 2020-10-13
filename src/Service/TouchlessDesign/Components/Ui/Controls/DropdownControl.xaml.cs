@@ -41,10 +41,10 @@ namespace TouchlessDesign.Components.Ui.Controls {
     }
 
     public static readonly DependencyProperty ValueProperty = DependencyProperty.Register(
-      "Value", typeof(int), typeof(DropdownControl), new PropertyMetadata(-1));
+      "Value", typeof(object), typeof(DropdownControl), new PropertyMetadata(null));
 
-    public int Value {
-      get { return (int)GetValue(ValueProperty); }
+    public object Value {
+      get { return GetValue(ValueProperty); }
       set { SetValue(ValueProperty, value); }
     }
 

@@ -17,7 +17,7 @@
            VerticalAlignment="Center" 
            MinWidth="{Binding RelativeSource={StaticResource RS_DC}, Path=LabelMinWidth}" 
            Visibility="{Binding RelativeSource={StaticResource RS_DC}, Path=IsLabelVisible, Converter={StaticResource BoolToVis}}"/>
-    <ComboBox SelectedIndex="{Binding RelativeSource={StaticResource RS_DC}, Path=Value, Mode=TwoWay}"
+    <ComboBox SelectedItem="{Binding RelativeSource={StaticResource RS_DC}, Path=Value, Mode=TwoWay}"
               ItemsSource="{Binding RelativeSource={StaticResource RS_DC}, Path=ItemsSource, Mode=TwoWay}"
               MinWidth="{Binding RelativeSource={StaticResource RS_DC}, Path=ValueMinWidth}"
               ItemTemplate="{Binding RelativeSource={StaticResource RS_DC}, Path=ItemTemplate}" />

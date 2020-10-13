@@ -58,18 +58,29 @@ namespace TouchlessDesign.Components.Ui {
     }
 
     protected override void DoStart() {
-      NotificationArea.Start(this);
-      CheckStartup();
-      ThreadPool.QueueUserWorkItem(InitMe);
+      if (Config.General.UiStartUpDelay <= 0) {
+        PerformStartupOperations();
+      }
+      else {
+        ThreadPool.QueueUserWorkItem(InitMe);
+      }
     }
 
     private void InitMe(object state) {
-      Thread.Sleep(10000);
-      InitializeExternalApplications();
+      Thread.Sleep(Config.General.UiStartUpDelay);
+      PerformStartupOperations();
+    }
+
+    private void PerformStartupOperations() {
+      CheckStartup();
       _app.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() => {
+        NotificationArea.Start(this);
         _mainWindow = new MainWindow();
         _app.MainWindow = _mainWindow;
-        _mainWindow.ShowWindow();
+        if (Config.General.ShowUiOnStartup) {
+          _mainWindow.ShowWindow();
+        }
+        InitializeExternalApplications();
       }));
     }
 

@@ -22,7 +22,7 @@
         <c:BoolControl Value="{Binding OverlayEnabled, Mode=TwoWay}" 
                        Header="Enabled"
                        LabelMinWidth="140"/>
-        <c:DropdownControl Value="{Binding OverlayIndex, Mode=TwoWay}" 
+        <c:DropdownControl Value="{Binding OverlayDisplay, Mode=TwoWay}" 
                            ItemsSource="{Binding Displays, Mode=TwoWay}"
                            Header="Display"
                            LabelMinWidth="140"
@@ -84,7 +84,7 @@
         <c:BoolControl Value="{Binding AddOnEnabled, Mode=TwoWay}" 
                        Header="Enabled"
                        LabelMinWidth="60"/>
-        <c:DropdownControl Value="{Binding AddOnIndex, Mode=TwoWay}" 
+        <c:DropdownControl Value="{Binding AddOnDisplay, Mode=TwoWay}" 
                            ItemsSource="{Binding Displays, Mode=TwoWay}"
                            Header="Display"
                            LabelMinWidth="60"
