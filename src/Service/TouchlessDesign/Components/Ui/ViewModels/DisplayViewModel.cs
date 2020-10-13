@@ -5,7 +5,7 @@ using TouchlessDesign.Config;
 namespace TouchlessDesign.Components.Ui.ViewModels {
   public class DisplayViewModel : VM<ConfigDisplay> {
 
-    public static readonly DependencyProperty DisplaysProperty = Reg<DisplayViewModel, ScreenObservableCollection>("Displays", null, PropertyTypes.Save);
+    public static readonly DependencyProperty DisplaysProperty = Reg<DisplayViewModel, ScreenObservableCollection>("Displays", null, PropertyTypes.None);
 
     public ScreenObservableCollection Displays {
       get { return (ScreenObservableCollection)GetValue(DisplaysProperty); }
@@ -20,11 +20,18 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
       set { SetValue(OverlayEnabledProperty, value); }
     }
 
-    public static readonly DependencyProperty OverlayDisplayProperty = Reg<DisplayViewModel, ScreenViewModel>("OverlayDisplay", null, PropertyTypes.Save);
+    public static readonly DependencyProperty OverlayDisplayProperty = Reg<DisplayViewModel, ScreenViewModel>("OverlayDisplay", null, PropertyTypes.Save, ValueChangedHandler);
+
+    private static void ValueChangedHandler(DisplayViewModel arg1, string arg2, object arg3) {
+      Log.Info($"{arg2}: {arg3}");
+    }
 
     public ScreenViewModel OverlayDisplay {
       get { return (ScreenViewModel)GetValue(OverlayDisplayProperty); }
-      set { SetValue(OverlayDisplayProperty, value); }
+      set {
+        if (value == OverlayDisplay) return;
+        SetValue(OverlayDisplayProperty, value);
+      }
     }
 
     public static readonly DependencyProperty CursorEnabledProperty = Reg<DisplayViewModel, bool>("CursorEnabled", true, PropertyTypes.Save);
@@ -115,7 +122,10 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
 
     public ScreenViewModel AddOnDisplay {
       get { return (ScreenViewModel)GetValue(AddOnDisplayProperty); }
-      set { SetValue(AddOnDisplayProperty, value); }
+      set {
+        if (value == AddOnDisplay) return;
+        SetValue(AddOnDisplayProperty, value);
+      }
     }
 
     public static readonly DependencyProperty LEDsEnabledProperty = Reg<DisplayViewModel, bool>("LEDsEnabled", true, PropertyTypes.Save);
@@ -150,7 +160,9 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
     }
 
     public void RefreshDisplays() {
-      Log.Info("Updating Screens");
+      var sav = NeedsSave;
+      SuppressSaveChanged = true;
+      _preventMessagesSending = true;
       if (Displays == null) {
         Displays = new ScreenObservableCollection();
       }
@@ -161,8 +173,13 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
         var vm = new ScreenViewModel();
         vm.SetScreen(i, s);
         Displays.Add(vm);
-        Log.Info($"Screen '{vm.Name}'");
       }
+
+      OverlayDisplay = FindClosestDisplay(Model.OverlayDisplay);
+      AddOnDisplay = FindClosestDisplay(Model.AddOnDisplay);
+      _preventMessagesSending = false;
+      NeedsSave = sav;
+      SuppressSaveChanged = false;
     }
 
     protected override void AssignModel() {
@@ -171,6 +188,8 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
 
     public override void UpdateRealTimeProperties() {
       base.UpdateRealTimeProperties();
+      SetDisplay(OverlayDisplay, ref Model.OverlayDisplay, DisplayInfo.PrimaryDisplay);
+      SetDisplay(AddOnDisplay, ref Model.AddOnDisplay, DisplayInfo.SecondaryDisplay);
       Model.LightingIntensity = (float) LEDIntensity;
       Model.CursorEnabled = CursorEnabled;
       Model.NoTouchEnabled = NoTouchEnabled;
@@ -186,15 +205,9 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
     }
 
     public override void ApplyValuesToModel() {
+      SetDisplay(OverlayDisplay, ref Model.OverlayDisplay, DisplayInfo.PrimaryDisplay);
+      SetDisplay(AddOnDisplay, ref Model.AddOnDisplay, DisplayInfo.SecondaryDisplay);
       Model.OverlayEnabled = OverlayEnabled;
-      
-      if (OverlayDisplay != null) {
-        Model.OverlayDisplay = new DisplayInfo(OverlayDisplay.Screen);
-      }
-      else {
-        Model.OverlayDisplay = new DisplayInfo {Primary = true};
-      }
-
       Model.CursorEnabled = CursorEnabled;
       Model.NoTouchEnabled = NoTouchEnabled;
       Model.OnboardingEnabled = OnboardingEnabled;
@@ -206,17 +219,7 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
       Model.Onboarding1Enabled = Onboarding1Enabled;
       Model.Onboarding2Enabled = Onboarding2Enabled;
       Model.Onboarding3Enabled = Onboarding3Enabled;
-
-
       Model.AddOnEnabled = AddOnEnabled;
-      
-      if (AddOnDisplay != null) {
-        Model.AddOnDisplay = new DisplayInfo(AddOnDisplay.Screen);
-      }
-      else {
-        Model.AddOnDisplay = new DisplayInfo(){Primary = false};
-      }
-      
       Model.LightingEnabled = LEDsEnabled;
       Model.LightingIntensity = (float) LEDIntensity;
     }
@@ -243,6 +246,25 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
       LEDIntensity = Model.LightingIntensity;
       _preventMessagesSending = false;
       SendMessage();
+    }
+
+    private void SetDisplay(ScreenViewModel vm, ref DisplayInfo info, DisplayInfo def = null) {
+      if (info == null) {
+        if (vm == null) {
+          info = def;
+        }
+        else {
+          info = new DisplayInfo(vm.Screen);
+        }
+      }
+      else {
+        if (vm == null) {
+          //info = info.
+        }
+        else if(!vm.IsEqual(info)){
+          info = new DisplayInfo(vm.Screen);
+        }
+      }
     }
 
     private ScreenViewModel FindClosestDisplay(DisplayInfo d, ScreenViewModel def = null) {

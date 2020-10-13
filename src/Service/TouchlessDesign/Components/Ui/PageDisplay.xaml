@@ -27,14 +27,13 @@
                            Header="Display"
                            LabelMinWidth="140"
                            ValueMinWidth="180"
-                           ItemTemplate="{StaticResource DisplayComboBoxItemTemplateStyle}" Loaded="FrameworkElement_OnLoaded"/>
+                           ItemTemplate="{StaticResource DisplayComboBoxItemTemplateStyle}"/>
         <c:BoolControl Value="{Binding CursorEnabled, Mode=TwoWay}" 
                        Header="Cursor"
                        LabelMinWidth="140"/>
         <c:BoolControl Value="{Binding NoTouchEnabled, Mode=TwoWay}" 
                        Header="No-Touch Warning"
                        LabelMinWidth="140"/>
-        
       </ui:SimpleStackPanel>
     </TabItem>
     <TabItem Header="Onboarding">

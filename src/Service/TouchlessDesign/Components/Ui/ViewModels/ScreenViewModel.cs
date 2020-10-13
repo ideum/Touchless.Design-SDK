@@ -32,5 +32,9 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
         Name = $"{s.Bounds.Width}x{s.Bounds.Height}";
       }
     }
+
+    public override string ToString() {
+      return Name;
+    }
   }
 }

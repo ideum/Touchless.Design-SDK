@@ -2,6 +2,10 @@
 
 namespace TouchlessDesign.Config {
   public class DisplayInfo {
+
+    public static DisplayInfo PrimaryDisplay { get; } = new DisplayInfo {Primary = true};
+    public static DisplayInfo SecondaryDisplay { get; } = new DisplayInfo {Primary = false};
+
     public string Name;
     public int Width, Height;
     public bool Primary;
