@@ -27,7 +27,7 @@ namespace Ideum {
       _seq?.Kill();
       _seq = DOTween.Sequence();
 
-      float targetWidth = fullWidth * normalizedProgress;
+      float targetWidth = fullWidth * Mathf.Clamp(normalizedProgress, 0f, 1f);
 
       _seq.Append(FillBar.DOSizeDelta(new Vector2(targetWidth, FillBar.rect.height), 0.5f));
     }

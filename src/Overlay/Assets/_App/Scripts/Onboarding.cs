@@ -147,12 +147,13 @@ namespace Ideum {
       Sensor.SetStatus(false);
 
       _seq.Append(_cg.DOFade(1.0f, 0.5f));
+      Steps.Activate();
 
       _currentActivityIndex = 0;
-      _seq.OnComplete(() => {
-        Steps.Activate();
+      _progress = (float)_currentActivityIndex / ((float)_activeActivities.Count - 1f);
+      Steps.SetProgress(_progress, _currentActivityIndex);
 
-        _progress = 0.0f;
+      _seq.OnComplete(() => {
         StartActivity();
       });
     }
@@ -191,7 +192,8 @@ namespace Ideum {
 
       if (_active) {
         _currentActivityIndex = 0;
-        _progress = 0.0f;
+        _progress = (float)_currentActivityIndex / ((float)_activeActivities.Count - 1f);
+        Steps.SetProgress(_progress, _currentActivityIndex);
         StartActivity();
       }
     }
@@ -216,9 +218,6 @@ namespace Ideum {
         _currentActivity.Deactivate();
       }
 
-      _progress = Mathf.Min(_progress + (1f / (_activeActivities.Count + 1)), 1f);
-      Steps.SetProgress(_progress, _currentActivityIndex);
-
       _currentActivity = _activeActivities[_currentActivityIndex];
       _currentActivity.Completed = HandleActivityCompleted;
       _currentActivity.ChangeTableUI = HandleTableUIChange;
@@ -234,6 +233,8 @@ namespace Ideum {
 
     private void HandleActivityCompleted() {
       _currentActivityIndex++;
+      _progress = (float)_currentActivityIndex / ((float)_activeActivities.Count - 1f);
+      Steps.SetProgress(_progress, _currentActivityIndex);
       if (_currentActivityIndex >= _activeActivities.Count) {
         _complete = true;
         EndWindow.Activate();
@@ -248,8 +249,6 @@ namespace Ideum {
         _currentActivity = null;
         return;
       }
-
-      _progress = Mathf.Min(_progress + (1f / (_activeActivities.Count + 1)), 1f);
 
       StartActivity();
     }

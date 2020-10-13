@@ -57,10 +57,8 @@ namespace Ideum {
     }
 
     public void SetProgress(float progress, int completedStep) {
-
       Bar.SetProgress(progress);
       for(int i = 0; i < Steps.Count; i++) {
-        if (!Steps[i].gameObject.activeInHierarchy) return;
         Steps[i].SetSelected(completedStep >= Steps[i].Index);
       }
     }
@@ -68,7 +66,8 @@ namespace Ideum {
     // Wait until the end of the frame because Content Size Fitter takes a frame to update it's width.
     private IEnumerator UpdateWidth() {
       yield return new WaitForEndOfFrame();
-      _barResizer.preferredWidth = StepsContainer.rect.width - 160f;
+      Bar.SetProgress(0);
+      _barResizer.preferredWidth = Mathf.Max(StepsContainer.rect.width - 160f, 1f);
     }
   }
 }

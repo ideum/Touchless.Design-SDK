@@ -20,6 +20,8 @@ namespace Ideum {
     public TransparentWindow Window;
     public Onboarding Onboarding;
 
+    private bool _noTouchWarningEnabled = true;
+
     private bool _connected;
     private float _queryInterval = 0.25f;
     private float _timer;
@@ -70,6 +72,12 @@ namespace Ideum {
       }
       if (_config.OnboardingNoHandTimeout_s != _onboardingTimeoutInterval) {
         _onboardingTimeoutInterval = _config.OnboardingNoHandTimeout_s;
+      }
+      if(_config.CursorEnabled != Cursor.gameObject.activeInHierarchy) {
+        Cursor.gameObject.SetActive(_config.CursorEnabled);
+      }
+      if(_config.NoTouchEnabled != _noTouchWarningEnabled) {
+        _noTouchWarningEnabled = _config.NoTouchEnabled;
       }
       Onboarding.SettingsChanged(_config);
     }
@@ -147,6 +155,8 @@ namespace Ideum {
     // Method delegate to handle TouchlessDesign response to QueryNoTouchState. This will prompt the cursor to change its state as well
     // as animate the red warning background.
     private void HandleNoTouch(bool noTouch) {
+      if (!_noTouchWarningEnabled) return;
+
       if (noTouch) {
         Cursor.ShowNoTouch();
       }

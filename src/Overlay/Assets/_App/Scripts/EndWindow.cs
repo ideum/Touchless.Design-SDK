@@ -48,6 +48,7 @@ namespace Ideum {
 
 
       if (count == 2) {
+        Dividers[0].SetActive(true);
         Dividers[1].SetActive(false);
         TopBar.sizeDelta = new Vector2(TopBar.rect.width, 210);
         foreach (TableSensorUI ui in Tables) {
@@ -61,6 +62,8 @@ namespace Ideum {
           ui.GetComponent<Transform>().localScale = new Vector3(0.66f, 0.66f, 0.66f);
         }
       } else {
+        Dividers[0].SetActive(true);
+        Dividers[1].SetActive(true);
         TopBar.sizeDelta = new Vector2(TopBar.rect.width, 310);
         foreach (TableSensorUI ui in Tables) {
           ui.GetComponent<Transform>().localScale = new Vector3(0.66f, 0.66f, 0.66f);
