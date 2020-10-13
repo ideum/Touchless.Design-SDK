@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
+using TouchlessDesign.Config;
 
 namespace Ideum.Data {
 
@@ -86,6 +87,9 @@ namespace Ideum.Data {
 
     [JsonProperty("F1")]
     public float? F1 = null;
+
+    [JsonProperty("Config")]
+    public ConfigDisplay Config;
 
     #endregion
 
@@ -248,8 +252,8 @@ namespace Ideum.Data {
           {Type = Types.AddOnQuery, Bool = hasSecondScreen, Bool2 = hasLEDs, X = width_px, Y = height_px, W = width_mm, H = height_mm};
       }
 
-      public static Msg SettingsMessage(string settingName, int? intVal1 = null, int? intVal2 = null, float? floatVal1 = null) {
-        return new Msg { Type = Types.DisplaySettingsChanged, S = settingName, X = intVal1, Y = intVal2, F1 = floatVal1 };
+      public static Msg SettingsMessage(ConfigDisplay config) {
+        return new Msg { Config = config };
       }
 
       public static Msg HandCountQuery() {
@@ -258,6 +262,10 @@ namespace Ideum.Data {
 
       public static Msg HandCountQuery(int handCount) {
         return new Msg { Type = Types.HandCountQuery, X = handCount };
+      }
+
+      public static Msg SubscribeMessage() {
+        return new Msg { Type = Types.SubscribeToDisplaySettings };
       }
     }
 

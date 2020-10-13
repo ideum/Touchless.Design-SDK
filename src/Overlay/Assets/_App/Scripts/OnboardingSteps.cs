@@ -17,6 +17,8 @@ namespace Ideum {
     private Sequence _seq;
     private CanvasGroup _bar;
 
+    private string[] _texts = { "Hover & Point", "Point & Click", "Hold & Drag" };
+
     private void Awake() {
       _barResizer = GetComponentInChildren<LayoutElement>();
 
@@ -25,14 +27,20 @@ namespace Ideum {
       _bar.alpha = 0f;
     }
 
-    public void Initialize(List<int> ActiveSections) {
-      for(int i = 0; i < Steps.Count; i++) {
-        if (ActiveSections[i] == 0) {
-          Steps[i].gameObject.SetActive(false);
-        } else {
-          Steps[i].gameObject.SetActive(true);
-        }
+    public void Setup(List<int> ActiveSections) {
+      int count = 0;
+      for(int i = 0; i < ActiveSections.Count; i++) {
+        if(ActiveSections[i] == 1) {
+          Steps[count].SetText(_texts[i]);
+          Steps[count].gameObject.SetActive(true);
+          Steps[count].Index = count;
+          count++;
+        } 
       }
+      for(int j = count; j < 3; j++) {
+        Steps[j].gameObject.SetActive(false);
+      }
+      StartCoroutine(UpdateWidth());
     }
 
     public void Activate() {
@@ -51,7 +59,10 @@ namespace Ideum {
     public void SetProgress(float progress, int completedStep) {
 
       Bar.SetProgress(progress);
-      Steps[completedStep].SetSelected(true);
+      for(int i = 0; i < Steps.Count; i++) {
+        if (!Steps[i].gameObject.activeInHierarchy) return;
+        Steps[i].SetSelected(completedStep >= Steps[i].Index);
+      }
     }
 
     // Wait until the end of the frame because Content Size Fitter takes a frame to update it's width.

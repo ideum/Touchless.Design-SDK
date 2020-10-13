@@ -114,6 +114,7 @@ namespace Ideum {
           }
           break;
         case Msg.Types.SubscribeToDisplaySettings:
+          SettingChanged?.Invoke(msg);
           break;
         case Msg.Types.DisplaySettingsChanged:
           SettingChanged.Invoke(msg);
@@ -219,6 +220,10 @@ namespace Ideum {
     public static void QueryHandCount(Msg.HandCountQueryDelegate callback) {
       HandQueries.Add(callback);
       _connectionManager.Send(Msg.Factories.HandCountQuery());
+    }
+
+    public static void SubscribeToDisplayConfig() {
+      _connectionManager.Send(Msg.Factories.SubscribeMessage());
     }
 
     #endregion

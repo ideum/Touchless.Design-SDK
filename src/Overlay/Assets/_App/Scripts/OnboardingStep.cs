@@ -27,6 +27,10 @@ namespace Ideum {
       Number.text = "" + (Index + 1);
     }
 
+    public void SetText(string text) {
+      Text.text = text;
+    }
+
     public void SetSelected(bool selected, bool immediate = false) {
       if (immediate) {
         Circle.color = selected ? Yellow : Grey;

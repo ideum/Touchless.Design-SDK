@@ -244,7 +244,7 @@ namespace TouchlessDesign.Components.Ipc {
       }
 
       public static Msg SettingsMessage(ConfigDisplay config) {
-        return new Msg { Config = config };
+        return new Msg { Type = Types.DisplaySettingsChanged, Config = config };
       }
 
       public static Msg HandCountQuery(int handCount) {
@@ -253,6 +253,10 @@ namespace TouchlessDesign.Components.Ipc {
 
       public static Msg HandCountQuery() {
         return new Msg { Type = Types.HandCountQuery };
+      }
+
+      public static Msg SubscribeMessage() {
+        return new Msg { Type = Types.SubscribeToDisplaySettings };
       }
     }
 

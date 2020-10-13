@@ -9,6 +9,7 @@
 using DG.Tweening;
 using Ideum.Data;
 using System;
+using TouchlessDesign.Config;
 using UnityEngine;
 
 namespace Ideum {
@@ -34,6 +35,9 @@ namespace Ideum {
     private Sequence _seq;
     bool _touchWarningActive = false;
 
+    private bool _configChangeFlag = false;
+    private ConfigDisplay _config;
+
     // Initialize the TouchlessDesign and path directory to Service and subscribe to OnConnect and OnDisconnect events.
     void Start() {
       TouchlessDesign.Initialize(AppSettings.Get().DataDirectory.GetPath());
@@ -56,27 +60,34 @@ namespace Ideum {
     }
 
     private void HandleSettingChanged(Msg msg) {
-      switch (msg.S) {
-        case "NewUserTimeout":
-          _onboardingResetInterval = (float)msg.X;
-          break;
-        case "NoHandTimeout":
-          _onboardingTimeoutInterval = (float)msg.X;
-          break;
-        default:
-          Onboarding.SettingChanged(msg);
-          break;
+      _config = msg.Config;
+      _configChangeFlag = true;
+    }
+
+    private void HandleNewConfig() {
+      if (_config.OnboardingNewUserTimeout_s != _onboardingResetInterval) {
+        _onboardingResetInterval = _config.OnboardingNewUserTimeout_s;
       }
+      if (_config.OnboardingNoHandTimeout_s != _onboardingTimeoutInterval) {
+        _onboardingTimeoutInterval = _config.OnboardingNoHandTimeout_s;
+      }
+      Onboarding.SettingsChanged(_config);
     }
 
     private void OnConnected() {
       Log.Info("Connected. Starting to query...");
+      TouchlessDesign.SubscribeToDisplayConfig();
       TouchlessDesign.SettingChanged += HandleSettingChanged;
       _connected = true;
     }
 
     // At a regular interval, query the click and hover states, as well as the no touch state, passing respective method delegates. Also manages onboarding timeout
     private void Update() {
+      if (_configChangeFlag) {
+        _configChangeFlag = false;
+        HandleNewConfig();
+      }
+
       if (!_onboardingResetFlag && !Onboarding.Active) {
         _onboardingResetTimer += Time.deltaTime;
         if(_onboardingResetTimer > _onboardingResetInterval) {

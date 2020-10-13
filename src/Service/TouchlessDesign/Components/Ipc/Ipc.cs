@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using TouchlessDesign.Components.Ipc.Networking;
 using TouchlessDesign.Components.Ipc.Networking.Tcp;
 using TouchlessDesign.Config;
@@ -88,6 +89,8 @@ namespace TouchlessDesign.Components.Ipc {
           case Msg.Types.SubscribeToDisplaySettings:
             if (!_settingsInterestedClients.Contains(c)) {
               _settingsInterestedClients.Add(c);
+              Msg settingsMsg = Msg.Factories.SettingsMessage(AppComponent.Config.Display);
+              c.Send(settingsMsg);
             }
             break;
           case Msg.Types.DisplaySettingsChanged:

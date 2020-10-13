@@ -12,6 +12,10 @@ namespace Ideum {
     public Color ActiveColor;
     public Color InactiveColor;
 
+    public float Scale {
+      get { return _rect.localScale.x; }
+    }
+
     private RectTransform _rect;
 
     private void Awake() {

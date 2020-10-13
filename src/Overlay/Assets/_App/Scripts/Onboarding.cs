@@ -3,6 +3,8 @@ using Ideum.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TouchlessDesign.Config;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -42,7 +44,8 @@ namespace Ideum {
     private CanvasGroup _cg;
     private Sequence _seq;
 
-    private List<Activity> _activities;
+    private List<Activity> _allActivities;
+    private List<Activity> _activeActivities;
     private Activity _currentActivity;
     private int _currentActivityIndex;
 
@@ -62,7 +65,17 @@ namespace Ideum {
         SetActive?.Invoke(false);
       });
 
-      _activities = new List<Activity>();
+      _activeActivities = new List<Activity>();
+      _allActivities = new List<Activity>();
+
+      _activeSections = new List<int>() { 1,1,1};
+
+      Activity activity1 = Instantiate(PointActivityPrefab, ActivityRect).GetComponent<Activity>();
+      _allActivities.Add(activity1);
+      Activity activity2 = Instantiate(ClickActivityPrefab, ActivityRect).GetComponent<Activity>();
+      _allActivities.Add(activity2);
+      Activity activity3 = Instantiate(DragActivityPrefab, ActivityRect).GetComponent<Activity>();
+      _allActivities.Add(activity3);
     }
 
     private void Update() {
@@ -75,56 +88,46 @@ namespace Ideum {
       }
     }
 
-    public void SettingChanged(Msg message) {
-      switch (message.S) {
-        case "Enabled":
-          _enabled = (bool)message.Bool;
-          if(!_enabled && _active) {
-            SetActive?.Invoke(false);
-          }
-          break;
-        case "Hover&Point":
-          if((bool)message.Bool && !_activeSections.Contains(0)) {
-            _activeSections[0] = 1;
-            SetupActivities();
-          } else if((bool)message.Bool && _activeSections.Contains(0)) {
-            _activeSections[0] = 0;
-            SetupActivities();
-          }
-          break;
-        case "Point&Click":
-          if ((bool)message.Bool && !_activeSections.Contains(0)) {
-            _activeSections[1] = 1;
-            SetupActivities();
-          } else if ((bool)message.Bool && _activeSections.Contains(0)) {
-            _activeSections[1] = 0;
-            SetupActivities();
-          }
-          break;
-        case "Hold&Drag":
-          if ((bool)message.Bool && !_activeSections.Contains(0)) {
-            _activeSections[2] = 1;
-            SetupActivities();
-          } else if ((bool)message.Bool && _activeSections.Contains(0)) {
-            _activeSections[2] = 0;
-            SetupActivities();
-          }
-          break;
-        case "UIScale":
-          Rescale((float)message.F1);
-          break;
-        case "StatusBarScale":
-          ResizeSensorBar((float)message.F1);
-          break;
-        case "StatusBarXOffset":
-          Vector2 newPosition = new Vector2((float)message.F1, 0);
-          MoveSensorBar(newPosition);
-          break;
+    public void SettingsChanged(ConfigDisplay config) {
+      if(_enabled != config.OnboardingEnabled) {
+        _enabled = config.OnboardingEnabled;
+        if(!_enabled && _active) {
+          SetActive?.Invoke(false);
+        } else if(_enabled && !_active) {
+          SetActive?.Invoke(true);
+        }
+      }
+
+      bool activitiesChanged = false;
+      if((_activeSections[0] == 1) != config.Onboarding1Enabled) {
+        activitiesChanged = true;
+        _activeSections[0] = config.Onboarding1Enabled ? 1 : 0;
+      }if((_activeSections[1] == 1) != config.Onboarding2Enabled) {
+        activitiesChanged = true;
+        _activeSections[1] = config.Onboarding2Enabled ? 1 : 0;
+      }if((_activeSections[2] == 1) != config.Onboarding3Enabled) {
+        activitiesChanged = true;
+        _activeSections[2] = config.Onboarding3Enabled ? 1 : 0;
+      }
+
+      if (activitiesChanged) {
+        SetupActivities();
+      }
+
+      if(Scalar.sizeDelta.x != config.OnboardingUIScale) {
+        Rescale(config.OnboardingUIScale);
+      }
+
+      if(Sensor.Scale != config.OnboardingStatusBarScale) {
+        ResizeSensorBar(config.OnboardingStatusBarScale);
+      }
+
+      if(Sensor.GetComponent<RectTransform>().anchoredPosition.x != config.OnboardingStatusBarXOffset) {
+        MoveSensorBar(new Vector2(config.OnboardingStatusBarXOffset, 0));
       }
     }
 
     public void Initialize() {
-      _activeSections = new List<int> { 1, 1, 1 };
       SetupActivities();
     }
 
@@ -150,7 +153,6 @@ namespace Ideum {
         Steps.Activate();
 
         _progress = 0.0f;
-        Steps.SetProgress(_progress, 0);
         StartActivity();
       });
     }
@@ -172,26 +174,30 @@ namespace Ideum {
     }
 
     private void SetupActivities() {
-      _activities.Clear();
-      Steps.Initialize(_activeSections);
-      EndWindow.Initialize(_activeSections);
+      _activeActivities.Clear();
 
       if (_activeSections[0] == 1) {
-        Activity activity = Instantiate(PointActivityPrefab, ActivityRect).GetComponent<Activity>();
-        _activities.Add(activity);
+        _activeActivities.Add(_allActivities[0]);
       }
       if (_activeSections[1] == 1) {
-        Activity activity = Instantiate(ClickActivityPrefab, ActivityRect).GetComponent<Activity>();
-        _activities.Add(activity);
+        _activeActivities.Add(_allActivities[1]);
       }
       if (_activeSections[2] == 1) {
-        Activity activity = Instantiate(DragActivityPrefab, ActivityRect).GetComponent<Activity>();
-        _activities.Add(activity);
+        _activeActivities.Add(_allActivities[2]);
+      }
+
+      Steps.Setup(_activeSections);
+      EndWindow.Initialize(_activeSections);
+
+      if (_active) {
+        _currentActivityIndex = 0;
+        _progress = 0.0f;
+        StartActivity();
       }
     }
 
     private void Rescale(float newScale) {
-      Scalar.sizeDelta = new Vector2(newScale, newScale);
+      Scalar.localScale = new Vector2(newScale, newScale);
     }
 
     private void ResizeSensorBar(float scale) {
@@ -210,10 +216,10 @@ namespace Ideum {
         _currentActivity.Deactivate();
       }
 
-      _progress = Mathf.Min(_progress + (1f / (_activities.Count + 1)), 1f);
-      Steps.SetProgress(_progress, 0);
+      _progress = Mathf.Min(_progress + (1f / (_activeActivities.Count + 1)), 1f);
+      Steps.SetProgress(_progress, _currentActivityIndex);
 
-      _currentActivity = _activities[_currentActivityIndex];
+      _currentActivity = _activeActivities[_currentActivityIndex];
       _currentActivity.Completed = HandleActivityCompleted;
       _currentActivity.ChangeTableUI = HandleTableUIChange;
       _currentActivity.Activate(oldActivity ? 0.5f : 0.0f);
@@ -228,7 +234,7 @@ namespace Ideum {
 
     private void HandleActivityCompleted() {
       _currentActivityIndex++;
-      if (_currentActivityIndex >= _activities.Count) {
+      if (_currentActivityIndex >= _activeActivities.Count) {
         _complete = true;
         EndWindow.Activate();
         _seq?.Kill();
@@ -243,8 +249,7 @@ namespace Ideum {
         return;
       }
 
-      _progress = Mathf.Min(_progress + (1f / (_activities.Count + 1)), 1f);
-      Steps.SetProgress(_progress, _currentActivityIndex);
+      _progress = Mathf.Min(_progress + (1f / (_activeActivities.Count + 1)), 1f);
 
       StartActivity();
     }

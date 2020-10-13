@@ -19,11 +19,15 @@ namespace Ideum {
     private RectTransform _rect;
 
     public void Initialize(List<int> sections) {
-      for(int i = 0; i < Tables.Count; i++) {
+
+      int count = 0;
+      for (int i = 0; i < Tables.Count; i++) {
         if (sections[i] == 0) {
           Tables[i].gameObject.SetActive(false);
           continue;
         }
+
+        count++;
 
         HandInfo info = new HandInfo();
         info.State = i == 0 ? HandState.Point : i == 1 ? HandState.Select : HandState.Close;
@@ -42,11 +46,19 @@ namespace Ideum {
         }
       }
 
-      if(sections.Count < 3) {
+
+      if (count == 2) {
         Dividers[1].SetActive(false);
         TopBar.sizeDelta = new Vector2(TopBar.rect.width, 210);
-        foreach(TableSensorUI ui in Tables) {
+        foreach (TableSensorUI ui in Tables) {
           ui.GetComponent<Transform>().localScale = new Vector3(1f, 1f, 1f);
+        }
+      } else if (count == 1) {
+        Dividers[0].SetActive(false);
+        Dividers[1].SetActive(false);
+        TopBar.sizeDelta = new Vector2(TopBar.rect.width, 310);
+        foreach (TableSensorUI ui in Tables) {
+          ui.GetComponent<Transform>().localScale = new Vector3(0.66f, 0.66f, 0.66f);
         }
       } else {
         TopBar.sizeDelta = new Vector2(TopBar.rect.width, 310);
