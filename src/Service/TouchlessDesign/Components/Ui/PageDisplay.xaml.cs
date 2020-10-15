@@ -8,18 +8,12 @@ namespace TouchlessDesign.Components.Ui {
   /// </summary>
   public partial class PageDisplay : UserControl {
 
-    private bool _hasLoaded;
-
     public PageDisplay() {
       InitializeComponent();
       Loaded += PageDisplay_Loaded;
     }
 
     private void PageDisplay_Loaded(object sender, RoutedEventArgs e) {
-      DoRefreshDisplays();
-    }
-
-    private void RefreshDisplaysClicked(object sender, RoutedEventArgs e) {
       DoRefreshDisplays();
     }
 

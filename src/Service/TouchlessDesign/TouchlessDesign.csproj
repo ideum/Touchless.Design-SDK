@@ -137,6 +137,7 @@
     <Compile Include="Components\Ui\PageNetwork.xaml.cs">
       <DependentUpon>PageNetwork.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Components\Ui\ProcessWindowManager.cs" />
     <Compile Include="Components\Ui\StatusView.xaml.cs">
       <DependentUpon>StatusView.xaml</DependentUpon>
     </Compile>

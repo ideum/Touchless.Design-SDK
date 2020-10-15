@@ -8,6 +8,7 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Threading;
 using IWshRuntimeLibrary;
+using TouchlessDesign.Config;
 using File = System.IO.File;
 
 namespace TouchlessDesign.Components.Ui {
@@ -131,45 +132,104 @@ namespace TouchlessDesign.Components.Ui {
     private const string OverlayFilename = "bin/Overlay/TouchlessDesign.FrontEnd.exe";
     private const string AddOnFilename = "bin/AddOn/TouchlessDesignService.AddOnUI.exe";
 
-    private readonly List<Process> _processes = new List<Process>();
+    private readonly List<ProcessWindowManager> _processes = new List<ProcessWindowManager>();
+
+    public ProcessWindowManager OverlayWindowManager, AddOnWindowManager;
 
     private void InitializeExternalApplications() {
-
-      var appPaths = new List<string>();
-
+      string path;
+      Process process;
+      
       if (Config.Display.OverlayEnabled) {
-        appPaths.Add(Path.Combine(DataDir, OverlayFilename));
+        path = Path.Combine(DataDir, OverlayFilename);
+        if (TryStartProcess(path, out process)) {
+          OverlayWindowManager = new ProcessWindowManager(process, null, HandleOverlayWindowShown);
+          _processes.Add(OverlayWindowManager);
+        }
+        else {
+          Log.Error("Failed to start overlay process.");
+        }
       }
 
       if (Config.Display.AddOnEnabled) {
-        appPaths.Add(Path.Combine(DataDir, AddOnFilename));
-      }
-
-      foreach (var rawPath in appPaths) {
-        var path = Path.Combine(DataDir, rawPath);
-        try {
-          if (!File.Exists(path)) {
-            Log.Error($"External Exe at {path} does not exist.");
-            continue;
-          }
-          var process = Process.Start(path);
-          _processes.Add(process);
+        path = Path.Combine(DataDir, AddOnFilename);
+        if (TryStartProcess(path, out process)) {
+          AddOnWindowManager = new ProcessWindowManager(process, null, HandleAddOnWindowShown);
+          _processes.Add(AddOnWindowManager);
         }
-        catch (Exception e) {
-          Log.Error($"Caught exception while trying to start external application at {path}: {e}");
+        else {
+          Log.Error("Failed to start add-on process");
         }
       }
     }
 
+    private void HandleOverlayWindowShown(ProcessWindowManager obj) {
+      Log.Info("Overlay shown");
+      if (!SetScreen(obj, ref Config.Display.OverlayDisplay, DisplayInfo.PrimaryDisplay, () => {
+        App.Current.Dispatcher.BeginInvoke(new Action(() => { App.Instance.AppViewModel.Display.RefreshDisplays(); }));
+      })) {
+        Log.Warn("Failed to set overlay screen.");
+      }
+    }
+
+    private void HandleAddOnWindowShown(ProcessWindowManager obj) {
+      Log.Info("AddOn shown");
+      if (!SetScreen(obj, ref Config.Display.AddOnDisplay, DisplayInfo.SecondaryDisplay, () => {
+        App.Current.Dispatcher.BeginInvoke(new Action(() => { App.Instance.AppViewModel.Display.RefreshDisplays(); }));
+      })) {
+        Log.Warn("Failed to set add-on screen.");
+      }
+    }
+
+    public bool SetScreen(ProcessWindowManager p, ref DisplayInfo displayInfo, DisplayInfo fallback, Action displayInfoChanged = null) {
+      var screens = Screen.AllScreens;
+      if (screens.Length <= 0) return false;
+
+      if (displayInfo == null && fallback == null) return false;
+
+      if (displayInfo == null) {
+        displayInfo = fallback;
+      }
+
+      foreach (var s in screens) {
+        if (s.IsEqual(displayInfo)) {
+          p.SetWindowPosition(s);
+          return true;
+        }
+      }
+
+      foreach (var s in screens) {
+        if (s.Primary == displayInfo.Primary) {
+          p.SetWindowPosition(s);
+          displayInfo = new DisplayInfo(s);
+          displayInfoChanged?.Invoke();
+          return true;
+        }
+      }
+
+      return false;
+    }
+
+    private bool TryStartProcess(string path, out Process process) {
+      try {
+        if (!File.Exists(path)) {
+          Log.Error($"External Exe at {path} does not exist.");
+          process = null;
+          return false;
+        }
+        process = Process.Start(path);
+        return true;
+      }
+      catch (Exception e) {
+        Log.Error($"Caught exception while trying to start external application at {path}: {e}");
+      }
+      process = null;
+      return false;
+    }
+
     private void DeInitializeExternalApplications() {
       foreach (var process in _processes) {
-        try {
-          if (process.HasExited) continue;
-          process.Kill();
-        }
-        catch (Exception e) {
-          Log.Error($"Exception thrown while attempting to kill process '{process.ProcessName}': {e}");
-        }
+        process.Stop();
       }
       _processes.Clear();
     }
