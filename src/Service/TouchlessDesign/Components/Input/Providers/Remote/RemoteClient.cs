@@ -17,6 +17,7 @@ namespace TouchlessDesign.Components.Remote {
     private UdpClient _sendClient, _receiveClient;
 
     private IpInfo _receiveInfo;
+    private IPEndPoint _sendEndPoint;
 
     private Thread _thread;
     private AutoResetEvent _endEvt;
@@ -35,11 +36,10 @@ namespace TouchlessDesign.Components.Remote {
 
       var data = Encoding.UTF8.GetBytes(msg.Serialize());
 
-      _sendClient.Send(data, data.Length);
+      _sendClient.Send(data, data.Length, _sendEndPoint);
     }
 
     protected override void DoStart() {
-      Log.Debug("Starting remote connection.");
       ConfigNetwork config = ConfigNetwork.Get(DataDir);
 
       _receiveInfo = config.UdpBroadcast;
@@ -47,6 +47,8 @@ namespace TouchlessDesign.Components.Remote {
       _receiveClient.ExclusiveAddressUse = false;
       _receiveClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
       _receiveClient.Client.Bind(new IPEndPoint(IPAddress.Any, _receiveInfo.Port));
+
+      _sendClient = new UdpClient();
 
       _endEvt = new AutoResetEvent(false);
       _msgEvt = new AutoResetEvent(false);
@@ -100,8 +102,7 @@ namespace TouchlessDesign.Components.Remote {
             return;
           }
 
-          _sendClient = new UdpClient();
-          _sendClient.Client.Bind(new IPEndPoint(broadcasterEndpoint.Address, sendPort));
+          _sendEndPoint = new IPEndPoint(broadcasterEndpoint.Address, sendPort);
 
           //SEND TCP PORT TO INPUT
 
