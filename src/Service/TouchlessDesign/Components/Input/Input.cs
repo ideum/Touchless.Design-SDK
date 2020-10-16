@@ -8,7 +8,7 @@ using System.Windows.Forms;
 using Gma.System.MouseKeyHook;
 using TouchlessDesign.Components.Input.Providers;
 using TouchlessDesign.Components.Input.Providers.LeapMotion;
-using TouchlessDesign.Components.Input.Providers.RealSense;
+using TouchlessDesign.Components.Input.Providers.Remote;
 using Timer = System.Threading.Timer;
 
 namespace TouchlessDesign.Components.Input {
@@ -106,7 +106,7 @@ namespace TouchlessDesign.Components.Input {
     private void InitializeInputProvider() {
       var providerInterfaceType = typeof(IInputProvider);
 
-      var providerTypes = new[]{typeof(LeapMotionProvider), typeof(RealSenseProvider)};
+      var providerTypes = new[]{typeof(LeapMotionProvider), typeof(RemoteProvider)};
       Type providerType = null;
 
 
