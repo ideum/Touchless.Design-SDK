@@ -26,6 +26,7 @@ namespace TouchlessDesign.Components.Input {
     public Property<int> HandCount { get; } = new Property<int>(0);
     
     private Rectangle? _bounds;
+    private bool _routeToRemote = false;
 
     public Rectangle Bounds {
       get {
@@ -143,7 +144,11 @@ namespace TouchlessDesign.Components.Input {
       try {
         _provider.Start();
         Log.Info($"Input provider '{_provider.GetType().Name}' started.");
-        _inputProviderTimer = new Timer(HandleProviderUpdate, null, 0, Config.Input.UpdateRate_ms);
+        if (_routeToRemote) {
+          _inputProviderTimer = new Timer(HandleRemoteUpdate, null, 0, Config.Input.UpdateRate_ms);
+        } else {
+          _inputProviderTimer = new Timer(HandleProviderUpdate, null, 0, Config.Input.UpdateRate_ms);
+        }
       }
       catch (Exception e) {
         Log.Error($"Exception caught while starting {_provider.GetType().Name}. {e}");
@@ -151,6 +156,19 @@ namespace TouchlessDesign.Components.Input {
     }
 
     private bool _hasClicked;
+
+    private void HandleRemoteUpdate(object state) {
+      if (!IsEmulationEnabled.Value) return;
+      lock (_hands) {
+        if (!_provider.Update(_hands)) {
+          _hands.Clear();
+        }
+
+        if (RemoteClient.AvailableToSend) {
+          RemoteClient.SendHandData(_hands.Values.ToArray());
+        }
+      }
+    }
 
     private void HandleProviderUpdate(object state) {
       if (!IsEmulationEnabled.Value) return;

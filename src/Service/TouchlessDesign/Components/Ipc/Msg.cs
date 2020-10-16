@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
+using TouchlessDesign.Components.Input;
 using TouchlessDesign.Config;
 
 namespace TouchlessDesign.Components.Ipc {
@@ -28,7 +29,8 @@ namespace TouchlessDesign.Components.Ipc {
       AddOnQuery,
       SubscribeToDisplaySettings,
       DisplaySettingsChanged,
-      HandCountQuery
+      HandCountQuery,
+      Hands
     }
 
     [JsonProperty("T")]
@@ -81,6 +83,9 @@ namespace TouchlessDesign.Components.Ipc {
 
     [JsonProperty("Config")]
     public ConfigDisplay Config;
+
+    [JsonProperty("Hands")]
+    public Hand[] Hands;
 
     #endregion
 
@@ -258,6 +263,10 @@ namespace TouchlessDesign.Components.Ipc {
       public static Msg SubscribeMessage() {
         return new Msg { Type = Types.SubscribeToDisplaySettings };
       }
+
+      public static Msg HandMessage() {
+        return new Msg { Type = Types.Hands };
+      }
     }
 
     #endregion
@@ -412,6 +421,8 @@ namespace TouchlessDesign.Components.Ipc {
           case Types.HandCountQuery:
             Operate(collection.OfType<HandCountQueryDelegate>(), p => p(msg.X.Value));
             break;
+          case Types.Hands:
+            break;
           default:
             throw new ArgumentOutOfRangeException();
         }
@@ -540,6 +551,8 @@ namespace TouchlessDesign.Components.Ipc {
             return true;
           case Types.HandCountQuery:
             return true;
+          case Types.Hands:
+            return false;
           default:
             throw new ArgumentOutOfRangeException();
         }
@@ -584,6 +597,8 @@ namespace TouchlessDesign.Components.Ipc {
             return false;
           case Types.HandCountQuery:
             return false;
+          case Types.Hands:
+            return true;
           default:
             throw new ArgumentOutOfRangeException();
         }

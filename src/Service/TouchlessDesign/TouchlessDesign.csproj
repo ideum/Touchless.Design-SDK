@@ -97,6 +97,10 @@
     <Compile Include="Components\Input\Providers\IInputProvider.cs" />
     <Compile Include="Components\Input\Providers\LeapMotion\LeapMotionProvider.cs" />
     <Compile Include="Components\Input\Providers\LeapMotion\LeapSettings.cs" />
+    <Compile Include="Components\Input\Providers\Remote\RemoteClient.cs" />
+    <Compile Include="Components\Input\Providers\Remote\RemoteProvider.cs" />
+    <Compile Include="Components\Ipc\Networking\Udp\UdpConnection.cs" />
+    <Compile Include="Components\Ipc\Networking\Udp\UdpServer.cs" />
     <Compile Include="Components\Ui\Controls\BoolControl.xaml.cs">
       <DependentUpon>BoolControl.xaml</DependentUpon>
     </Compile>

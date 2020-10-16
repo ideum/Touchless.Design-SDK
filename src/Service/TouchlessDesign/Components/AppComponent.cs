@@ -8,14 +8,16 @@ namespace TouchlessDesign.Components {
     public static Config.Config Config { get; set; }
 
     public static AppComponent[] Components { get; set; }
-    
+
     public static Ui.Ui Ui { get; set; }
-    
+
     public static Input.Input Input { get; set; }
-    
+
     public static Ipc.Ipc Ipc { get; set; }
 
     public static Lighting.Lighting Lighting { get; set; }
+
+    public static Remote.RemoteClient RemoteClient { get; set; }
 
     public event Action OnStarted;
     public event Action OnStopped;
@@ -45,6 +47,8 @@ namespace TouchlessDesign.Components {
     private static bool _isLoaded = false;
     private static readonly List<Action> OnLoadedHandlers = new List<Action>();
 
+    private static bool _remote = false;
+
     public static void OnLoaded(Action onLoaded) {
       if (_isLoaded) {
         onLoaded?.Invoke();
@@ -59,18 +63,28 @@ namespace TouchlessDesign.Components {
       Input = new Input.Input();
       Lighting = new Lighting.Lighting();
       Ipc = new Ipc.Ipc();
-      Components = new AppComponent[] {
+      RemoteClient = new Remote.RemoteClient();
+      if (_remote) {
+        Components = new AppComponent[] {
+        Ui,
+        Input,
+        Lighting,
+        Ipc,
+        RemoteClient
+        };
+      } else {
+        Components = new AppComponent[] {
         Ui,
         Input,
         Lighting,
         Ipc
       };
+      }
       foreach (var c in Components) {
         try {
           c.DataDir = app.DataDir;
           c.Start();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
           Log.Error($"Error starting AppComponent of type {c.GetType().Name}: {e}");
         }
       }
@@ -86,8 +100,7 @@ namespace TouchlessDesign.Components {
       foreach (var c in Components) {
         try {
           c.Stop();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
           Log.Error(e);
         }
       }
