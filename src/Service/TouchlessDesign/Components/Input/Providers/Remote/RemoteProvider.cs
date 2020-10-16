@@ -63,7 +63,6 @@ namespace TouchlessDesign.Components.Input.Providers.Remote {
     }
 
     private void SendDiscoveryBroadcast(object state) {
-      Log.Debug("Sending discovery broadcast");
       string discovery = "Touchless_discovery " + _commInfo.Port + " " + _tcpPort;
       _server.SendBroadcast(Encoding.UTF8.GetBytes(discovery));
     }

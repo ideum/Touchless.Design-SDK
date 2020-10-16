@@ -47,8 +47,6 @@ namespace TouchlessDesign.Components {
     private static bool _isLoaded = false;
     private static readonly List<Action> OnLoadedHandlers = new List<Action>();
 
-    private static bool _remote = false;
-
     public static void OnLoaded(Action onLoaded) {
       if (_isLoaded) {
         onLoaded?.Invoke();
@@ -64,7 +62,7 @@ namespace TouchlessDesign.Components {
       Lighting = new Lighting.Lighting();
       Ipc = new Ipc.Ipc();
       RemoteClient = new Remote.RemoteClient();
-      if (_remote) {
+      if (Config.General.RemoteProviderMode) {
         Components = new AppComponent[] {
         Ui,
         Input,

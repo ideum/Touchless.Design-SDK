@@ -26,7 +26,6 @@ namespace TouchlessDesign.Components.Input {
     public Property<int> HandCount { get; } = new Property<int>(0);
     
     private Rectangle? _bounds;
-    private bool _routeToRemote = false;
 
     public Rectangle Bounds {
       get {
@@ -144,7 +143,7 @@ namespace TouchlessDesign.Components.Input {
       try {
         _provider.Start();
         Log.Info($"Input provider '{_provider.GetType().Name}' started.");
-        if (_routeToRemote) {
+        if (Config.General.RemoteProviderMode) {
           _inputProviderTimer = new Timer(HandleRemoteUpdate, null, 0, Config.Input.UpdateRate_ms);
         } else {
           _inputProviderTimer = new Timer(HandleProviderUpdate, null, 0, Config.Input.UpdateRate_ms);
