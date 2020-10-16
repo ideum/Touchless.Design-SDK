@@ -25,6 +25,13 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
       set { SetValue(UiStartupDelayProperty, value); }
     }
 
+    public static readonly DependencyProperty RemoteProviderModeProperty = Reg<GeneralViewModel, bool>("RemoteProviderMode", false, PropertyTypes.Restart);
+
+    public bool RemoteProviderMode {
+      get { return (bool)GetValue(RemoteProviderModeProperty); }
+      set { SetValue(RemoteProviderModeProperty, value); }
+    }
+
     public GeneralViewModel() {
 
     }
@@ -37,13 +44,14 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
       Model.StartOnStartup = StartOnStartup;
       Model.ShowUiOnStartup = ShowUiOnStartup;
       Model.UiStartUpDelay = UiStartupDelay;
-      
+      Model.RemoteProviderMode = RemoteProviderMode;
     }
 
     public override void UpdateValuesFromModel() {
       StartOnStartup = Model.StartOnStartup;
       ShowUiOnStartup = Model.ShowUiOnStartup;
       UiStartupDelay = Model.UiStartUpDelay;
+      RemoteProviderMode = Model.RemoteProviderMode;
     }
   }
 }

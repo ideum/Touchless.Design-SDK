@@ -7,7 +7,7 @@
         xmlns:c="clr-namespace:TouchlessDesign.Components.Ui"
         mc:Ignorable="d"
         Title="Touchless.Design" 
-        Height="640" Width="960" 
+        Height="640" Width="960"
         MinHeight="640" MinWidth="960" 
         TextOptions.TextFormattingMode="Ideal" 
         TextOptions.TextRenderingMode="Auto"
@@ -148,7 +148,7 @@
             <TabItem Header="Input" Foreground="{StaticResource Ideum.Brush.ForegroundSecondary}">
               <c:PageInput DataContext="{StaticResource InputViewModel}"/>
             </TabItem>
-            
+
             <TabItem IsSelected="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type c:MainWindow}}, Path=SelectNetworkTab}" Header="Network" Foreground="{StaticResource Ideum.Brush.ForegroundSecondary}">
               <c:PageNetwork DataContext="{StaticResource NetworkViewModel}" />
             </TabItem>

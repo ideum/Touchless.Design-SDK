@@ -6,6 +6,7 @@ namespace TouchlessDesign.Config {
     public bool StartOnStartup = true;
     public bool ShowUiOnStartup = false;
     public int UiStartUpDelay = 0;
+    public bool RemoteProviderMode = false;
 
     private const string Filename = "general.json";
 
@@ -14,7 +15,8 @@ namespace TouchlessDesign.Config {
       return Factory.Get(path, () => new ConfigGeneral {
         FilePath = path,
         StartOnStartup = true,
-        UiStartUpDelay = 0
+        UiStartUpDelay = 0,
+        RemoteProviderMode = false
       });
     }
 
@@ -26,6 +28,7 @@ namespace TouchlessDesign.Config {
     public override void Apply(ConfigGeneral i) {
       StartOnStartup = i.StartOnStartup;
       UiStartUpDelay = i.UiStartUpDelay;
+      RemoteProviderMode = i.RemoteProviderMode;
     }
   }
 }

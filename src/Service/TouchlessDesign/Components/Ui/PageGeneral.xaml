@@ -20,8 +20,14 @@
                      Header="Show UI On Startup" 
                      LabelMinWidth="180"/>
       <c:NumberControl Value="{Binding UiStartupDelay}" 
-                       Header="UI Startup Delay"
+                       Header="UI Startup Delay (ms)"
+                       Min="0"
+                       Max="15000"
+                       NumberFormatter="{StaticResource IntNumberFormatter}"
                        LabelMinWidth="180"/>
+      <c:BoolControl Value="{Binding RemoteProviderMode}"
+                     Header="Remote Provider Mode"
+                     LabelMinWidth="180"/>
       <Button Click="HandleOpenDirectoryClicked" Margin="0 6 0 0">Open Directory</Button>
     </ui:SimpleStackPanel>
   </Grid>
