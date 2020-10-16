@@ -30,6 +30,8 @@ namespace TouchlessDesign.Components.Input.Providers.Remote {
       _commInfo = config.UdpData;
       _tcpPort = config.TcpData.Port;
 
+      _lock = new object();
+
       _server = new UdpServer(_broadcastInfo, _commInfo);
 
       _server.MessageReceived = HandleMessageReceived;
@@ -39,6 +41,7 @@ namespace TouchlessDesign.Components.Input.Providers.Remote {
     }
 
     public void Stop() {
+      _server.SendBroadcast(Encoding.UTF8.GetBytes("Touchless_end"));
       _server.Stop();
     }
 
@@ -60,6 +63,7 @@ namespace TouchlessDesign.Components.Input.Providers.Remote {
     }
 
     private void SendDiscoveryBroadcast(object state) {
+      Log.Debug("Sending discovery broadcast");
       string discovery = "Touchless_discovery " + _commInfo.Port + " " + _tcpPort;
       _server.SendBroadcast(Encoding.UTF8.GetBytes(discovery));
     }
