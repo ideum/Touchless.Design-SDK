@@ -62,6 +62,8 @@ namespace TouchlessDesign.Components.Ipc.Networking.Udp {
         _broadcastClient.Send(data, data.Length, new IPEndPoint(IPAddress.Broadcast, _broadcastInfo.Port));
       } catch (SocketException e) {
         Log.Error("UDP Socket exception caught during broadcast send attempt: " + e.ToString());
+      } catch (ObjectDisposedException) {
+        Log.Debug("Socket was disposed while listening.");
       }
     }
 
