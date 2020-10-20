@@ -101,6 +101,20 @@ namespace TouchlessDesign.Components.Input
           RemoteClient.SendHandData(_hands.Values.ToArray());
         }
       }
+      QueryClickAndHoverState();
+      QueryNoTouch();
+    }
+
+    private void QueryClickAndHoverState() {
+      if (_remoteClientActive) {
+        _remoteClient.Send(Msg.Factories.ClickAndHoverQuery());
+      }
+    }
+
+    private void QueryNoTouch() {
+      if (_remoteClientActive) {
+        _remoteClient.Send(Msg.Factories.NoTouchQuery());
+      }
     }
     #endregion
 
