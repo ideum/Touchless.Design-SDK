@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Net;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
@@ -9,22 +10,28 @@ using Gma.System.MouseKeyHook;
 using TouchlessDesign.Components.Input.Providers;
 using TouchlessDesign.Components.Input.Providers.LeapMotion;
 using TouchlessDesign.Components.Input.Providers.Remote;
+using TouchlessDesign.Components.Ipc;
+using TouchlessDesign.Components.Ipc.Networking;
+using TouchlessDesign.Components.Ipc.Networking.Tcp;
+using static TouchlessDesign.Components.Ipc.Networking.Client;
 using Timer = System.Threading.Timer;
 
-namespace TouchlessDesign.Components.Input {
+namespace TouchlessDesign.Components.Input
+{
 
-  public class Input : AppComponent {
+  public class Input : AppComponent, Client.IListener
+  {
 
     public Property<bool> IsEmulationEnabled { get; } = new Property<bool>(true);
 
     public Property<HoverStates> HoverState { get; } = new Property<HoverStates>(HoverStates.None);
-    
+
     public Property<bool> IsButtonDown { get; } = new Property<bool>(false);
-    
+
     public Property<bool> IsNoTouch { get; } = new Property<bool>(false);
 
     public Property<int> HandCount { get; } = new Property<int>(0);
-    
+
     private Rectangle? _bounds;
 
     public Rectangle Bounds {
@@ -40,6 +47,9 @@ namespace TouchlessDesign.Components.Input {
     private IKeyboardMouseEvents _hook;
     private DateTime? _timeSinceToggleEmulationKeyCombination;
 
+    private Client _remoteClient;
+    private bool _remoteClientActive = false;
+
     protected override void DoStart() {
       InitializeHooks();
       InitializeClickHandling();
@@ -52,12 +62,54 @@ namespace TouchlessDesign.Components.Input {
       DeInitializeHooks();
     }
 
+    #region Remote Input
+
+    public void MakeRemoteConnection(IPEndPoint endpoint) {
+      try {
+        TcpConnection connection;
+        if (TcpConnection.TryOpen(endpoint, out connection)) {
+          TcpMessageParser parser = new TcpMessageParser();
+          _remoteClient = new Client(connection, parser);
+          _remoteClient.Bind(this);
+        }
+      } catch (Exception e) {
+        Log.Error($"Connection error: {e}");
+      }
+    }
+    public void MessageReceived(Client client, Msg msg) {
+      Ipc.ProcessMsg(msg, client);
+    }
+
+    public void ConnectionClosed(Client client) {
+      Log.Debug("Remote connection to Service closed.");
+      _remoteClientActive = false;
+    }
+
+    public void OnException(Client client, Exception e) {
+      Log.Error("Exception caught with remote client connection: " + e.ToString());
+      _remoteClientActive = false;
+    }
+
+    private void HandleRemoteUpdate(object state) {
+      if (!IsEmulationEnabled.Value) return;
+      lock (_hands) {
+        if (!_provider.Update(_hands)) {
+          _hands.Clear();
+        }
+
+        if (RemoteClient.AvailableToSend) {
+          RemoteClient.SendHandData(_hands.Values.ToArray());
+        }
+      }
+    }
+    #endregion
+
 
     #region Click Handling
 
     private bool _isClicking;
     private Timer _clickTimer;
-    
+
     private void InitializeClickHandling() {
       HoverState.AddChangedListener(HandleHoverStateChangedForClick);
       _clickTimer = new Timer(HandleClickCallback, null, Timeout.Infinite, Timeout.Infinite);
@@ -105,11 +157,11 @@ namespace TouchlessDesign.Components.Input {
     private void InitializeInputProvider() {
       var providerInterfaceType = typeof(IInputProvider);
 
-      var providerTypes = new[]{typeof(LeapMotionProvider), typeof(RemoteProvider)};
+      var providerTypes = new[] { typeof(LeapMotionProvider), typeof(RemoteProvider) };
       Type providerType = null;
 
 
-      if (providerTypes.Length <=0) {
+      if (providerTypes.Length <= 0) {
         Log.Error($"No {providerInterfaceType.Name} implementation could be found.");
         return;
       }
@@ -126,9 +178,8 @@ namespace TouchlessDesign.Components.Input {
       object instance = null;
       try {
         instance = Activator.CreateInstance(providerType);
-        _provider = (IInputProvider) instance;
-      }
-      catch (Exception e) {
+        _provider = (IInputProvider)instance;
+      } catch (Exception e) {
         Log.Error($"Exception thrown when instantiating or casting provider '{instance?.GetType().Name}': {e}");
         return;
       }
@@ -148,26 +199,12 @@ namespace TouchlessDesign.Components.Input {
         } else {
           _inputProviderTimer = new Timer(HandleProviderUpdate, null, 0, Config.Input.UpdateRate_ms);
         }
-      }
-      catch (Exception e) {
+      } catch (Exception e) {
         Log.Error($"Exception caught while starting {_provider.GetType().Name}. {e}");
       }
     }
 
     private bool _hasClicked;
-
-    private void HandleRemoteUpdate(object state) {
-      if (!IsEmulationEnabled.Value) return;
-      lock (_hands) {
-        if (!_provider.Update(_hands)) {
-          _hands.Clear();
-        }
-
-        if (RemoteClient.AvailableToSend) {
-          RemoteClient.SendHandData(_hands.Values.ToArray());
-        }
-      }
-    }
 
     private void HandleProviderUpdate(object state) {
       if (!IsEmulationEnabled.Value) return;
@@ -186,15 +223,14 @@ namespace TouchlessDesign.Components.Input {
             if (_hasClicked) {
               _hasClicked = false;
             }
-          }
-          else {
+          } else {
             var hand = _hands.Values.First();
             HandCount.Value = _hands.Values.Count;
-            
+
             //position
-            Config.Input.NormalizedPosition(hand.X,hand.Y,hand.Z, out var h, out var v);
-            var pixelX = (int) Math.Round(h * Bounds.Width + Bounds.Left);
-            var pixelY = (int) Math.Round(v * Bounds.Height + Bounds.Top);
+            Config.Input.NormalizedPosition(hand.X, hand.Y, hand.Z, out var h, out var v);
+            var pixelX = (int)Math.Round(h * Bounds.Width + Bounds.Left);
+            var pixelY = (int)Math.Round(v * Bounds.Height + Bounds.Top);
             SetPosition(pixelX, pixelY);
 
             //click
@@ -207,12 +243,10 @@ namespace TouchlessDesign.Components.Input {
                   _hasClicked = true;
                   DoClick();
                 }
-              }
-              else {
+              } else {
                 SetMouseButtonDown(true);
               }
-            }
-            else if (!isGrabbing && IsButtonDown.Value) {
+            } else if (!isGrabbing && IsButtonDown.Value) {
               SetMouseButtonDown(false);
             }
 
@@ -220,8 +254,7 @@ namespace TouchlessDesign.Components.Input {
               _hasClicked = false;
             }
           }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
           Log.Error($"Caught exception while updating input provider: {e}");
         }
 
@@ -260,8 +293,7 @@ namespace TouchlessDesign.Components.Input {
     private void HandleToggleEmulationKeyCombination() {
       if (_timeSinceToggleEmulationKeyCombination == null) {
         DoToggleEmulation();
-      }
-      else {
+      } else {
         var now = DateTime.Now;
         var delta = now - _timeSinceToggleEmulationKeyCombination.Value;
         if (delta.TotalMilliseconds > Config.Input.ToggleEmulationToggleSpeed_ms) {
@@ -354,7 +386,8 @@ namespace TouchlessDesign.Components.Input {
 
     #region mouse_event
     [Flags]
-    public enum MouseEventFlags : uint {
+    public enum MouseEventFlags : uint
+    {
       LeftDown = 0x00000002,
       LeftUp = 0x00000004,
       MiddleDown = 0x00000020,
@@ -371,7 +404,8 @@ namespace TouchlessDesign.Components.Input {
     //Use the values of this enum for the 'dwData' parameter
     //to specify an X button when using MouseEventFlags.XDown or
     //MouseEventFlags.XUp for the dwFlags parameter.
-    public enum MouseEventDataXButtons : uint {
+    public enum MouseEventDataXButtons : uint
+    {
       XButton1 = 0x00000001,
       XButton2 = 0x00000002
     }
@@ -387,7 +421,8 @@ namespace TouchlessDesign.Components.Input {
 
     #region GetCursorInfo
 
-    private struct CursorInfo {
+    private struct CursorInfo
+    {
       public bool IsShown;
       public int X, Y;
     }
@@ -396,13 +431,15 @@ namespace TouchlessDesign.Components.Input {
     private const int CURSOR_SUPPRESSED = 0x00000002;
 
     [StructLayout(LayoutKind.Sequential)]
-    private struct POINT {
+    private struct POINT
+    {
       public int x;
       public int y;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    private struct CURSORINFO {
+    private struct CURSORINFO
+    {
       public int cbSize;        // Specifies the size, in bytes, of the structure.
                                 // The caller must set this to Marshal.SizeOf(typeof(CURSORINFO)).
       public int flags;         // Specifies the cursor state. This parameter can be one of the following values:
@@ -429,8 +466,7 @@ namespace TouchlessDesign.Components.Input {
           Y = nativeCursorInfo.ptScreenPos.y,
           IsShown = nativeCursorInfo.flags == CURSOR_SHOWING
         };
-      }
-      else {
+      } else {
         return new CursorInfo();
       }
     }
@@ -439,8 +475,7 @@ namespace TouchlessDesign.Components.Input {
       if (GetCursor(out var cursor)) {
         x = cursor.ptScreenPos.x;
         y = cursor.ptScreenPos.y;
-      }
-      else {
+      } else {
         x = y = 0;
       }
     }
@@ -449,8 +484,7 @@ namespace TouchlessDesign.Components.Input {
       get {
         if (GetCursor(out var cursor)) {
           return cursor.flags == CURSOR_SHOWING;
-        }
-        else {
+        } else {
           return false;
         }
       }

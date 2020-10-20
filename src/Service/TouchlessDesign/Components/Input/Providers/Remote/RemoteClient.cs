@@ -104,7 +104,7 @@ namespace TouchlessDesign.Components.Remote {
 
           _sendEndPoint = new IPEndPoint(broadcasterEndpoint.Address, sendPort);
 
-          //SEND TCP PORT TO INPUT
+          Input.MakeRemoteConnection(_sendEndPoint);
 
           _sendReady = true;
         } else if(splitStr[0] == "Touchless_end") {
