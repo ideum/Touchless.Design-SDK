@@ -10,7 +10,8 @@ using System.IO;
 using UnityEngine;
 using Newtonsoft.Json.Linq;
 
-public class App : MonoBehaviour {
+public class App : MonoBehaviour
+{
 
   private bool _connected;
   private float _queryInterval = 0.25f;
@@ -34,28 +35,22 @@ public class App : MonoBehaviour {
           Log.Info("Screen set to " + screen);
         }
       }
-    }
-    catch (Exception e) {
+    } catch (Exception e) {
       Log.Error(e);
     }
 
 #if !UNITY_EDITOR
         if(Display.displays.Length > 0)
         {
-            PlayerPrefs.SetInt("UnitySelectMonitor", screen);
+            //PlayerPrefs.SetInt("UnitySelectMonitor", screen);
 
-            var display = Display.displays[screen];
+            var display = Display.displays[0];
             int w = display.systemWidth;
             int h = display.systemHeight;
             Screen.SetResolution(w, h, true);
-        }
-        else
-        {
-            Application.Quit();
         } 
-#endif
 
-    if (Display.displays.Length > 1) {
+    else if (Display.displays.Length > 1) {
       //PlayerPrefs.SetInt("UnitySelectMonitor", screen);
 
       var display = Display.displays[screen];
@@ -69,6 +64,7 @@ public class App : MonoBehaviour {
     else {
       Application.Quit();
     }
+#endif
 
 
     TouchlessDesign.Initialize(AppSettings.Get().DataDirectory.GetPath());
