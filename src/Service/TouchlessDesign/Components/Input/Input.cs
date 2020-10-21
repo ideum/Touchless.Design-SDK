@@ -13,7 +13,6 @@ using TouchlessDesign.Components.Input.Providers.Remote;
 using TouchlessDesign.Components.Ipc;
 using TouchlessDesign.Components.Ipc.Networking;
 using TouchlessDesign.Components.Ipc.Networking.Tcp;
-using static TouchlessDesign.Components.Ipc.Networking.Client;
 using Timer = System.Threading.Timer;
 
 namespace TouchlessDesign.Components.Input
@@ -71,6 +70,7 @@ namespace TouchlessDesign.Components.Input
           TcpMessageParser parser = new TcpMessageParser();
           _remoteClient = new Client(connection, parser);
           _remoteClient.Bind(this);
+          _remoteClientActive = true;
         }
       } catch (Exception e) {
         Log.Error($"Connection error: {e}");
