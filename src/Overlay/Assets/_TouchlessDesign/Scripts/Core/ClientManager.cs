@@ -52,7 +52,7 @@ namespace Ideum {
       _reconnectInterval = settings.ReconnectClientInterval_ms;
       _pingInterval = settings.PingInterval_ms;
       //_connectionInfo = new ConnectionInfo(settings.Server.GetEndPoint());
-      _endpoint = settings.Server.GetEndPoint();
+      _endpoint = settings.TcpData.GetEndPoint();
       _msgType = settings.PrimaryMsgType;
       _pingMsgType = settings.PingMsgType;
       TryConnect();

@@ -7,7 +7,7 @@ using UnityEngine;
 namespace Ideum.Data {
   public class AppSettings {
 
-    public const string DefaultDirectory = "%appdata%/Ideum/TouchlessDesignService";
+    public const string DefaultDirectory = "%appdata%/Ideum/TouchlessDesign";
     private const string Filename = "config.json";
 
     private static readonly PathInfo DefaultFilePathInfo = new PathInfo {

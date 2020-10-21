@@ -1,6 +1,6 @@
 {
   "DataDirectory": {
-    "Path": "%appdata%/Ideum/TouchlessDesignService",
+    "Path": "%appdata%/Ideum/TouchlessDesign",
     "Type": "FileSystem"
   }
 }

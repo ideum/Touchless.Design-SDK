@@ -9,7 +9,7 @@ namespace Ideum.Data {
     public string PingMsgType = "ping";
     public int ReconnectClientInterval_ms = 1000;
     public int PingInterval_ms = 5000;
-    public IpInfo Server;
+    public IpInfo TcpData;
 
     public static NetworkSettings Get(string dir) {
       var path = Path.Combine(dir, Filename);
@@ -27,7 +27,7 @@ namespace Ideum.Data {
         PingMsgType = "ping",
         ReconnectClientInterval_ms = 1000,
         PingInterval_ms = 5000,
-        Server = new IpInfo {
+        TcpData = new IpInfo {
           Loopback = true,
           Port = 4949
         }
