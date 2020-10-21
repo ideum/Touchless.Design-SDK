@@ -30,7 +30,8 @@ namespace TouchlessDesign.Components.Ipc {
       SubscribeToDisplaySettings,
       DisplaySettingsChanged,
       HandCountQuery,
-      Hands
+      Hands,
+      SetPriority
     }
 
     [JsonProperty("T")]
@@ -56,6 +57,9 @@ namespace TouchlessDesign.Components.Ipc {
     }
 
     #endregion
+
+    [JsonProperty("Priority")]
+    public int Priority = 0;
 
     [JsonProperty("B")]
     public bool? Bool = null;
@@ -95,7 +99,7 @@ namespace TouchlessDesign.Components.Ipc {
 
     }
 
-    public Msg(Types type, bool? boolValue = null, int? x = null, int? y = null, int? w = null, int? h = null, string s = null, float? f1 = null) {
+    public Msg(Types type, bool? boolValue = null, int? x = null, int? y = null, int? w = null, int? h = null, string s = null, float? f1 = null, int priority = 0) {
       Type = type;
       Bool = boolValue;
       X = x;
@@ -104,6 +108,7 @@ namespace TouchlessDesign.Components.Ipc {
       H = h;
       S = s;
       F1 = f1;
+      Priority = priority;
     }
 
     #endregion
@@ -267,6 +272,10 @@ namespace TouchlessDesign.Components.Ipc {
       public static Msg HandMessage() {
         return new Msg { Type = Types.Hands };
       }
+
+      public static Msg PriorityMessage(int priority = 0) {
+        return new Msg { Type = Types.SetPriority, Priority = priority };
+      }
     }
 
     #endregion
@@ -423,6 +432,8 @@ namespace TouchlessDesign.Components.Ipc {
             break;
           case Types.Hands:
             break;
+          case Types.SetPriority:
+            break;
           default:
             throw new ArgumentOutOfRangeException();
         }
@@ -553,6 +564,8 @@ namespace TouchlessDesign.Components.Ipc {
             return true;
           case Types.Hands:
             return false;
+          case Types.SetPriority:
+            return false;
           default:
             throw new ArgumentOutOfRangeException();
         }
@@ -598,6 +611,8 @@ namespace TouchlessDesign.Components.Ipc {
           case Types.HandCountQuery:
             return false;
           case Types.Hands:
+            return true;
+          case Types.SetPriority:
             return true;
           default:
             throw new ArgumentOutOfRangeException();

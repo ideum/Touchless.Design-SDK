@@ -37,7 +37,9 @@ namespace Ideum.Data {
       AddOnQuery,
       SubscribeToDisplaySettings,
       DisplaySettingsChanged,
-      HandCountQuery
+      HandCountQuery,
+      Hands,
+      SetPriority
     }
 
     [JsonProperty("T")]
@@ -63,6 +65,9 @@ namespace Ideum.Data {
     }
 
     #endregion
+
+    [JsonProperty("Priority")]
+    public int Priority = 0;
 
     [JsonProperty("B")]
     public bool? Bool = null;
@@ -99,7 +104,7 @@ namespace Ideum.Data {
 
     }
 
-    public Msg(Types type, bool? boolValue = null, int? x = null, int? y = null, int? w = null, int? h = null, string s = null, float? f1 = null) {
+    public Msg(Types type, bool? boolValue = null, int? x = null, int? y = null, int? w = null, int? h = null, string s = null, float? f1 = null, int priority = 0) {
       Type = type;
       Bool = boolValue;
       X = x;
@@ -108,6 +113,7 @@ namespace Ideum.Data {
       H = h;
       S = s;
       F1 = f1;
+      Priority = priority;
     }
 
     #endregion
@@ -267,6 +273,14 @@ namespace Ideum.Data {
       public static Msg SubscribeMessage() {
         return new Msg { Type = Types.SubscribeToDisplaySettings };
       }
+
+      public static Msg HandMessage() {
+        return new Msg { Type = Types.Hands };
+      }
+
+      public static Msg PriorityMessage(int priority = 0) {
+        return new Msg { Type = Types.SetPriority, Priority = priority };
+      }
     }
 
     #endregion
@@ -421,6 +435,10 @@ namespace Ideum.Data {
           case Types.HandCountQuery:
             Operate(collection.OfType<HandCountQueryDelegate>(), p => p(msg.X.Value));
             break;
+          case Types.Hands:
+            break;
+          case Types.SetPriority:
+            break;
           default:
             throw new ArgumentOutOfRangeException();
         }
@@ -549,6 +567,10 @@ namespace Ideum.Data {
             return true;
           case Types.HandCountQuery:
             return true;
+          case Types.Hands:
+            return false;
+          case Types.SetPriority:
+            return false;
           default:
             throw new ArgumentOutOfRangeException();
         }
@@ -593,6 +615,10 @@ namespace Ideum.Data {
             return false;
           case Types.HandCountQuery:
             return false;
+          case Types.Hands:
+            return true;
+          case Types.SetPriority:
+            return true;
           default:
             throw new ArgumentOutOfRangeException();
         }

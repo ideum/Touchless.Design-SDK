@@ -158,16 +158,20 @@ namespace Ideum {
     /// Sets the hover-state
     /// </summary>
     /// <param name="hover"></param>
-    public static void SetHoverState(HoverStates hover) {
-      _connectionManager.Send(Msg.Factories.Hover(hover));
+    public static void SetHoverState(HoverStates hover, int priority = 0) {
+      Msg msg = Msg.Factories.Hover(hover);
+      msg.Priority = priority;
+      _connectionManager.Send(msg);
     }
 
     /// <summary>
     /// Sets the hover-state of the cursor. 
     /// </summary>
     /// <param name="isHovering">If isHovering is true, the hover-state will be set to HoverStates.Click. If false, the hover-state will be set to HoverStates.None</param>
-    public static void SetHoverState(bool isHovering) {
-      _connectionManager.Send(Msg.Factories.Hover(isHovering ? HoverStates.Click : HoverStates.None));
+    public static void SetHoverState(bool isHovering, int priority = 0) {
+      Msg msg = Msg.Factories.Hover(isHovering ? HoverStates.Click : HoverStates.None);
+      msg.Priority = priority;
+      _connectionManager.Send(msg);
     }
 
     public static void QueryHoverState(Msg.BoolDelegate callback) {
@@ -180,16 +184,22 @@ namespace Ideum {
       _connectionManager.Send(Msg.Factories.HoverQuery());
     }
 
-    public static void SetPosition(int x, int y) {
-      _connectionManager.Send(Msg.Factories.Position(x, y));
+    public static void SetPosition(int x, int y, int priority = 0) {
+      Msg msg = Msg.Factories.Position(x, y);
+      msg.Priority = priority;
+      _connectionManager.Send(msg);
     }
 
-    public static void SetClickState(bool isDown) {
-      _connectionManager.Send(Msg.Factories.Click(isDown));
+    public static void SetClickState(bool isDown, int priority = 0) {
+      Msg msg = Msg.Factories.Click(isDown);
+      msg.Priority = priority;
+      _connectionManager.Send(msg);
     }
 
-    public static void SetNoTouchState(bool value) {
-      _connectionManager.Send(Msg.Factories.NoTouch(value));
+    public static void SetNoTouchState(bool value, int priority = 0) {
+      Msg msg = Msg.Factories.NoTouch(value);
+      msg.Priority = priority;
+      _connectionManager.Send(msg);
     }
 
     public static void QueryClickState(Msg.BoolDelegate callback) {
@@ -224,6 +234,10 @@ namespace Ideum {
 
     public static void SubscribeToDisplayConfig() {
       _connectionManager.Send(Msg.Factories.SubscribeMessage());
+    }
+
+    public static void SetPriority(int priority) {
+      _connectionManager.Send(Msg.Factories.PriorityMessage(priority));
     }
 
     #endregion

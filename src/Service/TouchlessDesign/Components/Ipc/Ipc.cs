@@ -31,7 +31,7 @@ namespace TouchlessDesign.Components.Ipc {
           case Msg.Types.None:
             break;
           case Msg.Types.Hover:
-            if (msg.ContainsIncomingServerSideData) {
+            if (msg.ContainsIncomingServerSideData && msg.Priority >= Input.ClientPriority.Value) {
               Log.Warn($"Changing Hover {Input.HoverState.Value} to {msg.HoverState}");
               Input.HoverState.Value = msg.HoverState;
             }
@@ -49,12 +49,12 @@ namespace TouchlessDesign.Components.Ipc {
             c.Send(Msg.Factories.DimensionsQuery(Input.Bounds.Left, Input.Bounds.Top, Input.Bounds.Width, Input.Bounds.Height));
             break;
           case Msg.Types.Position:
-            if (msg.ContainsIncomingServerSideData) {
+            if (msg.ContainsIncomingServerSideData && msg.Priority >= Input.ClientPriority.Value) {
               Input.SetPosition(msg.X.Value, msg.Y.Value);
             }
             break;
           case Msg.Types.Click:
-            if (msg.ContainsIncomingServerSideData) {
+            if (msg.ContainsIncomingServerSideData && msg.Priority >= Input.ClientPriority.Value) {
               Input.SetMouseButtonDown(msg.Bool.Value);
             }
             break;
@@ -68,7 +68,7 @@ namespace TouchlessDesign.Components.Ipc {
             c.Send(Msg.Factories.Ping());
             break;
           case Msg.Types.NoTouch:
-            if (msg.ContainsIncomingServerSideData) {
+            if (msg.ContainsIncomingServerSideData && msg.Priority >= Input.ClientPriority.Value) {
               Input.IsNoTouch.Value = msg.Bool.Value;
             }
             break;
@@ -97,6 +97,9 @@ namespace TouchlessDesign.Components.Ipc {
           case Msg.Types.HandCountQuery:
             int handCount = Input.HandCount.Value;
             c.Send(Msg.Factories.HandCountQuery(handCount));
+            break;
+          case Msg.Types.SetPriority:
+            Input.ClientPriority.Value = msg.Priority.Value;
             break;
           default:
             throw new ArgumentOutOfRangeException();

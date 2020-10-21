@@ -127,6 +127,7 @@ namespace Ideum {
     }
 
     private void SetOnboarding(bool active) {
+      TouchlessDesign.SetPriority(active ? 1 : 0);
       if (active) {
         Onboarding.Activate();
       } else {

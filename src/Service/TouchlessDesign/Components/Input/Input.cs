@@ -31,6 +31,9 @@ namespace TouchlessDesign.Components.Input
 
     public Property<int> HandCount { get; } = new Property<int>(0);
 
+    // Any message trying to set hand/click/notouch state with a lower priority than this value, will be ignored.
+    public Property<int> ClientPriority { get; } = new Property<int>(0);
+
     private Rectangle? _bounds;
 
     public Rectangle Bounds {
