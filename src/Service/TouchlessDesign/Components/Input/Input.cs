@@ -77,7 +77,15 @@ namespace TouchlessDesign.Components.Input
       }
     }
     public void MessageReceived(Client client, Msg msg) {
-      Ipc.ProcessMsg(msg, client);
+      switch (msg.Type) {
+        case Msg.Types.ClickAndHoverQuery:
+          Input.HoverState.Value = msg.HoverState;
+          Input.SetMouseButtonDown(msg.Bool.Value);
+          break;
+        case Msg.Types.NoTouchQuery:
+          Input.IsNoTouch.Value = msg.Bool.Value;
+          break;
+      }
     }
 
     public void ConnectionClosed(Client client) {
