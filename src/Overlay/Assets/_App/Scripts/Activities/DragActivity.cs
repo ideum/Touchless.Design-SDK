@@ -143,13 +143,13 @@ namespace Ideum {
     private void HandleHoverExit() {
       if (!_active) return;
 
-      TouchlessDesign.SetHoverState(Data.HoverStates.None);
+      TouchlessDesign.SetHoverState(Data.HoverStates.None, 1);
     }
 
     private void HandleHoverEnter() {
       if (!_active) return;
 
-      TouchlessDesign.SetHoverState(Data.HoverStates.Drag);
+      TouchlessDesign.SetHoverState(Data.HoverStates.Drag, 1);
     }
 
     private void HandleDragUpdate(Vector2 pos) {

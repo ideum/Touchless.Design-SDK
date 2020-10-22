@@ -47,6 +47,7 @@ namespace Ideum {
       TouchlessDesign.Disconnected += OnDisconnected;
       Onboarding.SetActive += SetOnboarding;
       Onboarding.Initialize(AppSettings.Get().IsPedestal);
+      Cursor.GetComponent<CanvasGroup>().alpha = 0.0f;
     }
 
     // Deinitialize TouchlessDesign
@@ -67,6 +68,10 @@ namespace Ideum {
     }
 
     private void HandleNewConfig() {
+      if (Onboarding.Enabled != _config.OnboardingEnabled) {
+        Onboarding.SetEnabled(_config.OnboardingEnabled);
+      }
+
       if (_config.OnboardingNewUserTimeout_s != _onboardingResetInterval) {
         _onboardingResetInterval = _config.OnboardingNewUserTimeout_s;
       }

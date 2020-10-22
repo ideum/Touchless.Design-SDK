@@ -39,6 +39,7 @@ namespace Ideum {
     private float _progress = 0.0f;
 
     private CanvasGroup _cg;
+    private CanvasGroup _uiCg;
     private Sequence _seq;
 
     private List<Activity> _allActivities;
@@ -55,9 +56,14 @@ namespace Ideum {
 
     private void Awake() {
       _cg = GetComponent<CanvasGroup>();
-      _cg.alpha = 0.0f;
-      _cg.blocksRaycasts = false;
-      _cg.interactable = false;
+      _cg.alpha = 1.0f;
+      _cg.blocksRaycasts = true;
+      _cg.interactable = true;
+
+      _uiCg = Scalar.GetComponent<CanvasGroup>();
+      _uiCg.alpha = 0.0f;
+      _uiCg.blocksRaycasts = false;
+      _uiCg.interactable = false;
 
       CloseBar.onClick.AddListener(() => {
         SetActive?.Invoke(false);
@@ -87,15 +93,6 @@ namespace Ideum {
     }
 
     public void SettingsChanged(ConfigDisplay config) {
-      if(_enabled != config.OnboardingEnabled) {
-        _enabled = config.OnboardingEnabled;
-        if(!_enabled && _active) {
-          SetActive?.Invoke(false);
-        } else if(_enabled && !_active) {
-          SetActive?.Invoke(true);
-        }
-      }
-
       bool activitiesChanged = false;
       if((_activeSections[0] == 1) != config.Onboarding1Enabled) {
         activitiesChanged = true;
@@ -125,6 +122,18 @@ namespace Ideum {
       }
     }
 
+    public void SetEnabled(bool enabled) {
+      if (_enabled == enabled) return;
+
+      _enabled = enabled;
+      _seq?.Kill();
+      _seq = DOTween.Sequence();
+
+      _cg.interactable = enabled;
+      _cg.blocksRaycasts = enabled;
+      _seq.Append(_cg.DOFade(enabled ? 1.0f : 0.0f, 0.5f));
+    }
+
     public void Initialize(bool isPedestal) {
       SetupActivities();
 
@@ -141,13 +150,13 @@ namespace Ideum {
       _seq?.Kill();
       _seq = DOTween.Sequence();
 
-      _cg.blocksRaycasts = true;
-      _cg.interactable = true;
+      _uiCg.blocksRaycasts = true;
+      _uiCg.interactable = true;
       EndWindow.Deactivate(true);
       MainWindow.alpha = 1.0f;
       Sensor.SetStatus(false);
 
-      _seq.Append(_cg.DOFade(1.0f, 0.5f));
+      _seq.Append(_uiCg.DOFade(1.0f, 0.5f));
       Steps.Activate();
 
       _currentActivityIndex = 0;
@@ -169,10 +178,10 @@ namespace Ideum {
       _seq?.Kill();
       _seq = DOTween.Sequence();
 
-      _cg.blocksRaycasts = false;
-      _cg.interactable = false;
+      _uiCg.blocksRaycasts = false;
+      _uiCg.interactable = false;
 
-      _seq.Append(_cg.DOFade(0.0f, 0.5f));
+      _seq.Append(_uiCg.DOFade(0.0f, 0.5f));
     }
 
     private void SetupActivities() {

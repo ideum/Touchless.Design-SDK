@@ -91,13 +91,13 @@ namespace Ideum {
     private void HandlePointerExit() {
       if (!_active) return;
 
-      TouchlessDesign.SetHoverState(Data.HoverStates.None);
+      TouchlessDesign.SetHoverState(Data.HoverStates.None, 1);
     }
 
     private void HandlePointerEnter() {
       if (!_active) return;
 
-      TouchlessDesign.SetHoverState(Data.HoverStates.Click);
+      TouchlessDesign.SetHoverState(Data.HoverStates.Click, 1);
     }
 
     private void HandleClick() {

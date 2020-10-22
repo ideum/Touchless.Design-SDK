@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -36,7 +37,11 @@ namespace TouchlessDesign.Components.Remote {
 
       var data = Encoding.UTF8.GetBytes(msg.Serialize());
 
-      _sendClient.Send(data, data.Length, _sendEndPoint);
+      try {
+        _sendClient.Send(data, data.Length, _sendEndPoint);
+      } catch (ObjectDisposedException) {
+        Log.Debug("UDP Client closed while writing.");
+      }
     }
 
     protected override void DoStart() {
