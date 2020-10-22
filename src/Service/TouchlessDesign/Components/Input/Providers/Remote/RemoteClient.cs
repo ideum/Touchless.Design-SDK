@@ -115,8 +115,8 @@ namespace TouchlessDesign.Components.Remote {
 
           _sendReady = true;
         } else if(splitStr[0] == "Touchless_end") {
-          _sendClient?.Close();
           _sendReady = false;
+          //_sendClient?.Close();
         }
 
       } catch (ObjectDisposedException) {
