@@ -40,6 +40,9 @@ public class TransparentWindow : MonoBehaviour {
   [DllImport("user32.dll")]
   static extern int SetWindowLong(IntPtr hWnd, int nIndex, uint dwNewLong);
 
+  [DllImport("user32.dll")]
+  public static extern IntPtr FindWindow(string className, string windowName);
+
   [DllImport("user32.dll", EntryPoint = "SetLayeredWindowAttributes")]
   static extern int SetLayeredWindowAttributes(IntPtr hwnd, int crKey, byte bAlpha, int dwFlags);
 
@@ -95,7 +98,7 @@ public class TransparentWindow : MonoBehaviour {
 		margins = new Rectangle() {Left = -1};
 		hwnd = GetActiveWindow();
 
-		if (GetWindowRect(hwnd, out windowRect))
+		if (!GetWindowRect(hwnd, out windowRect))
 		{
 			Debug.LogError("Couldn't get Window Rect");
 		}

@@ -101,6 +101,14 @@ namespace Ideum {
         HandleNewConfig();
       }
 
+      if(Input.touchCount > 0 && !_touchWarningActive) {
+        Debug.LogError("TOUCH");
+        TouchlessDesign.SetNoTouchState(true, 1);
+      } else if(Input.touchCount < 1 && _touchWarningActive) {
+        Debug.LogError("NOTOUCH");
+        TouchlessDesign.SetNoTouchState(false, 1);
+      }
+
       if (!_onboardingResetFlag && !Onboarding.Active) {
         _onboardingResetTimer += Time.deltaTime;
         if(_onboardingResetTimer > _onboardingResetInterval) {
