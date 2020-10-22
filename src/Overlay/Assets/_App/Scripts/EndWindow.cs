@@ -18,7 +18,7 @@ namespace Ideum {
 
     private RectTransform _rect;
 
-    public void Initialize(List<int> sections) {
+    public void Initialize(List<int> sections, bool isPedestal) {
 
       int count = 0;
       for (int i = 0; i < Tables.Count; i++) {
@@ -34,6 +34,7 @@ namespace Ideum {
         info.MovementVectorShown = i == 0;
         info.SensorHighlighted = i != 0;
 
+        Tables[i].Initialize(isPedestal);
         Tables[i].gameObject.SetActive(true);
         Tables[i].ChangeState(info);
       }

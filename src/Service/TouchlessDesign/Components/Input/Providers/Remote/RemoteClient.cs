@@ -71,10 +71,12 @@ namespace TouchlessDesign.Components.Remote {
       while (_running) {
         _receiveClient.BeginReceive(HandleMessageReceived, new object());
        
-        int result = WaitHandle.WaitAny(_waitHandles);
+        int result = WaitHandle.WaitAny(_waitHandles, 10000);
         if(result == 0) {
           _running = false;
           Dispose();
+        } else if(result == WaitHandle.WaitTimeout) {
+          _sendReady = false;
         }
       }
     }

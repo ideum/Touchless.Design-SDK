@@ -46,7 +46,7 @@ namespace Ideum {
       TouchlessDesign.Connected += OnConnected;
       TouchlessDesign.Disconnected += OnDisconnected;
       Onboarding.SetActive += SetOnboarding;
-      Onboarding.Initialize();
+      Onboarding.Initialize(AppSettings.Get().IsPedestal);
     }
 
     // Deinitialize TouchlessDesign
@@ -140,11 +140,12 @@ namespace Ideum {
     // Method delegate to handle a change in the number of tracked hands. This is used to manage the timeout, and reset of the onboarding.
     private void HandleHandCount(int handCount) {
       if(_handCount != handCount) {
-        if(_handCount == 0 && handCount > 0 && _onboardingResetFlag && Onboarding.Enabled) {
+        if (_handCount == 0 && handCount > 0 && _onboardingResetFlag && Onboarding.Enabled) {
           SetOnboarding(true);
           _onboardingResetTimer = 0f;
           _onboardingResetFlag = false;
         }
+        Cursor.GetComponent<CanvasGroup>().alpha = handCount > 0 ? 1.0f : 0.0f;
         _handCount = handCount;
       }
       if (_handCount > 0) {

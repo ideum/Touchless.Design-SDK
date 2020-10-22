@@ -16,6 +16,7 @@ namespace Ideum.Data {
     };
 
     public PathInfo DataDirectory;
+    public bool IsPedestal;
 
     public static AppSettings Get() {
       var path = DefaultFilePathInfo.GetPath();

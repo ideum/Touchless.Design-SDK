@@ -8,10 +8,6 @@ using UnityEngine;
 namespace Ideum {
   public class TableSensorUI : MonoBehaviour {
 
-    public SVGImage TableGraphic;
-    public Sprite AddonGraphicSprite;
-    public Sprite PedestalGraphicSprite;
-
     public List<CanvasGroup> HandImages;
 
     public CanvasGroup MovementVectorImage;
@@ -22,12 +18,16 @@ namespace Ideum {
     public Color ActiveColor;
     public Color InactiveColor;
 
+    public CanvasGroup PedestalCG;
+    public CanvasGroup AddonCG;
+
     private Sequence _seq;
 
     public void Initialize(bool isPedestal) {
       SetDefaults();
 
-      TableGraphic.sprite = isPedestal ? PedestalGraphicSprite : AddonGraphicSprite;
+      PedestalCG.alpha = isPedestal ? 1.0f : 0.0f;
+      AddonCG.alpha = isPedestal ? 0.0f : 1.0f;
     }
 
     public void ChangeState(HandInfo info) {

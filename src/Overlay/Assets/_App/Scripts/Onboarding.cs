@@ -51,6 +51,7 @@ namespace Ideum {
 
     private bool _enabled = true;
     private List<int> _activeSections;
+    private bool _isPedestal = false;
 
     private void Awake() {
       _cg = GetComponent<CanvasGroup>();
@@ -124,8 +125,11 @@ namespace Ideum {
       }
     }
 
-    public void Initialize() {
+    public void Initialize(bool isPedestal) {
       SetupActivities();
+
+      _isPedestal = isPedestal;
+      TableUI.Initialize(_isPedestal);
     }
 
     public void Activate() {
@@ -185,7 +189,7 @@ namespace Ideum {
       }
 
       Steps.Setup(_activeSections);
-      EndWindow.Initialize(_activeSections);
+      EndWindow.Initialize(_activeSections, _isPedestal);
 
       if (_active) {
         _currentActivityIndex = 0;

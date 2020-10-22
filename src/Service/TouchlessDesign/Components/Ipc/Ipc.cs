@@ -99,7 +99,7 @@ namespace TouchlessDesign.Components.Ipc {
             c.Send(Msg.Factories.HandCountQuery(handCount));
             break;
           case Msg.Types.SetPriority:
-            Input.ClientPriority.Value = msg.Priority.Value;
+            Input.ClientPriority.Value = msg.Priority;
             break;
           default:
             throw new ArgumentOutOfRangeException();

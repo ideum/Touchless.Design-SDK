@@ -2,5 +2,6 @@
   "DataDirectory": {
     "Path": "%appdata%/Ideum/TouchlessDesign",
     "Type": "FileSystem"
-  }
+  },
+  "IsPedestal" : true
 }
