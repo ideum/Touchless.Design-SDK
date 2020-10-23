@@ -9,11 +9,13 @@ using TouchlessDesign.Components.Ipc;
 using TouchlessDesign.Config;
 
 namespace TouchlessDesign.Components.Remote {
-  public class RemoteClient : AppComponent {
+  public class RemoteClient {
 
     public bool AvailableToSend {
       get { return _sendReady; }
     }
+
+    public string DataDir;
 
     private UdpClient _sendClient, _receiveClient;
 
@@ -44,7 +46,7 @@ namespace TouchlessDesign.Components.Remote {
       }
     }
 
-    protected override void DoStart() {
+    public void Start() {
       ConfigNetwork config = ConfigNetwork.Get(DataDir);
 
       _receiveInfo = config.UdpBroadcast;
@@ -63,7 +65,7 @@ namespace TouchlessDesign.Components.Remote {
       _thread.Start();
     }
 
-    protected override void DoStop() {
+    public void Stop() {
       _endEvt?.Set();
       if (!_running) {
         Dispose();
@@ -81,7 +83,7 @@ namespace TouchlessDesign.Components.Remote {
           _running = false;
           Dispose();
         } else if(result == WaitHandle.WaitTimeout) {
-          _sendReady = false;
+          //_sendReady = false;
         }
       }
     }
@@ -111,11 +113,11 @@ namespace TouchlessDesign.Components.Remote {
 
           _sendEndPoint = new IPEndPoint(broadcasterEndpoint.Address, sendPort);
 
-          Input.MakeRemoteConnection(new IPEndPoint(broadcasterEndpoint.Address, tcpPort));
+          AppComponent.Input.MakeRemoteConnection(new IPEndPoint(broadcasterEndpoint.Address, tcpPort));
 
           _sendReady = true;
         } else if(splitStr[0] == "Touchless_end") {
-          _sendReady = false;
+          //_sendReady = false;
           //_sendClient?.Close();
         }
 

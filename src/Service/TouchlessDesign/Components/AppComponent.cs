@@ -17,8 +17,6 @@ namespace TouchlessDesign.Components {
 
     public static Lighting.Lighting Lighting { get; set; }
 
-    //public static Remote.RemoteClient RemoteClient { get; set; }
-
     public event Action OnStarted;
     public event Action OnStopped;
 
@@ -61,22 +59,6 @@ namespace TouchlessDesign.Components {
       Input = new Input.Input();
       Lighting = new Lighting.Lighting();
       Ipc = new Ipc.Ipc();
-      //RemoteClient = new Remote.RemoteClient();
-      //if (Config.General.RemoteProviderMode) {
-      //  Components = new AppComponent[] {
-      //  Ui,
-      //  Input,
-      //  Lighting,
-      //  Ipc,
-      //  RemoteClient
-      //  };
-      //} else {
-      //  Components = new AppComponent[] {
-      //  Ui,
-      //  Input,
-      //  Lighting,
-      //  Ipc
-      //};
       Components = new AppComponent[] {
         Ui,
         Input,

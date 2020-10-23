@@ -62,6 +62,7 @@ namespace TouchlessDesign.Components.Input
 
       if (Config.General.RemoteProviderMode) {
         _udpClient = new RemoteClient();
+        _udpClient.DataDir = DataDir;
         _udpClient.Start();
       }
     }
@@ -70,6 +71,10 @@ namespace TouchlessDesign.Components.Input
       DeinitializeInputProvider();
       DeInitializeClickHandling();
       DeInitializeHooks();
+
+      if (Config.General.RemoteProviderMode) {
+        _udpClient.Stop();
+      }
     }
 
     #region Remote Input
