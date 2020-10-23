@@ -72,6 +72,10 @@ namespace TouchlessDesign.Components.Remote {
       }
     }
 
+    public void Disconnect() {
+      _sendReady = false;
+    }
+
     private void ListenWork() {
       _running = true;
 
@@ -116,9 +120,6 @@ namespace TouchlessDesign.Components.Remote {
           AppComponent.Input.MakeRemoteConnection(new IPEndPoint(broadcasterEndpoint.Address, tcpPort));
 
           _sendReady = true;
-        } else if(splitStr[0] == "Touchless_end") {
-          //_sendReady = false;
-          //_sendClient?.Close();
         }
 
       } catch (ObjectDisposedException) {

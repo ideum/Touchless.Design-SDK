@@ -68,12 +68,15 @@ namespace TouchlessDesign.Components.Input
     }
 
     protected override void DoStop() {
+      _remoteClientActive = false;
+      _remoteClient?.Connection.Close();
+
       DeinitializeInputProvider();
       DeInitializeClickHandling();
       DeInitializeHooks();
 
       if (Config.General.RemoteProviderMode) {
-        _udpClient.Stop();
+        _udpClient?.Stop();
       }
     }
 
@@ -93,6 +96,7 @@ namespace TouchlessDesign.Components.Input
       }
     }
     public void MessageReceived(Client client, Msg msg) {
+      if (!_remoteClientActive) return;
       switch (msg.Type) {
         case Msg.Types.ClickAndHoverQuery:
           Input.HoverState.Value = msg.HoverState;
@@ -107,11 +111,13 @@ namespace TouchlessDesign.Components.Input
     public void ConnectionClosed(Client client) {
       Log.Debug("Remote connection to Service closed.");
       _remoteClientActive = false;
+      _udpClient.Disconnect();
     }
 
     public void OnException(Client client, Exception e) {
       Log.Error("Exception caught with remote client connection: " + e.ToString());
       _remoteClientActive = false;
+      _udpClient.Disconnect();
     }
 
     private void HandleRemoteUpdate(object state) {
@@ -141,7 +147,6 @@ namespace TouchlessDesign.Components.Input
       }
     }
     #endregion
-
 
     #region Click Handling
 
