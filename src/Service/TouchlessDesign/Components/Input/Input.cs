@@ -13,6 +13,7 @@ using TouchlessDesign.Components.Input.Providers.Remote;
 using TouchlessDesign.Components.Ipc;
 using TouchlessDesign.Components.Ipc.Networking;
 using TouchlessDesign.Components.Ipc.Networking.Tcp;
+using TouchlessDesign.Components.Remote;
 using Timer = System.Threading.Timer;
 
 namespace TouchlessDesign.Components.Input
@@ -52,10 +53,17 @@ namespace TouchlessDesign.Components.Input
     private Client _remoteClient;
     private bool _remoteClientActive = false;
 
+    private RemoteClient _udpClient;
+
     protected override void DoStart() {
       InitializeHooks();
       InitializeClickHandling();
       InitializeInputProvider();
+
+      if (Config.General.RemoteProviderMode) {
+        _udpClient = new RemoteClient();
+        _udpClient.Start();
+      }
     }
 
     protected override void DoStop() {
@@ -108,8 +116,8 @@ namespace TouchlessDesign.Components.Input
           _hands.Clear();
         }
 
-        if (RemoteClient.AvailableToSend) {
-          RemoteClient.SendHandData(_hands.Values.ToArray());
+        if (_udpClient.AvailableToSend) {
+          _udpClient.SendHandData(_hands.Values.ToArray());
         }
       }
       QueryClickAndHoverState();
