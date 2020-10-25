@@ -56,13 +56,13 @@ namespace TouchlessDesign.Components {
     public static void InitializeComponents(App app) {
       Config = new Config.Config(app.DataDir);
       Ui = new Ui.Ui(app);
-      Input = new Input.Input();
       Lighting = new Lighting.Lighting();
+      Input = new Input.Input();
       Ipc = new Ipc.Ipc();
       Components = new AppComponent[] {
         Ui,
-        Input,
         Lighting,
+        Input,
         Ipc
       };
       foreach (var c in Components) {
