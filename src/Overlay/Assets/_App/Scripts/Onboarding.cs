@@ -182,6 +182,10 @@ namespace Ideum {
       _uiCg.interactable = false;
 
       _seq.Append(_uiCg.DOFade(0.0f, 0.5f));
+      foreach(Activity a in _activeActivities) {
+        a.Deactivate();
+      }
+      _currentActivity = null;
     }
 
     private void SetupActivities() {
