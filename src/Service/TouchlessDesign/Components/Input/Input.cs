@@ -169,7 +169,7 @@ namespace TouchlessDesign.Components.Input
 
     private void StartClickCountdown() {
       _isClicking = true;
-      _clickTimer.Change(0, Config.Input.ClickDuration_ms);
+      _clickTimer.Change(Config.Input.ClickDuration_ms, Config.Input.ClickDuration_ms);
     }
 
     private void StopClickCountdown() {

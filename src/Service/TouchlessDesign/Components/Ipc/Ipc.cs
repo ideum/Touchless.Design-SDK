@@ -54,7 +54,7 @@ namespace TouchlessDesign.Components.Ipc {
             }
             break;
           case Msg.Types.Click:
-            if (msg.ContainsIncomingServerSideData && msg.Priority >= Input.ClientPriority.Value) {
+            if (msg.ContainsIncomingServerSideData) {
               Input.SetMouseButtonDown(msg.Bool.Value);
             }
             break;
