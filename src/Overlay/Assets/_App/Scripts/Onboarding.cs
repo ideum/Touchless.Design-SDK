@@ -41,6 +41,7 @@ namespace Ideum {
     private CanvasGroup _cg;
     private CanvasGroup _uiCg;
     private Sequence _seq;
+    private CanvasGroup _sensorBarCG;
 
     private List<Activity> _allActivities;
     private List<Activity> _activeActivities;
@@ -64,6 +65,8 @@ namespace Ideum {
       _uiCg.alpha = 0.0f;
       _uiCg.blocksRaycasts = false;
       _uiCg.interactable = false;
+
+      _sensorBarCG = Sensor.GetComponent<CanvasGroup>();
 
       CloseBar.onClick.AddListener(() => {
         SetActive?.Invoke(false);
@@ -138,6 +141,7 @@ namespace Ideum {
       SetupActivities();
 
       _isPedestal = isPedestal;
+      _sensorBarCG.alpha = isPedestal ? 0.0f : 1.0f;
       TableUI.Initialize(_isPedestal);
     }
 
