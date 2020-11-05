@@ -32,6 +32,8 @@ namespace TouchlessDesign.Components.Input
 
     public Property<int> HandCount { get; } = new Property<int>(0);
 
+    public Property<bool> IsOnboardingActive { get; } = new Property<bool>(false);
+
     // Any message trying to set hand/click/notouch state with a lower priority than this value, will be ignored.
     public Property<int> ClientPriority { get; } = new Property<int>(0);
 
@@ -81,7 +83,6 @@ namespace TouchlessDesign.Components.Input
     }
 
     #region Remote Input
-
     public void MakeRemoteConnection(IPEndPoint endpoint) {
       try {
         TcpConnection connection;

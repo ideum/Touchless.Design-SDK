@@ -39,7 +39,9 @@ namespace Ideum.Data {
       DisplaySettingsChanged,
       HandCountQuery,
       Hands,
-      SetPriority
+      SetPriority,
+      OnboardingQuery,
+      SetOnboarding
     }
 
     [JsonProperty("T")]
@@ -281,6 +283,18 @@ namespace Ideum.Data {
       public static Msg PriorityMessage(int priority = 0) {
         return new Msg { Type = Types.SetPriority, Priority = priority };
       }
+
+      public static Msg OnboardingQueryMessage(bool onboardingActive) {
+        return new Msg { Type = Types.OnboardingQuery, Bool = onboardingActive };
+      }
+
+      public static Msg OnboardingQueryMessage() {
+        return new Msg { Type = Types.OnboardingQuery };
+      }
+
+      public static Msg SetOnboardingMessage(bool onboardingActive) {
+        return new Msg { Type = Types.SetOnboarding, Bool = onboardingActive };
+      }
     }
 
     #endregion
@@ -306,6 +320,8 @@ namespace Ideum.Data {
     public delegate void AddOnQueryDelegate(bool hasScreen, bool hasLEDs, int width_px, int height_px, int width_mm, int height_mm);
 
     public delegate void HandCountQueryDelegate(int handCount);
+
+    public delegate void OnboardingQueryDelegate(bool onboardingActive);
 
     public class Callback {
 
@@ -364,6 +380,11 @@ namespace Ideum.Data {
       }
 
       public Callback(Types type, params HandCountQueryDelegate[] callbacks) {
+        Type = type;
+        _callbacks = new HashSet<object>(callbacks);
+      }
+
+      public Callback(Types type, params OnboardingQueryDelegate[] callbacks) {
         Type = type;
         _callbacks = new HashSet<object>(callbacks);
       }
@@ -439,6 +460,11 @@ namespace Ideum.Data {
             break;
           case Types.SetPriority:
             break;
+          case Types.OnboardingQuery:
+            Operate(collection.OfType<OnboardingQueryDelegate>(), p => p(msg.Bool.Value));
+            break;
+          case Types.SetOnboarding:
+            break;
           default:
             throw new ArgumentOutOfRangeException();
         }
@@ -512,6 +538,12 @@ namespace Ideum.Data {
         }
       }
 
+      public void Add(OnboardingQueryDelegate a) {
+        lock (_callbacks) {
+          _callbacks.Add(a);
+        }
+      }
+
       public void Remove(object a) {
         lock (_callbacks) {
           _callbacks.Remove(a);
@@ -571,6 +603,10 @@ namespace Ideum.Data {
             return false;
           case Types.SetPriority:
             return false;
+          case Types.OnboardingQuery:
+            return true;
+          case Types.SetOnboarding:
+            return false;
           default:
             throw new ArgumentOutOfRangeException();
         }
@@ -618,6 +654,10 @@ namespace Ideum.Data {
           case Types.Hands:
             return true;
           case Types.SetPriority:
+            return true;
+          case Types.OnboardingQuery:
+            return Bool.HasValue;
+          case Types.SetOnboarding:
             return true;
           default:
             throw new ArgumentOutOfRangeException();

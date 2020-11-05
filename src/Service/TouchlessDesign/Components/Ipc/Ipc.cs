@@ -101,6 +101,13 @@ namespace TouchlessDesign.Components.Ipc {
           case Msg.Types.SetPriority:
             Input.ClientPriority.Value = msg.Priority;
             break;
+          case Msg.Types.OnboardingQuery:
+            c.Send(Msg.Factories.OnboardingQueryMessage(Input.IsOnboardingActive.Value));
+            break;
+          case Msg.Types.SetOnboarding:
+            Input.IsOnboardingActive.Value = msg.Bool.Value;
+            Log.Debug("HI FRIEND: " + msg.Bool.Value);
+            break;
           default:
             throw new ArgumentOutOfRangeException();
         }

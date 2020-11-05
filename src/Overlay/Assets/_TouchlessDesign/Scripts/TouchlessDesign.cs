@@ -122,6 +122,9 @@ namespace Ideum {
         case Msg.Types.HandCountQuery:
           HandQueries.SyncClearInvoke(msg);
           break;
+        case Msg.Types.OnboardingQuery:
+          OnboardingQueries.SyncClearInvoke(msg);
+          break;
         default:
           throw new ArgumentOutOfRangeException();
       }
@@ -148,6 +151,7 @@ namespace Ideum {
     private static readonly Msg.Callback NoTouchQueries = new Msg.Callback(Msg.Types.NoTouchQuery);
     private static readonly Msg.Callback AddOnQueries = new Msg.Callback(Msg.Types.AddOnQuery);
     private static readonly Msg.Callback HandQueries = new Msg.Callback(Msg.Types.HandCountQuery);
+    private static readonly Msg.Callback OnboardingQueries = new Msg.Callback(Msg.Types.OnboardingQuery);
 
     public static void QueryDimensions(Msg.QueryDimsDelegate callback) {
       DimsQueries.Add(callback);
@@ -238,6 +242,15 @@ namespace Ideum {
 
     public static void SetPriority(int priority) {
       _connectionManager.Send(Msg.Factories.PriorityMessage(priority));
+    }
+
+    public static void SetOnboarding(bool onboarding) {
+      _connectionManager.Send(Msg.Factories.SetOnboardingMessage(onboarding));
+    }
+
+    public static void QueryOnboarding(Msg.OnboardingQueryDelegate callback) {
+      OnboardingQueries.Add(callback);
+      _connectionManager.Send(Msg.Factories.OnboardingQueryMessage());
     }
 
     #endregion
