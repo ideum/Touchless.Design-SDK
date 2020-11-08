@@ -130,10 +130,6 @@ namespace Ideum {
       }
     }
 
-    internal static void QuertyHandCOunt(object handleHandCount) {
-      throw new NotImplementedException();
-    }
-
     private static void SyncClearInvoke(this Msg.Callback c, Msg msg) {
       Sync(() => { c.ClearInvoke(msg); });
     }
