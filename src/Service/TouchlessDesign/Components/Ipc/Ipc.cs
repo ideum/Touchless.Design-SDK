@@ -106,7 +106,6 @@ namespace TouchlessDesign.Components.Ipc {
             break;
           case Msg.Types.SetOnboarding:
             Input.IsOnboardingActive.Value = msg.Bool.Value;
-            Log.Debug("HI FRIEND: " + msg.Bool.Value);
             break;
           default:
             throw new ArgumentOutOfRangeException();
