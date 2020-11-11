@@ -42,7 +42,7 @@ When interacting with a client application that is connected to the Integrated T
 
 ### AddOn
 
-he Add-on application is designed to display information on the secondary monitor and control the LED lights available on the [Touchless Add-on](https://ideum.com/products/touch-tables/drafting#touchless). This application provides further feedback and onboarding information to supplement the Overlay cursor as users interact with the Integrated Touchless System. When enabled, the System will automatically manage and communicate with the Add-on application. In addition to the animated hand icon, the Add-on application also shows text feedback.
+The Add-on application is designed to display information on the secondary monitor and control the LED lights available on the [Touchless Add-on](https://ideum.com/products/touch-tables/drafting#touchless). This application provides further feedback and onboarding information to supplement the Overlay cursor as users interact with the Integrated Touchless System. When enabled, the System will automatically manage and communicate with the Add-on application. In addition to the animated hand icon, the Add-on application also shows text feedback.
 
 !["AddOn"](/docs/images/addon.PNG)
 
