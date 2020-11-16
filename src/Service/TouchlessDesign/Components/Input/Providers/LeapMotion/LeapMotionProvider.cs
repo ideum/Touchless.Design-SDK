@@ -70,7 +70,7 @@ namespace TouchlessDesign.Components.Input.Providers.LeapMotion {
           if (PalmVelocity <= 0.1f)
           {
             InvalidHand.TimeValidated += frameDelta;
-            if (InvalidHand.TimeValidated >= 2f)
+            if (InvalidHand.TimeValidated >= 1f)
             {
               hands.Add(leapHand.Id, InvalidHand.hand);
               _handsAwaitingValidation.Remove(leapHand.Id);
