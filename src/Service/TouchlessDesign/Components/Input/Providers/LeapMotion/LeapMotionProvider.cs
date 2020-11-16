@@ -1,9 +1,22 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using Leap;
 
 namespace TouchlessDesign.Components.Input.Providers.LeapMotion {
   public class LeapMotionProvider : IInputProvider {
+
+    private class InvalidHand
+    {
+      public InvalidHand(Hand hand)
+      {
+        this.hand = hand;
+        this.TimeValidated = 0;
+      }
+
+      public Hand hand { get; }
+      public float TimeValidated { get; set; }
+    }
 
     private const float MillimetersToMeters = 0.001f;
 
@@ -13,6 +26,8 @@ namespace TouchlessDesign.Components.Input.Providers.LeapMotion {
     private Controller _controller;
 
     private readonly List<Hand> _handsToRemoveBuffer = new List<Hand>();
+
+    private readonly Dictionary<int, InvalidHand> _handsAwaitingValidation = new Dictionary<int, InvalidHand>();
 
     public void Start() {
       _xform = new LeapTransform(Vector.Zero, LeapQuaternion.Identity, new Vector(MillimetersToMeters, MillimetersToMeters, MillimetersToMeters));
@@ -43,16 +58,39 @@ namespace TouchlessDesign.Components.Input.Providers.LeapMotion {
         return false;
       }
       var f = _controller.Frame(0);
+      float frameDelta = (float)((f.Timestamp - _controller.Frame(1).Timestamp) / 1E+6);
       _handsToRemoveBuffer.AddRange(hands.Values);
       foreach (var leapHand in f.Hands) {
-        if (hands.TryGetValue(leapHand.Id, out var hand)) {
+
+        // Update captured (but invalid) hands
+        if(_handsAwaitingValidation.TryGetValue(leapHand.Id, out var InvalidHand))
+        {
+          float PalmVelocity = leapHand.PalmVelocity.Magnitude * MillimetersToMeters;
+          Console.WriteLine(PalmVelocity);
+          if (PalmVelocity <= 0.1f)
+          {
+            InvalidHand.TimeValidated += frameDelta;
+            if (InvalidHand.TimeValidated >= 2f)
+            {
+              hands.Add(leapHand.Id, InvalidHand.hand);
+              _handsAwaitingValidation.Remove(leapHand.Id);
+            }
+          }
+          else
+          {
+            InvalidHand.TimeValidated = 0;
+          }
+          _handsToRemoveBuffer.Remove(InvalidHand.hand); //prevent this hand from being removed
+        }
+        // Update Valid Hands
+        else if (hands.TryGetValue(leapHand.Id, out var hand)) {
           hand.Apply(leapHand, _xform);
+          _handsToRemoveBuffer.Remove(hand); //prevent this hand from being removed
         }
         else {
           hand = new Hand(leapHand, _xform);
-          hands.Add(leapHand.Id, hand);
+          _handsAwaitingValidation.Add(leapHand.Id, new InvalidHand(hand));
         }
-        _handsToRemoveBuffer.Remove(hand); //prevent this hand from being removed
       }
 
       foreach (var hand in _handsToRemoveBuffer) { //remove all hands that were not added or updated this frame
