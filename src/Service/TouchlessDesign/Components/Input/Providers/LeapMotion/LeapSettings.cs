@@ -33,7 +33,8 @@ namespace TouchlessDesign
       return new LeapSettings
       {
         VerificationDuration_ms = 1000,
-        MaxVerificationHandVelocity = 0.1f
+        MaxVerificationHandVelocity = 0.1f,
+        VerificationTimeout = 1.5f
       };
     }
 
