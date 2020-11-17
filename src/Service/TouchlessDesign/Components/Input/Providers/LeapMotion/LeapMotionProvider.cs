@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Threading;
 using Leap;
 
-namespace TouchlessDesign.Components.Input.Providers.LeapMotion {
-  public class LeapMotionProvider : IInputProvider {
+namespace TouchlessDesign.Components.Input.Providers.LeapMotion
+{
+  public class LeapMotionProvider : IInputProvider
+  {
 
     private class InvalidHand
     {
@@ -29,7 +31,22 @@ namespace TouchlessDesign.Components.Input.Providers.LeapMotion {
 
     private readonly Dictionary<int, InvalidHand> _handsAwaitingValidation = new Dictionary<int, InvalidHand>();
 
-    public void Start() {
+    private float _timeSinceHandLost;
+
+    private LeapSettings _settings;
+
+    public LeapMotionProvider()
+    {
+      _settings = LeapSettings.Get();
+      if (_settings == null)
+      {
+        _settings = LeapSettings.Defaults();
+        _settings.Save();
+      }
+    }
+
+    public void Start()
+    {
       _xform = new LeapTransform(Vector.Zero, LeapQuaternion.Identity, new Vector(MillimetersToMeters, MillimetersToMeters, MillimetersToMeters));
       _xform.MirrorZ();
       _controller = new Controller();
@@ -38,39 +55,44 @@ namespace TouchlessDesign.Components.Input.Providers.LeapMotion {
       _controller.StartConnection();
     }
 
-    public void Stop() {
+    public void Stop()
+    {
       _controller.StopConnection();
       _controller.Connect -= HandleLeapConnected;
       _controller.Disconnect -= HandleLeapDisconnected;
       _controller = null;
     }
 
-    private void HandleLeapConnected(object sender, ConnectionEventArgs e) {
+    private void HandleLeapConnected(object sender, ConnectionEventArgs e)
+    {
       Log.Info("Leap Connected.");
     }
 
-    private void HandleLeapDisconnected(object sender, ConnectionLostEventArgs e) {
+    private void HandleLeapDisconnected(object sender, ConnectionLostEventArgs e)
+    {
       Log.Info("Leap Disconnected");
     }
 
-    public bool Update(Dictionary<int, Hand> hands) {
-      if (_controller == null || !_controller.IsConnected) {
+    public bool Update(Dictionary<int, Hand> hands)
+    {
+      if (_controller == null || !_controller.IsConnected)
+      {
         return false;
       }
       var f = _controller.Frame(0);
-      float frameDelta = (float)((f.Timestamp - _controller.Frame(1).Timestamp) / 1E+6);
+      float frameDelta = (float)((_controller.Now() - _controller.FrameTimestamp(1)) / 1E+6);
       _handsToRemoveBuffer.AddRange(hands.Values);
-      foreach (var leapHand in f.Hands) {
-
+      _timeSinceHandLost += frameDelta;
+      foreach (var leapHand in f.Hands)
+      {
         // Update captured (but invalid) hands
-        if(_handsAwaitingValidation.TryGetValue(leapHand.Id, out var InvalidHand))
+        if (_handsAwaitingValidation.TryGetValue(leapHand.Id, out var InvalidHand))
         {
           float PalmVelocity = leapHand.PalmVelocity.Magnitude * MillimetersToMeters;
-          Console.WriteLine(PalmVelocity);
-          if (PalmVelocity <= 0.1f)
+          if (PalmVelocity <= _settings.MaxVerificationHandVelocity)
           {
             InvalidHand.TimeValidated += frameDelta;
-            if (InvalidHand.TimeValidated >= 1f)
+            if (InvalidHand.TimeValidated >= _settings.VerificationDuration_ms / 1000f)
             {
               hands.Add(leapHand.Id, InvalidHand.hand);
               _handsAwaitingValidation.Remove(leapHand.Id);
@@ -83,24 +105,35 @@ namespace TouchlessDesign.Components.Input.Providers.LeapMotion {
           _handsToRemoveBuffer.Remove(InvalidHand.hand); //prevent this hand from being removed
         }
         // Update Valid Hands
-        else if (hands.TryGetValue(leapHand.Id, out var hand)) {
+        else if (hands.TryGetValue(leapHand.Id, out var hand))
+        {
           hand.Apply(leapHand, _xform);
           _handsToRemoveBuffer.Remove(hand); //prevent this hand from being removed
+          _timeSinceHandLost = 0;
         }
-        else {
+        // Create a new hand instance, updating immediately if we haven't timed out or to the hand validation queue if we have timed out.
+        else
+        {
           hand = new Hand(leapHand, _xform);
-          _handsAwaitingValidation.Add(leapHand.Id, new InvalidHand(hand));
+          if (_timeSinceHandLost < _settings.VerificationTimeout)
+          {
+            hands.Add(leapHand.Id, hand);
+            _timeSinceHandLost = 0;
+          }
+          else
+          {
+            _handsAwaitingValidation.Add(leapHand.Id, new InvalidHand(hand));
+          }
         }
       }
 
-      foreach (var hand in _handsToRemoveBuffer) { //remove all hands that were not added or updated this frame
+      foreach (var hand in _handsToRemoveBuffer)
+      { //remove all hands that were not added or updated this frame
         hands.Remove(hand.Id);
       }
       _handsToRemoveBuffer.Clear();
       return true;
     }
-
-
 
     //private void HandleTimerTick(object state) {
     //  if (_controller == null || !_controller.IsConnected) return;
