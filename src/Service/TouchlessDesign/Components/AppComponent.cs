@@ -60,10 +60,10 @@ namespace TouchlessDesign.Components {
       Input = new Input.Input();
       Ipc = new Ipc.Ipc();
       Components = new AppComponent[] {
-        Ui,
         Lighting,
         Input,
-        Ipc
+        Ipc,
+        Ui
       };
       foreach (var c in Components) {
         try {
