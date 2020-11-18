@@ -4,9 +4,9 @@
 
 [[Website](https://touchless.design)] [[Leap Motion SDK](https://developer.leapmotion.com/sdk-leap-motion-controller/)]
 
-In light of the coronavirus crisis, touchless interaction has become the focus of many designers and developers who create kiosks and screen-based exhibits for public spaces. Using the [Leap Motion Controller](https://www.ultraleap.com/product/leap-motion-controller/) and [V4 SDK](https://developer.leapmotion.com/sdk-leap-motion-controller/), our Integrated Touchless System allows users to interact with our tables and exhibits with no physical touch. This system tracks the visitor’s hand and watches for open and close gestures to give complete control over the mouse. The Integrated Touchless System is a mouse emulation system with multiple methods for onboarding and real-time feedback.
+In light of the coronavirus crisis, touchless interaction has become the focus of many designers and developers who create kiosks and screen-based exhibits for public spaces. Using the [Leap Motion Controller](https://www.ultraleap.com/product/leap-motion-controller/) and [V4 SDK](https://developer.leapmotion.com/sdk-leap-motion-controller/), our Integrated Touchless System allows users to interact with our tables and exhibits with no physical touch. This system tracks the visitor’s hand and watches for specific gestures, such as opening and closing, that give complete control over the mouse. The Integrated Touchless System is a mouse emulation system with multiple methods for onboarding and real-time feedback.
 
-Alongside this system are two additional applications: a dynamic cursor overlay and a secondary screen and LED system add-on. Download the latest release [here](). These applications are meant to provide both feedback and onboarding information to the visitor with changing colors, gesture icons, and interaction information when hovering over buttons or drag areas. This repository also includes a Unity asset package that allows users to integrate support for the system into their own applications and a demo application for reference. The core system is built in .Net Framework 4.6.1 and the peripheral applications are built in the Unity Game Engine.
+Alongside this system are three additional applications: a dynamic cursor overlay, a secondary instructional screen, and a LED system add-on. Download the latest release [here](https://github.com/ideum/Touchless.Design-SDK/releases/tag/v2.0.0). These applications are meant to provide both feedback and onboarding information to the visitor through color changes, gesture icons, and interaction information when hovering over buttons or drag areas. This repository also includes a Unity asset package that allows users to integrate support for the system into their own applications and a demo application for reference. The core system is built in .Net Framework 4.6.1 and the peripheral applications are built in the Unity Game Engine.
 
 Important Notes:
 - The [Leap Motion V4 Orion SDK](https://developer.leapmotion.com/sdk-leap-motion-controller/) must be installed with a leap motion device connected for this application to function.
@@ -19,7 +19,7 @@ Preview Video:
 
 ## Repository Layout
 
-In the src directory is all of the source code for the Integrated Touchless System, as well as the peripheral applications and dependencies with the exception of the [Leap Motion V4 Orion SDK](https://developer.leapmotion.com/setup/desktop) which should be downloaded and installed before running the Touchless Design applications.
+All of the source code for the Integrated Touchless System is in the src directory, as well as the peripheral applications and dependencies with the exception of the [Leap Motion V4 Orion SDK](https://developer.leapmotion.com/setup/desktop). The Leap Motion V4 Orion SDK should be downloaded and installed before running the Touchless Design applications.
 
 ### Service
 
@@ -64,23 +64,21 @@ This is a logging abstraction we use in Unity and is included in all of the Unit
 
 #### Building:
 
-In order to build the core of the Integrated Touchless System, open the TouchlessDesign.sln file in Visual Studio, right-click the Solution and select "Build Solution." We have included build instructions that will build the solution at the following path on your system: 
+In order to build the core of the Integrated Touchless System, open the TouchlessDesign.sln file in Visual Studio, right-click the Solution and select "Build Solution." We have included instructions that will build the solution at the following path on your system:
 ```
 %appdata%/Ideum
 ```
 #### Running:
 
-Navigate to the build directory (see above), open ```TouchlessDesignService/bin/Service/```, and run the TouchlessDesignService.exe. If the AddOn and/or Overlay applications have been built and configured, they will also be launched and the mouse should immediately begin reacting to the Leap Motion controller. An icon will appear in the system tray and exposes a number of options, including the ability to toggle on or off the mouse emulation. The System can also be terminated from this icon, which will likewise close the AddOn and Overlay applications if they are running.
+Navigate to the build directory (see above), open ```TouchlessDesign/bin/Service/```, and run the ```TouchlessDesign.exe```. If the AddOn and/or Overlay applications have been built and configured, they will also be launched and the mouse should immediately begin reacting to the Leap Motion controller. An icon will appear in the system tray and by left clicking on the icon, the service UI will be displayed.
 
-#### Settings:
+#### Configuration:
 
-In the TouchlessDesignService directory are a number of configuration json files that can be used to adjust certain aspects of the Integrated Touchless System.
+Configuration is primarily handled through the UI, but all configurable values are stored in JSON files that can be found in the touchless design directory.
 
+- display.json: Allows you to adjust functionality related to the overall user experience such as toggling the onboarding on and off or adjusting values relating to the [FadeCandy](https://github.com/scanlime/fadecandy) LED control.
 - input.json: Allows you to adjust options related to mouse emulation.
-- leap.json: Allows you to adjust values relating to the mapping of Leap Motion data to screen position.
-- led.json: Allows you to adjust values relating to the [FadeCandy](https://github.com/scanlime/fadecandy) LED control.
 - network.json: Configures network settings for the Service.
-- ui.json: Controls which on the peripheral applications are managed by the System.
 
 ### AddOn and Overlay
 
@@ -88,9 +86,9 @@ In the TouchlessDesignService directory are a number of configuration json files
 2. Open the application in Unity, and go to File -> Build Settings.
 3. Make sure the _App/Scenes/App Scene is checked and press Build.
 4. In order for the Integrated Touchless System to find and run either of the peripheral applications, they should be built at the following respective paths:
-  - ```%appdata%/Ideum/TouchlessDesignService/bin/AddOn/```
-  - ```%appdata%/Ideum/TouchlessDesignService/bin/Overlay/```
-5. In the TouchlessDesignService directory, open the ui.json file and make sure the paths to the two applications are included in the ApplicationPaths field.
+  - ```%appdata%/Ideum/TouchlessDesign/bin/AddOn/```
+  - ```%appdata%/Ideum/TouchlessDesign/bin/Overlay/```
+5. In the TouchlessDesign directory, open the ui.json file and make sure the paths to the two applications are included in the ApplicationPaths field.
 
 Now, when you run the Integrated Touchless System, it will automatically start up the applications specified in the ui.json file. Likewise, when the System is exited, it will terminate those same applications. Note: These applications will only provide gesture feedback when running alongside a client application that uses the Integrated Touchless System bindings, such as the Example application.
 
@@ -105,7 +103,7 @@ In order to integrate a project wih the Integrated Touchless System, the project
 
 ``` cs
 void Start() {
-  TouchlessDesign.Initialize("%appdata%/Ideum/TouchlessDesignService");
+  TouchlessDesign.Initialize("%appdata%/Ideum/TouchlessDesign");
   TouchlessDesign.Connected += OnConnected;
   TouchlessDesign.Disconnected += OnDisconnected;
 }
