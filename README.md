@@ -6,11 +6,11 @@
 
 In light of the coronavirus crisis, touchless interaction has become the focus of many designers and developers who create kiosks and screen-based exhibits for public spaces. Using the [Leap Motion Controller](https://www.ultraleap.com/product/leap-motion-controller/) and [V4 SDK](https://developer.leapmotion.com/sdk-leap-motion-controller/), our Integrated Touchless System allows users to interact with our tables and exhibits with no physical touch. This system tracks the visitor’s hand and watches for specific gestures, such as opening and closing, that give complete control over the mouse. The Integrated Touchless System is a mouse emulation system with multiple methods for onboarding and real-time feedback.
 
-Alongside this system are three additional applications: a dynamic cursor overlay, a secondary instructional screen, and a LED system add-on. Download the latest release [here](https://github.com/ideum/Touchless.Design-SDK/releases/tag/v2.0.0). These applications are meant to provide both feedback and onboarding information to the visitor through color changes, gesture icons, and interaction information when hovering over buttons or drag areas. This repository also includes a Unity asset package that allows users to integrate support for the system into their own applications and a demo application for reference. The core system is built in .Net Framework 4.6.1 and the peripheral applications are built in the Unity Game Engine.
+Alongside this system are three additional applications: a dynamic cursor overlay, a secondary instructional screen, and an LED system add-on. Download the latest release [here](https://github.com/ideum/Touchless.Design-SDK/releases/tag/v2.0.0). These applications are meant to provide both feedback and onboarding information to the visitor through color changes, gesture icons, and interaction information when hovering over buttons or drag areas. This repository also includes a Unity asset package that allows users to integrate support for the system into their own applications and a demo application for reference. The core system is built in .Net Framework 4.6.1 and the peripheral applications are built in the Unity Game Engine.
 
 Important Notes:
 - The [Leap Motion V4 Orion SDK](https://developer.leapmotion.com/sdk-leap-motion-controller/) must be installed with a leap motion device connected for this application to function.
-- This repository is meant to be built and run using the [Touchless Add-on](https://ideum.com/products/touch-tables/drafting#touchless) with a Leap Motion device, 3.5” display, and LED lights mounted on to an [Ideum Drafting Touch Table](https://ideum.com/products/touch-tables/drafting) or an [Ideum Touchless Pedestal](https://ideum.com/products/touchless/touchless-pedestal).
+- This repository is meant to be built and run using the [Touchless Add-on](https://ideum.com/products/touch-tables/drafting#touchless) with a Leap Motion device, 3.5” display, and LED lights mounted on an [Ideum Drafting Touch Table](https://ideum.com/products/touch-tables/drafting) or an [Ideum Touchless Pedestal](https://ideum.com/products/touchless/touchless-pedestal).
 - The keyboard shortcut <b>Ctrl+Alt+I</b> will toggle mouse emulation on/off when the service is running.
 
 Preview Video:
@@ -99,7 +99,7 @@ In order to integrate a project wih the Integrated Touchless System, the project
 1. Open the Unity project.
 2. Open Assets-> Import Package -> Custom Package...
 3. This will open a dialog. Select the TouchlessDesign.unitypackage file in the src directory of this repository. When it prompts you to select which parts of the package to import, select Import All.
-4. In a MonoBehavior script, in the Start function, call the TouchlessDesign.Initialize function and subscribe to its OnConnected and OnDisconnected events. (Make sure to include using Ideum in the file). Also include the Deinitialize call on application quit.
+4. In a MonoBehavior script, in the Start function, call the TouchlessDesign.Initialize function and subscribe to its OnConnected and OnDisconnected events. (Make sure to include using Ideum in the file). Also include the Deinitialize call when quitting the application.
 
 ``` cs
 void Start() {
