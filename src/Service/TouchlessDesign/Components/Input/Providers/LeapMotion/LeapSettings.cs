@@ -24,7 +24,7 @@ namespace TouchlessDesign
     public static LeapSettings Get()
     {
       var path = Path.Combine(Environment.ExpandEnvironmentVariables("%appdata%/Ideum/TouchlessDesign/"), Filename);
-      var result = Config.Factory.Get(path, Defaults);
+      var result = Factory.Get(path, Defaults);
       return result;
     }
 
