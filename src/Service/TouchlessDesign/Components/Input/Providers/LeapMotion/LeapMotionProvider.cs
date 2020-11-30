@@ -41,7 +41,6 @@ namespace TouchlessDesign.Components.Input.Providers.LeapMotion
 
     public void Start()
     {
-      Console.WriteLine("Ah, I'm starting!");
       LoadHandVerification();
       _xform = new LeapTransform(Vector.Zero, LeapQuaternion.Identity, new Vector(MillimetersToMeters, MillimetersToMeters, MillimetersToMeters));
       _xform.MirrorZ();
@@ -53,7 +52,6 @@ namespace TouchlessDesign.Components.Input.Providers.LeapMotion
 
     private void LoadHandVerification()
     {
-      Console.WriteLine("Leap Motion handling app load");
       _settings = ConfigInput.Get(DataDir);
       _verificationEnabled = !ConfigGeneral.Get(DataDir).RemoteProviderMode;
       if (!_verificationEnabled)
