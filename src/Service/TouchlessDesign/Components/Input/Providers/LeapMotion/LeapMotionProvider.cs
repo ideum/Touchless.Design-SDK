@@ -54,8 +54,8 @@ namespace TouchlessDesign.Components.Input.Providers.LeapMotion
     private void LoadHandVerification()
     {
       Console.WriteLine("Leap Motion handling app load");
-      _settings = ConfigInput.Get(App.Instance.DataDir);
-      _verificationEnabled = !ConfigGeneral.Get(App.Instance.DataDir).RemoteProviderMode;
+      _settings = ConfigInput.Get(DataDir);
+      _verificationEnabled = !ConfigGeneral.Get(DataDir).RemoteProviderMode;
       if (!_verificationEnabled)
       {
         Console.WriteLine("Warning: Hand verification will not work while running in remote provider mode.");
