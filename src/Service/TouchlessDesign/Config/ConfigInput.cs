@@ -39,6 +39,11 @@ namespace TouchlessDesign.Config {
     public int MinV = 0;
     public int MaxV = 255;
 
+    // NOTE: These values only work for the leap when it is plugged into the computer (working as a local provider, not remote). 
+    public int VerificationDuration_ms = 1000;
+    public float MaxVerificationHandVelocity = 0.1f;
+    public int VerificationTimeout_ms = 1500;
+
     #region Utility Methods
 
     public float Width() {
@@ -126,6 +131,9 @@ namespace TouchlessDesign.Config {
       MaxS = i.MaxS;
       MinV = i.MinV;
       MaxV = i.MaxV;
+      VerificationDuration_ms = i.VerificationDuration_ms;
+      MaxVerificationHandVelocity = i.MaxVerificationHandVelocity;
+      VerificationTimeout_ms = i.VerificationTimeout_ms;
     }
   }
 }

@@ -123,5 +123,21 @@
                          Header="Max (m)" 
                          LabelMinWidth="80"
                          Visibility="{Binding UseXy, Converter={StaticResource BoolToVis}}"/>
-  </ui:SimpleStackPanel>
+    <c:NumberControl Value="{Binding VerificationDuration_ms, Mode=TwoWay}" 
+                        Min="0" Max="5000" 
+                        Header="Hand Verification (ms)" 
+                        LabelMinWidth="80"
+                        Visibility="Visible"/>
+    <c:NumberControl Value="{Binding VerificationTimeout_ms, Mode=TwoWay}" 
+                        Min="0" Max="60000" 
+                        Header="Hand Verification Timeout (ms)" 
+                        LabelMinWidth="80"
+                        Visibility="Visible"/>
+    <c:NumberControl Value="{Binding MaxVerificationVelocity, Mode=TwoWay}" 
+                        Min="0.05" Max="2" 
+                        Header="Max Verification Hand Velocity (m)" 
+                        LabelMinWidth="80"
+                        Visibility="Visible"/>
+
+    </ui:SimpleStackPanel>
 </UserControl>

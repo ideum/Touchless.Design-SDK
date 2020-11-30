@@ -207,6 +207,30 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
       set { SetValue(MaxValueProperty, value); }
     }
 
+    public static readonly DependencyProperty VerificationDurationProperty = Reg<InputViewModel, int>("VerificationDuration_ms", 0, PropertyTypes.Save);
+
+    public int VerificationDuration_ms
+    {
+      get { return (int)GetValue(VerificationDurationProperty); }
+      set { SetValue(VerificationDurationProperty, value); }
+    }
+
+    public static readonly DependencyProperty VerificationTimeoutProperty = Reg<InputViewModel, int>("VerificationTimeout_ms", 0, PropertyTypes.Save);
+
+    public int VerificationTimeout_ms
+    {
+      get { return (int)GetValue(VerificationTimeoutProperty); }
+      set { SetValue(VerificationTimeoutProperty, value); }
+    }
+
+    public static readonly DependencyProperty MaxVerificationVelocityProperty = Reg<InputViewModel, double>("MaxVerificationVelocity", 0, PropertyTypes.Save);
+
+    public double MaxVerificationVelocity
+    {
+      get { return (double)GetValue(MaxVerificationVelocityProperty); }
+      set { SetValue(MaxVerificationVelocityProperty, value); }
+    }
+
     public InputViewModel() {
       AppComponent.OnLoaded(HandleAppComponentOnLoaded);
     }
@@ -240,6 +264,10 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
       Model.MaxS = MaxSaturation;
       Model.MinV = MinValue;
       Model.MaxV = MaxValue;
+
+      Model.VerificationDuration_ms = VerificationDuration_ms;
+      Model.VerificationTimeout_ms = VerificationTimeout_ms;
+      Model.MaxVerificationHandVelocity = (float)MaxVerificationVelocity;
     }
 
     protected override void AssignModel() {
@@ -270,6 +298,10 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
       Model.MaxS = MaxSaturation;
       Model.MinV = MinValue;
       Model.MaxV = MaxValue;
+
+      Model.VerificationDuration_ms = VerificationDuration_ms;
+      Model.VerificationTimeout_ms = VerificationTimeout_ms;
+      Model.MaxVerificationHandVelocity = (float)MaxVerificationVelocity;
     }
 
     public override void UpdateValuesFromModel() {
@@ -294,6 +326,9 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
       MaxSaturation = Model.MaxS;
       MinValue = Model.MinV;
       MaxValue = Model.MaxV;
+      VerificationDuration_ms = Model.VerificationDuration_ms;
+      VerificationTimeout_ms = Model.VerificationTimeout_ms;
+      MaxVerificationVelocity = Model.MaxVerificationHandVelocity;
     }
   }
 }

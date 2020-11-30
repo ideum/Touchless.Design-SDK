@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using Leap;
+using TouchlessDesign.Config;
 
 namespace TouchlessDesign.Components.Input.Providers.LeapMotion
 {
@@ -33,20 +34,11 @@ namespace TouchlessDesign.Components.Input.Providers.LeapMotion
 
     private float _timeSinceHandLost;
 
-    private LeapSettings _settings;
-
-    public LeapMotionProvider()
-    {
-      _settings = LeapSettings.Get();
-      if (_settings == null)
-      {
-        _settings = LeapSettings.Defaults();
-        _settings.Save();
-      }
-    }
+    private ConfigInput _settings;
 
     public void Start()
     {
+      _settings = ConfigInput.Get(App.Instance.DataDir);
       _xform = new LeapTransform(Vector.Zero, LeapQuaternion.Identity, new Vector(MillimetersToMeters, MillimetersToMeters, MillimetersToMeters));
       _xform.MirrorZ();
       _controller = new Controller();
@@ -115,7 +107,7 @@ namespace TouchlessDesign.Components.Input.Providers.LeapMotion
         else
         {
           hand = new Hand(leapHand, _xform);
-          if (_timeSinceHandLost < _settings.VerificationTimeout)
+          if (_timeSinceHandLost < _settings.VerificationTimeout_ms / 1000f)
           {
             hands.Add(leapHand.Id, hand);
             _timeSinceHandLost = 0;
