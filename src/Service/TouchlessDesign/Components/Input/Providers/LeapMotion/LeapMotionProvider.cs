@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Windows.Navigation;
 using Leap;
 using TouchlessDesign.Config;
 
@@ -36,15 +37,35 @@ namespace TouchlessDesign.Components.Input.Providers.LeapMotion
 
     private ConfigInput _settings;
 
+    private bool _verificationEnabled;
+
     public void Start()
     {
-      _settings = ConfigInput.Get(App.Instance.DataDir);
+      Console.WriteLine("Ah, I'm starting!");
+      LoadHandVerification();
       _xform = new LeapTransform(Vector.Zero, LeapQuaternion.Identity, new Vector(MillimetersToMeters, MillimetersToMeters, MillimetersToMeters));
       _xform.MirrorZ();
       _controller = new Controller();
       _controller.Connect += HandleLeapConnected;
       _controller.Disconnect += HandleLeapDisconnected;
       _controller.StartConnection();
+    }
+
+    private void LoadHandVerification()
+    {
+      Console.WriteLine("Leap Motion handling app load");
+      _settings = ConfigInput.Get(App.Instance.DataDir);
+      _verificationEnabled = !ConfigGeneral.Get(App.Instance.DataDir).RemoteProviderMode;
+      if (!_verificationEnabled)
+      {
+        Console.WriteLine("Warning: Hand verification will not work while running in remote provider mode.");
+      }
+      else
+      {
+        Console.WriteLine($"Hand verification time set to {_settings.VerificationDuration_ms}");
+        Console.WriteLine($"Hand verification velocity threshold time set to {_settings.MaxVerificationHandVelocity}");
+        Console.WriteLine($"Hand verification timeout set to {_settings.VerificationTimeout_ms}");
+      }
     }
 
     public void Stop()
@@ -75,10 +96,11 @@ namespace TouchlessDesign.Components.Input.Providers.LeapMotion
       float frameDelta = (float)((_controller.Now() - _controller.FrameTimestamp(1)) / 1E+6);
       _handsToRemoveBuffer.AddRange(hands.Values);
       _timeSinceHandLost += frameDelta;
+
       foreach (var leapHand in f.Hands)
       {
         // Update captured (but invalid) hands
-        if (_handsAwaitingValidation.TryGetValue(leapHand.Id, out var InvalidHand))
+        if (_verificationEnabled && _handsAwaitingValidation.TryGetValue(leapHand.Id, out var InvalidHand))
         {
           float PalmVelocity = leapHand.PalmVelocity.Magnitude * MillimetersToMeters;
           if (PalmVelocity <= _settings.MaxVerificationHandVelocity)
@@ -103,11 +125,11 @@ namespace TouchlessDesign.Components.Input.Providers.LeapMotion
           _handsToRemoveBuffer.Remove(hand); //prevent this hand from being removed
           _timeSinceHandLost = 0;
         }
-        // Create a new hand instance, updating immediately if we haven't timed out or to the hand validation queue if we have timed out.
+        // Create a new hand instance, putting into "valid hand" container immediately if we haven't timed out. Otherwise, send to the hand validation queue.
         else
         {
           hand = new Hand(leapHand, _xform);
-          if (_timeSinceHandLost < _settings.VerificationTimeout_ms / 1000f)
+          if (!_verificationEnabled || (_timeSinceHandLost < _settings.VerificationTimeout_ms / 1000.0f))
           {
             hands.Add(leapHand.Id, hand);
             _timeSinceHandLost = 0;

@@ -11,13 +11,16 @@
   <d:UserControl.DataContext>
     <vm:InputViewModel />
   </d:UserControl.DataContext>
-  <ui:SimpleStackPanel Spacing="5" Margin="8">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" x:Name="_scroll1">
+        <ui:SimpleStackPanel Spacing="5" Margin="8">
     <Label Margin="0 0 0 0" FontSize="16" FontWeight="Bold" Content="General"/>
+    
     <Grid>
       <Grid.ColumnDefinitions>
         <ColumnDefinition />
         <ColumnDefinition />
       </Grid.ColumnDefinitions>
+
       <c:BoolControl x:Name="ModeButton" 
                      Value="{Binding InputProvider, Mode=TwoWay}" 
                      Header="Mode"
@@ -123,6 +126,14 @@
                          Header="Max (m)" 
                          LabelMinWidth="80"
                          Visibility="{Binding UseXy, Converter={StaticResource BoolToVis}}"/>
+    <Label Margin="0 6 0 0">
+        <Label.Content>
+            <TextBlock>
+        <Run FontSize="16" FontWeight="Bold">Hand Verification</Run>
+        <Run FontSize="13">(Local Provider Mode Only)</Run>
+            </TextBlock>
+        </Label.Content>
+    </Label>
     <c:NumberControl Value="{Binding VerificationDuration_ms, Mode=TwoWay}" 
                         Min="0" Max="5000" 
                         Header="Hand Verification (ms)" 
@@ -140,4 +151,5 @@
                         Visibility="Visible"/>
 
     </ui:SimpleStackPanel>
+    </ScrollViewer>
 </UserControl>
