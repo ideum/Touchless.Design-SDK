@@ -1,0 +1,33 @@
+{
+  "OverlayEnabled": true,
+  "OverlayDisplay": {
+    "Name": null,
+    "Width": 0,
+    "Height": 0,
+    "Primary": true,
+    "Index": 0
+  },
+  "CursorEnabled": true,
+  "NoTouchEnabled": true,
+  "OnboardingEnabled": true,
+  "OnboardingUIScale": 1.0,
+  "OnboardingStatusBarScale": 1.0,
+  "OnboardingStatusBarXOffset": 0.0,
+  "OnboardingNewUserTimeout_s": 60,
+  "OnboardingNoHandTimeout_s": 15,
+  "Onboarding1Enabled": true,
+  "Onboarding2Enabled": true,
+  "Onboarding3Enabled": true,
+  "AddOnEnabled": true,
+  "AddOnDisplay": {
+    "Name": null,
+    "Width": 0,
+    "Height": 0,
+    "Primary": false,
+    "Index": 1
+  },
+  "LightingEnabled": true,
+  "LightingIntensity": 0.667,
+  "FadeCandyChannel": 0,
+  "FadeCandyLightCount": 64
+}

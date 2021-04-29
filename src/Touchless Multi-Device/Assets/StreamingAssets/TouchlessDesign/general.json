@@ -1,0 +1,6 @@
+{
+  "StartOnStartup": true,
+  "ShowUiOnStartup": false,
+  "UiStartUpDelay": 0,
+  "RemoteProviderMode": false
+}

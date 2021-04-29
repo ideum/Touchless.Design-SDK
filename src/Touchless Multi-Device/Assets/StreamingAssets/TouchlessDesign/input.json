@@ -1,0 +1,37 @@
+{
+  "ToggleEmulationKeyCombination": "Control+Alt+I",
+  "ToggleEmulationToggleSpeed_ms": 1500.0,
+  "GrabClickThreshold": 0.75,
+  "ClickDuration_ms": 500,
+  "ClickEnabled": true,
+  "UpdateRate_ms": 9,
+  "InputProvider": 1,
+  "FlipYAxis": false,
+  "UseXY": false,
+  "MinX": -0.35,
+  "MaxX": 0.35,
+  "MinZ": -0.2,
+  "MaxZ": 0.2,
+  "MinY": 0.1,
+  "MaxY": 0.6,
+  "MinConfidence": 0.2,
+  "MinH": 0,
+  "MaxH": 255,
+  "MinS": 0,
+  "MaxS": 255,
+  "MinV": 0,
+  "MaxV": 255,
+
+  "Players": [
+    {
+      "Id": 0,
+      "IpAddress": "192.168.56.1",
+      "BoundsWidth": 1920,
+      "BoundsHeight": 1080
+    },
+    {
+      "Id": 1,
+      "IpAddress": "192.168.10.4"
+    }
+  ]
+}

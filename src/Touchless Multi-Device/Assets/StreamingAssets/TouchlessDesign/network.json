@@ -1,0 +1,40 @@
+{
+  "ReconnectClientInterval_ms": 1000,
+  "PingInterval_ms": 5000,
+  "TcpEnabled": true,
+  "TcpData": {
+    "Address": null,
+    "Loopback": true,
+    "Port": 4949
+  },
+  "WsEnabled": false,
+  "WsData": {
+    "Address": null,
+    "Loopback": true,
+    "Port": 4950
+  },
+  "UdpBroadcastInterval_ms": 1000,
+  "UdpEnabled": true,
+  "UdpBroadcast": {
+    "Address": null,
+    "Loopback": false,
+    "Port": 4951
+  },
+  "UdpData": {
+    "Address": null,
+    "Loopback": false,
+    "Port": 4952
+  },
+  "FadeCandyData": {
+    "Address": null,
+    "Loopback": true,
+    "Port": 7890
+  },
+  "FadeCandyRelay": {
+    "Address": null,
+    "Loopback": true,
+    "Port": 7891
+  },
+  "FadeCandyInitialConnectInterval_ms": 500,
+  "FadeCandyReconnectInterval_ms": 500
+}

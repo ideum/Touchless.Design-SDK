@@ -301,8 +301,6 @@ namespace TouchlessDesign.Components.Input
         } catch (Exception e) {
           Log.Error($"Caught exception while updating input provider: {e}");
         }
-
-
       }
     }
 
