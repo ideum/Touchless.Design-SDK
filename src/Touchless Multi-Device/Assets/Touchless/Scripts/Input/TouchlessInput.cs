@@ -98,6 +98,7 @@ public class TouchlessInput : AppComponent, Client.IListener
       TcpConnection connection;
       if (TcpConnection.TryOpen(endpoint, out connection))
       {
+        Debug.Log("Client started");
         TcpMessageParser parser = new TcpMessageParser();
         _remoteClient = new Client(connection, parser);
         _remoteClient.Bind(this);
@@ -109,8 +110,10 @@ public class TouchlessInput : AppComponent, Client.IListener
       Debug.LogError($"Connection error: {e}");
     }
   }
+
   public void MessageReceived(Client client, Msg msg)
   {
+    Debug.Log(msg.Type);
     if (!_remoteClientActive) return;
     switch (msg.Type)
     {
@@ -153,6 +156,8 @@ public class TouchlessInput : AppComponent, Client.IListener
         _udpClient.SendHandData(_hands.Values.ToArray());
       }
     }
+
+    Debug.Log("Handling remote update");
     QueryClickAndHoverState();
     QueryNoTouch();
   }
@@ -161,6 +166,7 @@ public class TouchlessInput : AppComponent, Client.IListener
   {
     if (_remoteClientActive)
     {
+      Debug.Log("Querying click and hover");
       _remoteClient.Send(Msg.Factories.ClickAndHoverQuery());
     }
   }
@@ -337,6 +343,7 @@ public class TouchlessInput : AppComponent, Client.IListener
           var isGrabbing = hand.GrabStrength > Config.Input.GrabClickThreshold;
           SetMouseDownConfidence(hand.GrabStrength);
           var hoverState = HoverState;
+          Debug.Log("Yay Hoverstate: " + HoverState);
           if (isGrabbing && !IsButtonDown)
           {
             if (hoverState == HoverStates.Click)
@@ -380,74 +387,6 @@ public class TouchlessInput : AppComponent, Client.IListener
       _hands.Clear();
     }
   }
-
-  #endregion
-
-  #region Global Mouse / Keyboard Hooks
-
-  //private void InitializeHooks()
-  //{
-  //  _hook = Hook.GlobalEvents();
-  //  var d = new Dictionary<Combination, Action> {
-  //      {Combination.FromString(Config.Input.ToggleEmulationKeyCombination), HandleToggleEmulationKeyCombination}
-  //    };
-  //  _hook.OnCombination(d);
-  //}
-
-  //private void DeInitializeHooks()
-  //{
-  //  if (_hook != null)
-  //  {
-  //    _hook?.Dispose();
-  //  }
-  //  _hook = null;
-  //}
-
-  //private void HandleToggleEmulationKeyCombination()
-  //{
-  //  if (_timeSinceToggleEmulationKeyCombination == null)
-  //  {
-  //    DoToggleEmulation();
-  //  }
-  //  else
-  //  {
-  //    var now = DateTime.Now;
-  //    var delta = now - _timeSinceToggleEmulationKeyCombination.Value;
-  //    if (delta.TotalMilliseconds > Config.Input.ToggleEmulationToggleSpeed_ms)
-  //    {
-  //      DoToggleEmulation();
-  //    }
-  //  }
-  //}
-
-  //private void OnGlobalMouseUp(object sender, MouseEventArgs e)
-  //{
-  //  if (IsButtonDown)
-  //  {
-  //    IsButtonDown = false;
-  //  }
-  //}
-
-  //private void OnGlobalMouseDown(object sender, MouseEventArgs e)
-  //{
-  //  if (!IsButtonDown.Value)
-  //  {
-  //    IsButtonDown.Value = true;
-  //  }
-  //}
-
-  //private void DoToggleEmulation()
-  //{
-  //  _timeSinceToggleEmulationKeyCombination = DateTime.Now;
-  //  var v = IsEmulationEnabled.Value;
-  //  if (IsButtonDown.Value)
-  //  {
-  //    SetMouseButtonDown(false);
-  //  }
-  //  IsEmulationEnabled.Value = v = !v;
-
-  //  Log.Info($"Toggle Emulation invoked - mouse emulation: {v}");
-  //}
 
   #endregion
 

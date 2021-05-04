@@ -100,6 +100,7 @@ namespace TouchlessDesign.Components.Input
       if (!_remoteClientActive) return;
       switch (msg.Type) {
         case Msg.Types.ClickAndHoverQuery:
+          Log.Info("Changing state to hovering");
           Input.HoverState.Value = msg.HoverState;
           Input.SetMouseButtonDown(msg.Bool.Value);
           break;
@@ -138,6 +139,7 @@ namespace TouchlessDesign.Components.Input
 
     private void QueryClickAndHoverState() {
       if (_remoteClientActive) {
+        Log.Debug("Querying Click and Hove State");
         _remoteClient.Send(Msg.Factories.ClickAndHoverQuery());
       }
     }

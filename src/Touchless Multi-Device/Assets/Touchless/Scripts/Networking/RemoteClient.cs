@@ -117,7 +117,7 @@ namespace TouchlessDesign.Components.Remote
     private void HandleMessageReceived(IAsyncResult result)
     {
       IPEndPoint broadcasterEndpoint = new IPEndPoint(IPAddress.Any, _receiveInfo.Port);
-
+      Debug.Log("I dunno");
       try
       {
         var rawResponse = _receiveClient.EndReceive(result, ref broadcasterEndpoint);

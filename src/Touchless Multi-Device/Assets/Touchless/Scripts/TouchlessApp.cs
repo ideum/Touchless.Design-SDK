@@ -6,14 +6,17 @@ using System.Threading;
 using TouchlessDesign.Components;
 using TouchlessDesign.Components.Ipc;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace TouchlessDesign
 {
   public class TouchlessApp : MonoBehaviour
   {
     public Canvas Canvas;
+    public GraphicRaycaster GraphicRaycaster;
     public TouchlessInput TouchlessInput;
     public bool DebugHands;
+    public bool AddTouchlessInputModule;
 
     public string DataDir
     {
@@ -71,6 +74,8 @@ namespace TouchlessDesign
         user.SetUserData(info);
         Users.Add(user.UserInfo.IpAddress, user);
       }
+
+      OnStarted?.Invoke();
     }
 
     private void Update()
@@ -81,14 +86,21 @@ namespace TouchlessDesign
       }
     }
 
+    public void LogIt(string message)
+    {
+      Debug.Log(message);
+    }
+
     public void OnDestroy()
     {
       AppComponent.DeInitializeComponents();
+      OnStopped?.Invoke();
     }
 
 
     internal void HandleUserMessage(Msg msg, IPEndPoint endpoint)
     {
+      // Debug.Log("Receiving message from endpoint " + endpoint.Address);
       Users.TryGetValue(endpoint.Address.ToString(), out var TargetUser);
       if (TargetUser == null)
       {
@@ -166,5 +178,37 @@ namespace TouchlessDesign
       }
     }
     #endregion
+
+    /// <summary>
+    /// Arguments dispatched with TouchManager events.
+    /// </summary>
+    public class PointerEventArgs : EventArgs
+    {
+      /// <summary>
+      /// Gets list of pointers participating in the event.
+      /// </summary>
+      /// <value>List of pointers added, changed or removed this frame.</value>
+      public IList<TouchlessUser> Pointers { get; private set; }
+
+      private static PointerEventArgs instance;
+
+      /// <summary>
+      /// Initializes a new instance of the <see cref="PointerEventArgs"/> class.
+      /// </summary>
+      private PointerEventArgs() { }
+
+      /// <summary>
+      /// Returns cached instance of EventArgs.
+      /// This cached EventArgs is reused throughout the library not to alocate new ones on every call.
+      /// </summary>
+      /// <param name="pointers">A list of pointers for event.</param>
+      /// <returns>Cached EventArgs object.</returns>
+      public static PointerEventArgs GetCachedEventArgs(IList<TouchlessUser> pointers)
+      {
+        if (instance == null) instance = new PointerEventArgs();
+        instance.Pointers = pointers;
+        return instance;
+      }
+    }
   }
 }

@@ -25,13 +25,15 @@
   "Players": [
     {
       "Id": 0,
-      "IpAddress": "192.168.56.1",
+      "IpAddress": "10.0.0.155",
       "BoundsWidth": 1920,
       "BoundsHeight": 1080
     },
     {
       "Id": 1,
-      "IpAddress": "192.168.10.4"
+      "IpAddress": "10.0.0.87",
+      "BoundsWidth": 1920,
+      "BoundsHeight": 1080
     }
   ]
 }

@@ -33,6 +33,7 @@ namespace TouchlessDesign.Components.Ipc {
           case Msg.Types.Hover:
             if (msg.ContainsIncomingServerSideData && msg.Priority >= Input.ClientPriority.Value) {
               Log.Warn($"Changing Hover {Input.HoverState.Value} to {msg.HoverState}");
+              Log.Info("Hover state changing, aw ye");
               Input.HoverState.Value = msg.HoverState;
             }
             break;
