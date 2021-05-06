@@ -63,7 +63,6 @@ namespace TouchlessDesignCore.Examples
 
     public void OnPointerExit(PointerEventData eventData)
     {
-      if (!Click) return;
       if (TouchlessDesign.Instance.TryGetUserFromEventData(eventData, out TouchlessUser user))
       {
         user.SetHoverState(HoverStates.None);

@@ -20,6 +20,8 @@ namespace TouchlessDesignCore
     public TouchlessInput TouchlessInput;
     public bool DebugHands;
     public bool AddTouchlessInputModule;
+    public bool isStarted { get; private set; }
+    public bool shuttingDown { get; private set; }
 
     public string DataDir
     {
@@ -36,8 +38,10 @@ namespace TouchlessDesignCore
     public static TouchlessDesign Instance;
     public TouchlessUser TouchlessUserPrefab;
     public Dictionary<string, TouchlessUser> Users = new Dictionary<string, TouchlessUser>();
-    public event Action OnStarted;
-    public event Action OnStopped;
+    public static event Action OnStarted;
+    public static event Action OnStopped;
+    public static event Action<TouchlessUser> UserAdded;
+    public static event Action<TouchlessUser> UserRemoved;
 
     private string _dataDir;
 
@@ -84,6 +88,7 @@ namespace TouchlessDesignCore
         TouchlessUser user = Instantiate(TouchlessUserPrefab, transform);
         user.SetUserData(info);
         Users.Add(user.UserInfo.IpAddress, user);
+
       }
 
       OnStarted?.Invoke();

@@ -146,7 +146,7 @@ namespace TouchlessDesignCore.Components.Input.Providers.Remote
 
       if(user != null)
       {
-        user.ClientMessageReceived(msg);
+        user.ClientTcpMessageReceived(msg);
       }
     }
 
