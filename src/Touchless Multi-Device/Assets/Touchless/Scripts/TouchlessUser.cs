@@ -335,7 +335,7 @@ namespace TouchlessDesignCore
         if (candidates[i].gameObject == null)
           continue;
 
-        result = candidates[i];
+        return candidates[i];
       }
       return result;
     }

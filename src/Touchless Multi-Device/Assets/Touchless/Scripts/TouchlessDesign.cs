@@ -91,6 +91,7 @@ namespace TouchlessDesignCore
 
       }
 
+      isStarted = true;
       OnStarted?.Invoke();
     }
 

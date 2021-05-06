@@ -6,7 +6,7 @@ using TouchlessDesignCore;
 
 namespace TouchlessDesignCore.Examples
 {
-  public class TouchlessClickDrag : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IDragHandler, IEndDragHandler
+  public class TouchlessClickDrag : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IDragHandler
   {
     public bool Click, Drag, DragHorizontal, DragVertical;
 
@@ -26,15 +26,6 @@ namespace TouchlessDesignCore.Examples
       else if(DragVertical)
       {
         user.SetHoverState(HoverStates.DragVertical);
-      }
-    }
-
-    public void OnEndDrag(PointerEventData eventData)
-    {
-      if (!Drag) return;
-      if (TouchlessDesign.Instance.TryGetUserFromEventData(eventData, out TouchlessUser user))
-      {
-        user.SetHoverState(HoverStates.None);
       }
     }
 
