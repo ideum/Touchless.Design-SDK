@@ -39,7 +39,7 @@ namespace TouchlessDesignCore.Components.Input.Providers.Remote
       _tcpPort = config.TcpData.Port;
 
       _tcpServer = new TcpServer(config.TcpData);
-      Debug.Log("Starting server on port " + _tcpPort);
+      Debug.Log("Starting Touchless server on port " + _tcpPort);
       _tcpServer.Bind(this);
       _tcpServer.Start();
 
@@ -111,14 +111,12 @@ namespace TouchlessDesignCore.Components.Input.Providers.Remote
 
     public void ServerStarted(Server s)
     {
-      Debug.Log("Server Started");
-
+      Debug.Log("Touchless Server Started");
     }
 
     public void ServerStopped(Server s)
     {
-      Debug.Log("Server Stopped");
-
+      Debug.Log("Touchless Server Stopped");
     }
 
     public void ClientConnected(Client c)

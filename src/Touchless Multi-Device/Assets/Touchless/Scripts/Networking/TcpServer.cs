@@ -26,7 +26,6 @@ namespace TouchlessDesignCore.Components.Ipc.Networking.Tcp
 
     protected override void DoStart()
     {
-      Debug.Log("Running with ip info: " + _endPoint.ToString());
       _connectionEvt.Reset();
       _closeEvt.Reset();
       try

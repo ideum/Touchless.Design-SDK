@@ -64,7 +64,6 @@ public class TouchlessInput : TouchlessComponent
     try
     {
       _provider.Start();
-      Debug.Log($"Touchless Input provider '{_provider.GetType().Name}' started.");
     }
     catch (Exception e)
     {
