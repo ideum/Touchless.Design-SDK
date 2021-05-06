@@ -297,7 +297,8 @@ namespace TouchlessDesignCore.Components.Input
     private bool ProcessTouchEvents()
     {
       // Process Touchless Users
-      var touchlessUsers = TouchlessDesign.Instance.Users.Values;
+      var touchlessUsers = TouchlessDesign.Instance?.Users?.Values;
+      if (touchlessUsers == null) return false;
       bool touchlessUpdated = false;
       foreach (TouchlessUser user in touchlessUsers)
       {
