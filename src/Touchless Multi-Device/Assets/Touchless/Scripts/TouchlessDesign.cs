@@ -40,8 +40,6 @@ namespace TouchlessDesignCore
     public Dictionary<string, TouchlessUser> Users = new Dictionary<string, TouchlessUser>();
     public static event Action OnStarted;
     public static event Action OnStopped;
-    public static event Action<TouchlessUser> UserAdded;
-    public static event Action<TouchlessUser> UserRemoved;
 
     private string _dataDir;
 

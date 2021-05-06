@@ -81,7 +81,6 @@ Configuration is primarily handled through the UI, but all configurable values a
 - network.json: Configures network settings for the Service.
 
 ### AddOn and Overlay
-
 1. Download Unity version 2019.3.2f1
 2. Open the application in Unity, and go to File -> Build Settings.
 3. Make sure the _App/Scenes/App Scene is checked and press Build.
@@ -92,66 +91,75 @@ Configuration is primarily handled through the UI, but all configurable values a
 
 Now, when you run the Integrated Touchless System, it will automatically start up the applications specified in the ui.json file. Likewise, when the System is exited, it will terminate those same applications. Note: These applications will only provide gesture feedback when running alongside a client application that uses the Integrated Touchless System bindings, such as the Example application.
 
-## Adding Support to a Custom Application
+## Touchless Multi-Device Support
+This version of the Touchless SDK includes a Unity package that will run the core of the service inside of Unity, rather than through the normal touchless service application. This allows for easily integrating multiple realsense devices into Unity UI Event System, treating each touchless cursor similarly to a mouse cursor. A .unitypackage file will be provided containing all of the necessary code. 
 
-In order to integrate a project wih the Integrated Touchless System, the project must first import the unity asset package located in the root src directory of this repository. Below are the minimum recommended steps to get the asset package loaded and integrated. The Example application can also be used as a demonstration.
+### Setting up a Project
+To set up the unity-based version of the Touchless service, download and import the provided package into a new Unity project. From there, you'll need to add the TouchlessDesign prefab into your scene and replace Unity's StandardInputModule with the TouchlessInputModule. 
 
 1. Open the Unity project.
 2. Open Assets-> Import Package -> Custom Package...
 3. This will open a dialog. Select the TouchlessDesign.unitypackage file in the src directory of this repository. When it prompts you to select which parts of the package to import, select Import All.
-4. In a MonoBehavior script, in the Start function, call the TouchlessDesign.Initialize function and subscribe to its OnConnected and OnDisconnected events. (Make sure to include using Ideum in the file). Also include the Deinitialize call when quitting the application.
+4. Add the TouchlessDesign prefab to the root of your scene, and assign the appropriate references.
+5. With a Canvas and EventSystem in the scene, remove or disable Unity's StandaloneInputModule and add the TouchlessInputModule. 
+6. In a Monobehavior script, subscribe to the OnStarted and OnStopped events for Touchless Design. The ```Examples``` folder contains a script that does this, and also creates custom cursors on startup.
 
-``` cs
-void Start() {
-  TouchlessDesign.Initialize("%appdata%/Ideum/TouchlessDesign");
-  TouchlessDesign.Connected += OnConnected;
-  TouchlessDesign.Disconnected += OnDisconnected;
-}
-
-void OnApplicationQuit() {
-  TouchlessDesign.DeInitialize();
-}
-```
-
-5. In order to query the state of the System, there are a number of static query calls. For each one, pass a delegate that will handle the response from the System. Below is an example on a script that queries both the click and hover state, and the no touch state on an interval, and passes two delegates to those calls. When the TouchlessDesign recieves a response from the System for either call, it will execute the passed delegate.
-
-``` cs
-private void Update() {
-  if (_connected) {
-    _timer += Time.deltaTime;
-    if(_timer > _queryInterval) {
-      TouchlessDesign.QueryClickAndHoverState(HandleQueryResponse);
-      TouchlessDesign.QueryNoTouchState(HandleNoTouch);
-      _timer = 0f;
-    }
+```cs
+  if (TouchlessDesign.Instance.isStarted) {
+      HandleTouchlessDesignStarted();
   }
-}
-
-private void HandleNoTouch(bool noTouch) {
-  if (noTouch) {
-    // Show no-touch warning information.
-  } 
-}
-
-private void HandleQueryResponse(bool clickState, HoverStates hoverState) {
-  // Do something with the hover and click state.
-}
+  else {
+    TouchlessDesign.OnStarted += HandleTouchlessDesignStarted;
+  }
+  TouchlessDesign.OnStopped += HandleTouchlessDesignStop;
 ```
 
-6. In order to set a hover state (for example, when the user hovers over a button), create a new script and place it on whatever component you want to react to the hover state. In that script, implement the IPointerEnterHandler and IPointerExitHandler interfaces.
+Once the Touchless service is started and it has loaded all users, you can start subscribing to user events as they come in.
 
-``` cs
-public class TouchlessHoverCapture : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+```cs
+    private void HandleTouchlessDesignStarted()
+    {
+      Debug.Log("Touchless Design Started.");
+      foreach (TouchlessUser user in TouchlessDesign.Instance.Users.Values)
+      {
+        user.HoverStateChanged += HandleHoverStateChanged;
+        user.CursorActivated += HandleCursorActivated;
+        user.CursorDeactivated += HandleCursorDeactivated;
+        user.PointerPressed += HandlePointerPressed;
+        user.PointerReleased += HandlePointerReleased;
+      }
+    }
 ```
 
-7. Implement the interface functions OnPointerEnter and OnPointerExit. In those functions call the TouchlessDesign SetHoverState function, and pass the desired hover state, or pass false to deactivate, as shown below:
+### Examples
+The ```Examples``` folder of the Touchless package contains some basic scripts and a scene that uses them. The Sample Scene can be used as a reference regarding scene and script setup in case there's any confusion.
 
-``` cs
-public void OnPointerEnter(PointerEventData eventData) {
-  TouchlessDesign.SetHoverState(HoverStates.Click);
-}
+### Configuration:
 
-public void OnPointerExit(PointerEventData eventData) {
-  TouchlessDesign.SetHoverState(false);
-}
+The Unity version of Touchless is configured through directly editing json files in the ```StreamingAssets>Touchless``` directory. Each of the configuration files are the same as listed above, with the except of input.json, which will now allow you to add IP addresses and IDs for expected users. 
+
+```json
+  "Players": [
+    {
+      "Id": 0,
+      "IpAddress": "10.0.0.155",
+      "BoundsWidth": 1920,
+      "BoundsHeight": 1080
+    },
+    {
+      "Id": 1,
+      "IpAddress": "10.0.0.87",
+      "BoundsWidth": 1920,
+      "BoundsHeight": 1080
+    }
+  ]
 ```
+
+Here we can set the ID, IP Address, and bounds settings for each user. 
+
+Note: The ```Id``` of a user should be no less than zero, and each user should have a unique ID assigned to them. This helps with making sure that it won't matter the order in which touchless pedestals or remote providers connect. These ID's are also used by Unity's event system to assign pointer ID's for GUI events.
+
+#### Pedestal Setup Recommendations
+It is recommended that each pedestal is assigned a static IP address so that they will not change in between daily reboots and become incompatible with the host ```Players``` configuration mentioned above.
+
+It should also be ensured that each pedestal's input mode is set to ```local``` instead of ```remote```. They should still have ```Remote Provider Mode``` enabled, however.

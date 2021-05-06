@@ -22,8 +22,7 @@ namespace TouchlessDesignCore.Examples
         TouchlessDesign.OnStarted += HandleTouchlessDesignStarted;
       }
       TouchlessDesign.OnStopped += HandleTouchlessDesignStop;
-      TouchlessDesign.UserAdded += HandleUserConnected;
-      TouchlessDesign.UserRemoved += HandleUserRemoved;
+
     }
     private void HandleTouchlessDesignStarted()
     {
@@ -41,11 +40,6 @@ namespace TouchlessDesignCore.Examples
     private void HandleTouchlessDesignStop()
     {
       Debug.Log("Touchless Design Stopped.");
-    }
-
-    private void HandleUserConnected(TouchlessUser user)
-    {
-      Debug.Log($"User added with ID : {user.UserInfo.Id}");
     }
 
     private void HandleUserRemoved(TouchlessUser user)

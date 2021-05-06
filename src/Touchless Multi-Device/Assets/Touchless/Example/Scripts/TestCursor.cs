@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -26,6 +27,12 @@ namespace TouchlessDesignCore.Examples
     {
       _touchlessUser = user;
       _userNumberText.text = user.UserInfo.Id.ToString();
+      user.HoverStateChanged += HandleHoverStateChanged;
+    }
+
+    private void HandleHoverStateChanged(HoverStates arg1, HoverStates arg2)
+    {
+      Debug.Log($"Hoverstate changed from {arg1} to {arg2}");
     }
 
     void Update()

@@ -28,11 +28,10 @@ namespace TouchlessDesignCore
     public Client Client { get; set; }
 
     public Action<HoverStates, HoverStates> HoverStateChanged;
-    public static Action<TouchlessUser> CursorActivated;
-    public static Action<TouchlessUser> CursorDeactivated;
-    public static Action<TouchlessUser> PointerPressed;
-    public static Action<TouchlessUser> PointerReleased;
-    public static Action<TouchlessUser> PointerHoverMoved;
+    public Action<TouchlessUser> CursorActivated;
+    public Action<TouchlessUser> CursorDeactivated;
+    public Action<TouchlessUser> PointerPressed;
+    public Action<TouchlessUser> PointerReleased;
 
     private List<Hand> _hands = new List<Hand>();
     private Rect _bounds;
