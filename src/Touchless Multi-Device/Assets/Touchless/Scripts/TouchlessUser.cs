@@ -55,17 +55,11 @@ namespace TouchlessDesignCore
       UserInfo = info;
       HoverState = HoverStates.None;
       _bounds = new Rect(UserInfo.BoundsX, UserInfo.BoundsY, UserInfo.BoundsWidth, UserInfo.BoundsHeight);
-      //if (!TcpConnection.TryOpen(new IPEndPoint(IPAddress.Parse(UserInfo.IpAddress), 4952), out _hoverSendClient))
-      //{
-      //  Debug.LogError("Couldn't open it!");
-      //}
-      // _hoverSendClient = new UdpClient(new IPEndPoint(IPAddress.Parse(UserInfo.IpAddress), 4952));
     }
 
     public void DataMessageReceived(Msg msg)
     {
       UpdateHands(msg.Hands);
-      // SetHoverState(msg.HoverState);
       UpdateCursorPosition();
 
       if (msg.Type == Msg.Types.ClickAndHoverQuery)
@@ -75,7 +69,7 @@ namespace TouchlessDesignCore
       }
     }
 
-    public void ClientMessageReceived(Msg msg)
+    public void ClientTcpMessageReceived(Msg msg)
     {
       /// <summary>
       /// Processes an incoming message from an end point
@@ -90,7 +84,7 @@ namespace TouchlessDesignCore
           case Msg.Types.None:
             break;
           case Msg.Types.Hover:
-            if (msg.ContainsIncomingServerSideData /*&& msg.Priority >= TouchlessDesign.Instance.TouchlessInput.ClientPriority.Value*/)
+            if (msg.ContainsIncomingServerSideData)
             {
               Debug.LogWarning($"Changing Hover {HoverState} to {msg.HoverState}");
               Debug.Log("Hover state changing, aw ye");
@@ -110,7 +104,7 @@ namespace TouchlessDesignCore
             Client.Send(Msg.Factories.DimensionsQuery((int)_bounds.xMin, (int)_bounds.yMin, (int)_bounds.width, (int)_bounds.height));
             break;
           case Msg.Types.Position:
-            if (msg.ContainsIncomingServerSideData /*&& msg.Priority >= Input.ClientPriority.Value*/)
+            if (msg.ContainsIncomingServerSideData)
             {
               SetPosition(msg.X.Value, msg.Y.Value);
             }
@@ -131,7 +125,7 @@ namespace TouchlessDesignCore
             Client.Send(Msg.Factories.Ping());
             break;
           case Msg.Types.NoTouch:
-            if (msg.ContainsIncomingServerSideData /*&& msg.Priority >= Input.ClientPriority.Value*/)
+            if (msg.ContainsIncomingServerSideData)
             {
               IsNoTouch = msg.Bool.Value;
             }
@@ -251,7 +245,7 @@ namespace TouchlessDesignCore
       if (_hands.Count == 0)
       {
         IsActivated = false;
-        ScreenPosition = new Vector2Int(0, 0);
+        ScreenPosition = new Vector2Int(-1, -1);
       }
       else
       {

@@ -245,7 +245,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -685,6 +685,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Click: 1
   Drag: 0
+  DragHorizontal: 0
+  DragVertical: 0
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -820,7 +822,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -857,6 +859,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Click: 0
   Drag: 1
+  DragHorizontal: 0
+  DragVertical: 0
 --- !u!1 &847526760
 GameObject:
   m_ObjectHideFlags: 0
@@ -1774,7 +1778,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -1812,6 +1816,7 @@ GameObject:
   - component: {fileID: 1615609966}
   - component: {fileID: 1615609965}
   - component: {fileID: 1615609964}
+  - component: {fileID: 1615609968}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -1901,6 +1906,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1615609968
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1615609963}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbb6a11bb20c8ee439cb58596c26cfa0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CursorPrefab: {fileID: 2533094668793622292, guid: 424e71affe985f3479ee2bf991068c12,
+    type: 3}
 --- !u!1 &1724197627
 GameObject:
   m_ObjectHideFlags: 0
@@ -1986,6 +2005,7 @@ GameObject:
   - component: {fileID: 1879761801}
   - component: {fileID: 1879761800}
   - component: {fileID: 1879761799}
+  - component: {fileID: 1879761802}
   m_Layer: 5
   m_Name: Scroll View
   m_TagString: Untagged
@@ -2081,6 +2101,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1879761797}
   m_CullTransparentMesh: 0
+--- !u!114 &1879761802
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1879761797}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 129539a39b1ce38469f9a14b098a0cd7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Click: 0
+  Drag: 0
+  DragHorizontal: 0
+  DragVertical: 1
 --- !u!1 &2011084933
 GameObject:
   m_ObjectHideFlags: 0
@@ -2250,11 +2286,6 @@ PrefabInstance:
       propertyPath: GraphicRaycaster
       value: 
       objectReference: {fileID: 1615609964}
-    - target: {fileID: 1703445575872969089, guid: 99b3e1dfa0b5baf478c73fdf14c9242f,
-        type: 3}
-      propertyPath: DebugHands
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6084214847058787362, guid: 99b3e1dfa0b5baf478c73fdf14c9242f,
         type: 3}
       propertyPath: m_Name
