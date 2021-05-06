@@ -392,21 +392,5 @@ namespace TouchlessDesignCore
       yield return new WaitForSecondsRealtime(TouchlessComponent.Config.Input.ClickDuration_ms);
       SetMouseButtonDown(false);
     }
-
-    private void OnDrawGizmosSelected()
-    {
-      if (Application.isPlaying && TouchlessDesign.Instance.DebugHands && _hands.Count > 0)
-      {
-        if (UserInfo.Id == 0)
-        {
-          Gizmos.color = Color.green;
-        }
-        else
-        {
-          Gizmos.color = Color.yellow;
-        }
-        Gizmos.DrawSphere(CursorWorldPosition, 50f);
-      }
-    }
   }
 }

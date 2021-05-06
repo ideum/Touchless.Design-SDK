@@ -18,7 +18,6 @@ namespace TouchlessDesignCore
     public Canvas Canvas;
     public GraphicRaycaster GraphicRaycaster;
     public TouchlessInput TouchlessInput;
-    public bool DebugHands;
     public bool AddTouchlessInputModule;
     public bool isStarted { get; private set; }
     public bool shuttingDown { get; private set; }
@@ -118,7 +117,7 @@ namespace TouchlessDesignCore
       Users.TryGetValue(endpoint.Address.ToString(), out var TargetUser);
       if (TargetUser == null)
       {
-        Debug.LogError("Message received from user that isn't in the players list");
+        Debug.LogError($"Message received from address {endpoint.Address}, which isn't in the players list. Please add this IP address to the players array in input.json with a unique ID.");
       }
       else
       {

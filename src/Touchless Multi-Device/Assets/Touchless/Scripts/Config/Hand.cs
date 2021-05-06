@@ -1,5 +1,4 @@
-﻿using Leap;
-
+﻿
 namespace TouchlessDesignCore.Components.Input
 {
   public class Hand
@@ -38,22 +37,6 @@ namespace TouchlessDesignCore.Components.Input
     public Hand()
     {
 
-    }
-
-    public Hand(Leap.Hand hand, Leap.LeapTransform? xform = null)
-    {
-      Apply(hand, xform);
-    }
-
-    public void Apply(Leap.Hand hand, Leap.LeapTransform? xform = null)
-    {
-      Id = hand.Id;
-      GrabStrength = hand.GrabStrength;
-      Confidence = hand.Confidence;
-      var p = xform?.TransformPoint(hand.PalmPosition) ?? hand.PalmPosition;
-      X = p.x;
-      Y = p.y;
-      Z = p.z;
     }
   }
 }

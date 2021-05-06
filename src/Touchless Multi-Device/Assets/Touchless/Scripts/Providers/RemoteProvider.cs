@@ -139,7 +139,7 @@ namespace TouchlessDesignCore.Components.Input.Providers.Remote
 
     public void MessageReceived(Client c, Msg msg)
     {
-      // Debug.Log($"Message from client at {c.Connection.Destination} of type {msg.Type} received.");
+      Debug.Log($"Message from client at {c.Connection.Destination} of type {msg.Type} received.");
       var user = FindTouchlessUserByClient(c);
 
       if(user != null)
@@ -161,7 +161,7 @@ namespace TouchlessDesignCore.Components.Input.Providers.Remote
     public TouchlessUser FindTouchlessUserByClient(Client c)
     {
       var userIps = TouchlessDesign.Instance.Users.Values;
-      var user = userIps.First((u) => u.Client == c);
+      var user = userIps.FirstOrDefault((u) => u.Client == c);
       return user;
     }
   }

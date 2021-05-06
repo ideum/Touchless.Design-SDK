@@ -32,6 +32,12 @@
     {
       "Id": 1,
       "IpAddress": "10.0.0.87",
+      "BoundsWidth": 500,
+      "BoundsHeight": 1080
+    },
+    {
+      "Id": 2,
+      "IpAddress": "10.0.0.122",
       "BoundsWidth": 1920,
       "BoundsHeight": 1080
     }
