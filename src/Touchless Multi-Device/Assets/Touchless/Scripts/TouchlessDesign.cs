@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Threading;
-using TouchlessDesign.Components;
-using TouchlessDesign.Components.Ipc;
+using TouchlessDesignCore.Components;
+using TouchlessDesignCore.Components.Input;
+using TouchlessDesignCore.Components.Ipc;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using System.Linq;
 
-namespace TouchlessDesign
+namespace TouchlessDesignCore
 {
-  public class TouchlessApp : MonoBehaviour
+  public class TouchlessDesign : MonoBehaviour
   {
     public Canvas Canvas;
     public GraphicRaycaster GraphicRaycaster;
@@ -30,7 +33,7 @@ namespace TouchlessDesign
       }
     }
 
-    public static TouchlessApp Instance;
+    public static TouchlessDesign Instance;
     public TouchlessUser TouchlessUserPrefab;
     public Dictionary<string, TouchlessUser> Users = new Dictionary<string, TouchlessUser>();
     public event Action OnStarted;
@@ -43,6 +46,14 @@ namespace TouchlessDesign
       if (Instance == null)
       {
         Instance = this;
+        if(AddTouchlessInputModule)
+        {
+          EventSystem e = FindObjectOfType<EventSystem>();
+          if(!e.TryGetComponent<TouchlessInputModule>(out var module))
+          {
+            e.gameObject.AddComponent<TouchlessInputModule>();
+          }
+        }
       }
       else
       {
@@ -66,9 +77,9 @@ namespace TouchlessDesign
         }
       }
 
-      AppComponent.InitializeComponents(this);
+      TouchlessComponent.InitializeInputComponent(this);
 
-      foreach (TouchlessUserInfo info in AppComponent.Config.Input.Players)
+      foreach (TouchlessUserInfo info in TouchlessComponent.Config.Input.Players)
       {
         TouchlessUser user = Instantiate(TouchlessUserPrefab, transform);
         user.SetUserData(info);
@@ -93,10 +104,9 @@ namespace TouchlessDesign
 
     public void OnDestroy()
     {
-      AppComponent.DeInitializeComponents();
+      TouchlessComponent.DeInitializeComponents();
       OnStopped?.Invoke();
     }
-
 
     internal void HandleUserMessage(Msg msg, IPEndPoint endpoint)
     {
@@ -177,38 +187,13 @@ namespace TouchlessDesign
         }
       }
     }
+
+    public bool TryGetUserFromEventData(PointerEventData eventData, out TouchlessUser user)
+    {
+      user = Users.Values.FirstOrDefault((u) => u.PointerEventData == eventData);
+      return user != null;
+    }
     #endregion
 
-    /// <summary>
-    /// Arguments dispatched with TouchManager events.
-    /// </summary>
-    public class PointerEventArgs : EventArgs
-    {
-      /// <summary>
-      /// Gets list of pointers participating in the event.
-      /// </summary>
-      /// <value>List of pointers added, changed or removed this frame.</value>
-      public IList<TouchlessUser> Pointers { get; private set; }
-
-      private static PointerEventArgs instance;
-
-      /// <summary>
-      /// Initializes a new instance of the <see cref="PointerEventArgs"/> class.
-      /// </summary>
-      private PointerEventArgs() { }
-
-      /// <summary>
-      /// Returns cached instance of EventArgs.
-      /// This cached EventArgs is reused throughout the library not to alocate new ones on every call.
-      /// </summary>
-      /// <param name="pointers">A list of pointers for event.</param>
-      /// <returns>Cached EventArgs object.</returns>
-      public static PointerEventArgs GetCachedEventArgs(IList<TouchlessUser> pointers)
-      {
-        if (instance == null) instance = new PointerEventArgs();
-        instance.Pointers = pointers;
-        return instance;
-      }
-    }
   }
 }

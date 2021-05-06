@@ -2,16 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace TouchlessDesign.Components
+namespace TouchlessDesignCore.Components
 {
 
-  public abstract class AppComponent : MonoBehaviour
+  public abstract class TouchlessComponent : MonoBehaviour
   {
-    public static TouchlessApp TouchlessApp => TouchlessApp.Instance;
-
     public static Config.Config Config { get; set; }
 
-    public static AppComponent[] Components { get; set; }
+    public static TouchlessComponent[] Components { get; set; }
 
     public static TouchlessInput Input { get; set; }
 
@@ -20,7 +18,6 @@ namespace TouchlessDesign.Components
 
     public bool IsStarted { get; private set; }
     public string DataDir { get; private set; }
-
 
     public void Init()
     {
@@ -55,25 +52,20 @@ namespace TouchlessDesign.Components
       OnLoadedHandlers.Add(onLoaded);
     }
 
-    public static void InitializeComponents(TouchlessApp app)
+    public static void InitializeInputComponent(TouchlessDesign app)
     {
       Config = new Config.Config(app.DataDir);
-      Input = TouchlessApp.Instance.TouchlessInput;
-      Components = new AppComponent[] {
-        Input
-      };
-      foreach (var c in Components)
+      Input = TouchlessDesign.Instance.TouchlessInput;
+      try
       {
-        try
-        {
-          c.DataDir = app.DataDir;
-          c.Init();
-        }
-        catch (Exception e)
-        {
-          Debug.LogError($"Error starting AppComponent of type {c.GetType().Name}: {e}");
-        }
+        Input.DataDir = app.DataDir;
+        Input.Init();
       }
+      catch (Exception e)
+      {
+        Debug.LogError($"Error starting Touchless Input Component: {e}");
+      }
+
       _isLoaded = true;
       foreach (var onLoadedHandler in OnLoadedHandlers)
       {
@@ -84,18 +76,7 @@ namespace TouchlessDesign.Components
 
     public static void DeInitializeComponents()
     {
-      foreach (var c in Components)
-      {
-        try
-        {
-          c.Stop();
-        }
-        catch (Exception e)
-        {
-          Debug.LogError(e);
-        }
-      }
-      Components = null;
+      Input.Stop();
       Input = null;
     }
   }

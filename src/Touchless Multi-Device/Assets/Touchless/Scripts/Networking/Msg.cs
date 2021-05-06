@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
-using TouchlessDesign.Components.Input;
-using TouchlessDesign.Config;
+using TouchlessDesignCore.Components.Input;
+using TouchlessDesignCore.Config;
 
-namespace TouchlessDesign.Components.Ipc
+namespace TouchlessDesignCore.Components.Ipc
 {
   public class Msg
   {

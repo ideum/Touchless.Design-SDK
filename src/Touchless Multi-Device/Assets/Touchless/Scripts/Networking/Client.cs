@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 using Newtonsoft.Json;
-using TouchlessDesign.Components.Ipc;
+using TouchlessDesignCore.Components.Ipc;
 using UnityEngine;
 
 public class Client : IDisposable, Parser.IListener, Connection.IListener

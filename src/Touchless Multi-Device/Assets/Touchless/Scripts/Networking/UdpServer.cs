@@ -3,10 +3,10 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-using TouchlessDesign.Config;
+using TouchlessDesignCore.Config;
 using UnityEngine;
 
-namespace TouchlessDesign.Components.Ipc.Networking.Udp
+namespace TouchlessDesignCore.Components.Ipc.Networking.Udp
 {
   class UdpServer
   {

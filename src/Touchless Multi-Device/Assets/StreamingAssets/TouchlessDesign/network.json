@@ -4,7 +4,7 @@
   "TcpEnabled": true,
   "TcpData": {
     "Address": null,
-    "Loopback": true,
+    "Loopback": false,
     "Port": 4949
   },
   "WsEnabled": false,

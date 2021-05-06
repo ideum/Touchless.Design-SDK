@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace TouchlessDesign.Pointers
+namespace TouchlessDesignCore.Pointers
 {
 
   public class TouchlessPointer : MonoBehaviour

@@ -2,7 +2,7 @@
 using System.Drawing;
 using Newtonsoft.Json;
 
-namespace TouchlessDesign.Config
+namespace TouchlessDesignCore.Config
 {
 
   public interface IConfig

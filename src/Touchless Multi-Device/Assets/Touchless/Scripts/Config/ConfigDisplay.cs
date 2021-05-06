@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace TouchlessDesign.Config
+namespace TouchlessDesignCore.Config
 {
   public class ConfigDisplay : ConfigBase<ConfigDisplay>
   {

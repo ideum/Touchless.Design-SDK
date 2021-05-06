@@ -3,16 +3,15 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-using TouchlessDesign.Components.Input;
-using TouchlessDesign.Components.Ipc;
-using TouchlessDesign.Config;
+using TouchlessDesignCore.Components.Input;
+using TouchlessDesignCore.Components.Ipc;
+using TouchlessDesignCore.Config;
 using UnityEngine;
 
-namespace TouchlessDesign.Components.Remote
+namespace TouchlessDesignCore.Components.Remote
 {
   public class RemoteClient
   {
-
     public bool AvailableToSend
     {
       get { return _sendReady; }
@@ -138,7 +137,7 @@ namespace TouchlessDesign.Components.Remote
 
           _sendEndPoint = new IPEndPoint(broadcasterEndpoint.Address, sendPort);
 
-          AppComponent.Input.MakeRemoteConnection(new IPEndPoint(broadcasterEndpoint.Address, tcpPort));
+          // TouchlessComponent.Input.MakeRemoteConnection(new IPEndPoint(broadcasterEndpoint.Address, tcpPort));
 
           _sendReady = true;
         }

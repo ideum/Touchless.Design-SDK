@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace TouchlessDesign.Config
+namespace TouchlessDesignCore.Config
 {
   public class IpInfo
   {

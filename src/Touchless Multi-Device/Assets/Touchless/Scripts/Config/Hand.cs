@@ -1,6 +1,6 @@
 ﻿using Leap;
 
-namespace TouchlessDesign.Components.Input
+namespace TouchlessDesignCore.Components.Input
 {
   public class Hand
   {

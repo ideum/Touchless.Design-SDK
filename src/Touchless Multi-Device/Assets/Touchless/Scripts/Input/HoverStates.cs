@@ -1,4 +1,4 @@
-﻿namespace TouchlessDesign
+﻿namespace TouchlessDesignCore
 {
   public enum HoverStates
   {

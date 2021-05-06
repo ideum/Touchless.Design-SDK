@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace TouchlessDesign.Components.Input.Providers
+namespace TouchlessDesignCore.Components.Input.Providers
 {
 
   /// <summary>

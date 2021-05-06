@@ -1,5 +1,5 @@
 ﻿
-namespace TouchlessDesign.Config
+namespace TouchlessDesignCore.Config
 {
   public class DisplayInfo
   {

@@ -9,8 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6084214847058787365}
-  - component: {fileID: 6084214847058787364}
   - component: {fileID: 6084214847058787367}
+  - component: {fileID: 1703445575872969089}
   m_Layer: 0
   m_Name: Touchless
   m_TagString: Untagged
@@ -32,24 +32,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6084214847058787364
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6084214847058787362}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c7274de0e3238ca4f87fe69c0c8fcd19, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Canvas: {fileID: 0}
-  GraphicRaycaster: {fileID: 0}
-  TouchlessInput: {fileID: 6084214847058787367}
-  DebugHands: 1
-  TouchlessUserPrefab: {fileID: 1471393187971545801, guid: 897c2fc084873984d95704d5aa5f778b,
-    type: 3}
 --- !u!114 &6084214847058787367
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -62,3 +44,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c62b32072f9b2d4abcd0a566775ac7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1703445575872969089
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6084214847058787362}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76f7a687bd4df1d418cf82c84dd3ca2f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Canvas: {fileID: 0}
+  GraphicRaycaster: {fileID: 0}
+  TouchlessInput: {fileID: 6084214847058787367}
+  DebugHands: 0
+  AddTouchlessInputModule: 1
+  TouchlessUserPrefab: {fileID: 1471393187971545801, guid: 897c2fc084873984d95704d5aa5f778b,
+    type: 3}

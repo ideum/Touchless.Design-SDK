@@ -6,7 +6,7 @@ using System.Net.Sockets;
 using System.Threading;
 using UnityEngine;
 
-namespace TouchlessDesign.Components.Ipc.Networking.Tcp
+namespace TouchlessDesignCore.Components.Ipc.Networking.Tcp
 {
   public class TcpConnection : Connection
   {

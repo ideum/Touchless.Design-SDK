@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace TouchlessDesign.Config
+namespace TouchlessDesignCore.Config
 {
   public class ConfigInput : ConfigBase<ConfigInput>
   {

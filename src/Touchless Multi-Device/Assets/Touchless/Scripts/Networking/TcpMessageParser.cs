@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace TouchlessDesign.Components.Ipc.Networking.Tcp
+namespace TouchlessDesignCore.Components.Ipc.Networking.Tcp
 {
   public class TcpMessageParser : Parser
   {

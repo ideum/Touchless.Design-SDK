@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 using UnityEngine;
 
 
-namespace TouchlessDesign.Config
+namespace TouchlessDesignCore.Config
 {
 
   public class Factory
@@ -22,7 +22,7 @@ namespace TouchlessDesign.Config
         if (File.Exists(path))
         {
           var raw = File.ReadAllText(path);
-          Debug.Log($"Loaded Config at {path}. Parsing...");
+          // Debug.Log($"Loaded Config at {path}. Parsing...");
           var i = JsonConvert.DeserializeObject<T>(raw);
           i.FilePath = path;
           return i;

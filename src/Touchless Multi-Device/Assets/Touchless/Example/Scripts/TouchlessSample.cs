@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace TouchlessDesign.Examples
+namespace TouchlessDesignCore.Examples
 {
   public class TouchlessSample : MonoBehaviour
   {
