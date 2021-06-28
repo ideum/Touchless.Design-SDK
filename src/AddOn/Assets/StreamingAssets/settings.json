@@ -1,3 +1,4 @@
 {
-    "ScreenNumber": 1
+    "ScreenNumber": 1,
+    "ForcePedestal": false
 }

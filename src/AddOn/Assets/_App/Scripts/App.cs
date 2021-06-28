@@ -23,9 +23,12 @@ public class App : MonoBehaviour
   public GameObject BigScreen;
   public GameObject PedestalScreen;
 
+  private bool _forcePedestalDisplay;
+
   // Sets the screen to whatever is specified in the settings file. Initialize the TouchlessDesign and path directory to Service and subscribe to OnConnect and OnDisconnect events.
   void Awake() {
     int screen = 0;
+    bool forcePedestal = false;
     try {
       var path = Path.Combine(Application.streamingAssetsPath, "settings.json");
       if (File.Exists(path)) {
@@ -33,6 +36,11 @@ public class App : MonoBehaviour
         var obj = JObject.Parse(json);
         if (int.TryParse(obj["ScreenNumber"].ToString(), out screen)) {
           Log.Info("Screen set to " + screen);
+        }
+        if(bool.TryParse(obj["ForcePedestal"].ToString(), out forcePedestal))
+        {
+          Log.Info("Pedestal display forced: " + forcePedestal);
+          _forcePedestalDisplay = forcePedestal;
         }
       }
     } catch (Exception e) {
@@ -100,11 +108,20 @@ public class App : MonoBehaviour
 
   // Response to the addon information query. Scales the application to fit the pixel ratio of the screen.
   private void HandleAddOnQuery(bool hasScreen, bool hasLEDs, int width_px, int height_px, int width_mm, int height_mm) {
-    BigScreen.SetActive(width_px != height_px);
-    PedestalScreen.SetActive(width_px == height_px);
+    if(_forcePedestalDisplay)
+    {
+      PedestalScreen.SetActive(true);
+      BigScreen.SetActive(false);
+    }
+    else
+    {
+      PedestalScreen.SetActive(width_px == height_px);
+      BigScreen.SetActive(width_px != height_px);
+    }
 
     Log.Info($"{hasScreen}, {hasLEDs}, {width_px}, {height_px}, {width_mm}, {height_mm}");
     if (!hasScreen) return;
+    if (_forcePedestalDisplay) return;
     float scaledX = Scalar.localScale.x * (width_mm / height_mm) / (width_px / height_px);
     Scalar.localScale = new Vector2(scaledX, Scalar.localScale.y);
   }
