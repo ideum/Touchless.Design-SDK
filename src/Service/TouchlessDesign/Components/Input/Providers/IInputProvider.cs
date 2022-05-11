@@ -21,7 +21,7 @@ namespace TouchlessDesign.Components.Input.Providers {
     /// </summary>
     /// <param name="hands">list to update and populate with Hand instances.</param>
     /// <returns>true if this provider is active and functioning, false otherwise.</returns>
-    bool Update(Dictionary<int, Hand> hands);
+    bool Update(Dictionary<int, List<Hand>> hands);
 
     /// <summary>
     /// Called to initialize and then start this input provider.

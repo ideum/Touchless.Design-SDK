@@ -30,12 +30,13 @@ namespace TouchlessDesign.Components.Remote {
     private bool _sendReady = false;
     private bool _running = false;
 
-    public void SendHandData(Hand[] hands) {
+    public void SendHandData(int deviceId, Hand[] hands) {
       //Log.Debug("SENDING HAND DATA");
       if (!_sendReady) return;
 
       Msg msg = Msg.Factories.HandMessage();
       msg.Hands = hands;
+      msg.DeviceId = deviceId;
 
       var data = Encoding.UTF8.GetBytes(msg.Serialize());
 

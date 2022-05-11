@@ -79,7 +79,7 @@ namespace TouchlessDesign.Components.Input
       DeinitializeInputProvider();
       DeInitializeClickHandling();
       DeInitializeHooks();
-
+      
       if (Config.General.RemoteProviderMode) {
         _udpClient?.Stop();
       }
@@ -95,7 +95,7 @@ namespace TouchlessDesign.Components.Input
           _remoteClient.Bind(this);
           _remoteClientActive = true;
           Log.Info("Connected. Attempting to register as a remote client");
-          _remoteClient.Send(new Msg(Msg.Types.RegisterRemoteClient));
+          _remoteClient.Send(new Msg(Msg.Types.RegisterRemoteClient, Config.General.DeviceID));
         }
       } catch (Exception e) {
         Log.Error($"Connection error: {e}");
@@ -134,7 +134,9 @@ namespace TouchlessDesign.Components.Input
         }
 
         if (_udpClient.AvailableToSend) {
-          _udpClient.SendHandData(_hands.Values.ToArray());
+          foreach (var handPairs in _hands) {
+            _udpClient.SendHandData(handPairs.Key, handPairs.Value.ToArray());
+          }
         }
       }
       QueryClickAndHoverState();
@@ -199,7 +201,7 @@ namespace TouchlessDesign.Components.Input
 
     #region Input Provider
 
-    private readonly Dictionary<int, Hand> _hands = new Dictionary<int, Hand>();
+    private readonly Dictionary<int, List<Hand>> _hands = new Dictionary<int, List<Hand>>();
     private Timer _inputProviderTimer;
     private IInputProvider _provider;
 
@@ -273,7 +275,7 @@ namespace TouchlessDesign.Components.Input
               _hasClicked = false;
             }
           } else {
-            var hand = _hands.Values.First();
+            var hand = _hands.Values.First().First();
             HandCount.Value = _hands.Values.Count;
 
             //position

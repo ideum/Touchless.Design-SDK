@@ -8,27 +8,35 @@
              xmlns:c="clr-namespace:TouchlessDesign.Components.Ui.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-  <d:UserControl.DataContext>
-    <viewModels:GeneralViewModel />
-  </d:UserControl.DataContext>
-  <Grid Margin="8">
-    <ui:SimpleStackPanel Spacing="5">
-      <c:BoolControl Value="{Binding StartOnStartup}" 
+    <d:UserControl.DataContext>
+        <viewModels:GeneralViewModel />
+    </d:UserControl.DataContext>
+    <Grid Margin="8">
+        <ui:SimpleStackPanel Spacing="5">
+            <c:BoolControl Value="{Binding StartOnStartup}" 
                      Header="Start When Windows Starts" 
                      LabelMinWidth="180"/>
-      <c:BoolControl Value="{Binding ShowUiOnStartup}" 
+            <c:BoolControl Value="{Binding ShowUiOnStartup}" 
                      Header="Show UI On Startup" 
                      LabelMinWidth="180"/>
-      <c:NumberControl Value="{Binding UiStartupDelay}" 
+            <c:NumberControl Value="{Binding UiStartupDelay}" 
                        Header="UI Startup Delay (ms)"
                        Min="0"
                        Max="15000"
                        NumberFormatter="{StaticResource IntNumberFormatter}"
                        LabelMinWidth="180"/>
-      <c:BoolControl Value="{Binding RemoteProviderMode}"
+            <c:BoolControl Value="{Binding RemoteProviderMode}"
                      Header="Remote Provider Mode"
                      LabelMinWidth="180"/>
-      <Button Click="HandleOpenDirectoryClicked" Margin="0 6 0 0">Open Directory</Button>
-    </ui:SimpleStackPanel>
-  </Grid>
+            <c:NumberControl Value="{Binding DeviceId, Mode=TwoWay}"
+                       Header="Device ID"
+                       ShowSlider="False"
+                       Min="0"
+                       Max="15000"
+                       SmallChange="1" LargeChange="10"
+                       NumberFormatter="{StaticResource IntNumberFormatter}"
+                       LabelMinWidth="150"/>
+            <Button Click="HandleOpenDirectoryClicked" Margin="0 6 0 0">Open Directory</Button>
+        </ui:SimpleStackPanel>
+    </Grid>
 </UserControl>

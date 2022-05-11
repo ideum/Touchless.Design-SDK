@@ -96,6 +96,9 @@ namespace TouchlessDesign.Components.Ipc {
     [JsonProperty("Hands")]
     public Hand[] Hands;
 
+    [JsonProperty("Users")]
+    public int[] Users;
+
     [JsonProperty("DeviceId")]
     public int DeviceId;
 
@@ -104,12 +107,12 @@ namespace TouchlessDesign.Components.Ipc {
     #region Constructors
 
     public Msg() {
-
     }
 
-    public Msg(Types type, bool? boolValue = null, int? x = null, int? y = null, int? w = null, int? h = null, string s = null, float? f1 = null, int priority = 0) {
+    public Msg(Types type, int deviceId = 0, bool? boolValue = null, int? x = null, int? y = null, int? w = null, int? h = null, string s = null, float? f1 = null, int priority = 0) {
       Type = type;
       Bool = boolValue;
+      DeviceId = deviceId;
       X = x;
       Y = y;
       W = w;

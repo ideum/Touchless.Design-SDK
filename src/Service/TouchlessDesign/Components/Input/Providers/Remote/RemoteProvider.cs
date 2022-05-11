@@ -45,7 +45,7 @@ namespace TouchlessDesign.Components.Input.Providers.Remote {
       _server.Stop();
     }
 
-    public bool Update(Dictionary<int, Hand> hands) {
+    public bool Update(Dictionary<int, List<Hand>> hands) {
       if (!_server.Running) {
         return false;
       }
@@ -54,9 +54,12 @@ namespace TouchlessDesign.Components.Input.Providers.Remote {
       }
       _updateFlag = false;
       lock (_lock) {
-        hands.Clear();
-        foreach (var handKey in _handBuffer) {
-          hands.Add()
+        //hands.Clear();
+        foreach (var handKey in hands) {
+          handKey.Value.Clear();
+          foreach (Hand hand in _handBuffer[handKey.Key]) {
+            handKey.Value.Add(hand);
+          }
         }
         //foreach(Hand h in _handBuffer) {
         //  hands.Add(h.Id, h);

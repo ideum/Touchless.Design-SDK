@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
+using System.Linq;
 using Leap;
 
 namespace TouchlessDesign.Components.Input.Providers.LeapMotion {
@@ -38,21 +39,23 @@ namespace TouchlessDesign.Components.Input.Providers.LeapMotion {
       Log.Info("Leap Disconnected");
     }
 
-    public bool Update(Dictionary<int, Hand> hands) {
+    public bool Update(Dictionary<int, List<Hand>> hands) {
       if (_controller == null || !_controller.IsConnected) {
         return false;
       }
+      var handList = hands.First().Value;
       var f = _controller.Frame(0);
-      _handsToRemoveBuffer.AddRange(hands.Values);
+      _handsToRemoveBuffer.AddRange(handList);
       foreach (var leapHand in f.Hands) {
-        if (hands.TryGetValue(leapHand.Id, out var hand)) {
-          hand.Apply(leapHand, _xform);
+        Hand foundHand = handList.Find(h => h.Id == leapHand.Id);
+        if (foundHand != null) {
+          foundHand.Apply(leapHand, _xform);
         }
         else {
-          hand = new Hand(leapHand, _xform);
-          hands.Add(leapHand.Id, hand);
+          foundHand = new Hand(leapHand, _xform);
+          handList.Add(foundHand);
         }
-        _handsToRemoveBuffer.Remove(hand); //prevent this hand from being removed
+        _handsToRemoveBuffer.Remove(foundHand); //prevent this hand from being removed
       }
 
       foreach (var hand in _handsToRemoveBuffer) { //remove all hands that were not added or updated this frame

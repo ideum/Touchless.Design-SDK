@@ -86,28 +86,30 @@ namespace TouchlessDesign.Components.Input.Providers.RealSense {
     //  HSVUpdate?.Invoke(values);
     //}
 
-    public bool Update(Dictionary<int, Hand> hands) {
+    public bool Update(Dictionary<int, List<Hand>> hands) {
       if(!_listener.ClientFound || !_listener.Running) {
         return false;
       }
       if (!_handUpdateFlag) {
         return true;
       }
-      _handsToRemoveBuffer.AddRange(hands.Values);
-      lock (_lock) {
-        foreach (var rHand in _handBuffer) {
-          if(hands.TryGetValue(rHand.Id, out var hand)) {
-            hand.Apply(rHand, _xform);
-          } else {
-            hand = new Hand(rHand, _xform);
-            hands.Add(rHand.Id, hand);
-          }
-          _handsToRemoveBuffer.Remove(hand);
-        }
-      }
-      foreach(var hand in _handsToRemoveBuffer) {
-        hands.Remove(hand.Id);
-      }
+      return false;
+
+      //_handsToRemoveBuffer.AddRange(hands.Values);
+      //lock (_lock) {
+      //  foreach (var rHand in _handBuffer) {
+      //    if(hands.TryGetValue(rHand.Id, out var hand)) {
+      //      hand.Apply(rHand, _xform);
+      //    } else {
+      //      hand = new Hand(rHand, _xform);
+      //      hands.Add(rHand.Id, hand);
+      //    }
+      //    _handsToRemoveBuffer.Remove(hand);
+      //  }
+      //}
+      //foreach(var hand in _handsToRemoveBuffer) {
+      //  hands.Remove(hand.Id);
+      //}
       _handsToRemoveBuffer.Clear();
       _handUpdateFlag = false;
       return true;

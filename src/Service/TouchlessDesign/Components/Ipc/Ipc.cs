@@ -137,7 +137,9 @@ namespace TouchlessDesign.Components.Ipc {
             Log.Info($"Querying for users");
             break;
           case Msg.Types.SubscribeToUserChanges:
-
+            if(!_usersInterestingClients.Contains(c)) {
+              _usersInterestingClients.Add(c);
+            }
             break;
           default:
             throw new ArgumentOutOfRangeException();
