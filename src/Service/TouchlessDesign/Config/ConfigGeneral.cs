@@ -7,6 +7,7 @@ namespace TouchlessDesign.Config {
     public bool ShowUiOnStartup = false;
     public int UiStartUpDelay = 0;
     public bool RemoteProviderMode = false;
+    public int DeviceID;
 
     private const string Filename = "general.json";
 

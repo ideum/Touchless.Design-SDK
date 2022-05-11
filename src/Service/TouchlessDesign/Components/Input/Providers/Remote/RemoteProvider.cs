@@ -14,7 +14,7 @@ namespace TouchlessDesign.Components.Input.Providers.Remote {
     private bool _updateFlag = false;
 
     private object _lock;
-    private List<Hand> _handBuffer = new List<Hand>();
+    private Dictionary<int, List<Hand>> _handBuffer = new Dictionary<int, List<Hand>>();
 
     private Timer _broadcastTimer;
     private int _broadcastInterval;
@@ -55,9 +55,12 @@ namespace TouchlessDesign.Components.Input.Providers.Remote {
       _updateFlag = false;
       lock (_lock) {
         hands.Clear();
-        foreach(Hand h in _handBuffer) {
-          hands.Add(h.Id, h);
+        foreach (var handKey in _handBuffer) {
+          hands.Add()
         }
+        //foreach(Hand h in _handBuffer) {
+        //  hands.Add(h.Id, h);
+        //}
       }
       return true;
     }
@@ -75,8 +78,13 @@ namespace TouchlessDesign.Components.Input.Providers.Remote {
       }
 
       lock (_lock) {
+        //bool userRegistered = AppComponent.Input.RegisteredUsers.TryGetValue(msg.DeviceId, out TouchlessUser user);
+        //if(userRegistered) {
+        //  user.Hands.Clear();
+        //  user.Hands = msg.Hands.ToList();
+        //}
         _handBuffer.Clear();
-        _handBuffer = msg.Hands.ToList();
+        _handBuffer[msg.DeviceId] = msg.Hands.ToList();
         _updateFlag = true;
       }
     }

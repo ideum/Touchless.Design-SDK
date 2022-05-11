@@ -99,6 +99,7 @@
     <Compile Include="Components\Input\Providers\LeapMotion\LeapSettings.cs" />
     <Compile Include="Components\Input\Providers\Remote\RemoteClient.cs" />
     <Compile Include="Components\Input\Providers\Remote\RemoteProvider.cs" />
+    <Compile Include="Components\Input\TouchlessUser.cs" />
     <Compile Include="Components\Ipc\Networking\Udp\UdpConnection.cs" />
     <Compile Include="Components\Ipc\Networking\Udp\UdpServer.cs" />
     <Compile Include="Components\Ui\Controls\BoolControl.xaml.cs">
@@ -166,6 +167,7 @@
     <Compile Include="Components\Ui\ViewModels\TestVM.cs" />
     <Compile Include="Components\Ui\ViewModels\VM.cs" />
     <Compile Include="Config\Config.cs" />
+    <Compile Include="Config\ConfigRemoteUsers.cs" />
     <Compile Include="Config\DisplayInfo.cs" />
     <Compile Include="Config\ConfigDisplay.cs" />
     <Compile Include="Config\ConfigGeneral.cs" />

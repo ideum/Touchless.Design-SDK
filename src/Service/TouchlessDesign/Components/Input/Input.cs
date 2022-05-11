@@ -34,6 +34,8 @@ namespace TouchlessDesign.Components.Input
 
     public Property<bool> IsOnboardingActive { get; } = new Property<bool>(false);
 
+    public Dictionary<int, TouchlessUser> RegisteredUsers;
+
     // Any message trying to set hand/click/notouch state with a lower priority than this value, will be ignored.
     public Property<int> ClientPriority { get; } = new Property<int>(0);
 
@@ -56,6 +58,7 @@ namespace TouchlessDesign.Components.Input
     private bool _remoteClientActive = false;
 
     private RemoteClient _udpClient;
+    private RemoteClient _userDataClient;
 
     protected override void DoStart() {
       InitializeHooks();
@@ -91,6 +94,8 @@ namespace TouchlessDesign.Components.Input
           _remoteClient = new Client(connection, parser);
           _remoteClient.Bind(this);
           _remoteClientActive = true;
+          Log.Info("Connected. Attempting to register as a remote client");
+          _remoteClient.Send(new Msg(Msg.Types.RegisterRemoteClient));
         }
       } catch (Exception e) {
         Log.Error($"Connection error: {e}");
@@ -301,8 +306,6 @@ namespace TouchlessDesign.Components.Input
         } catch (Exception e) {
           Log.Error($"Caught exception while updating input provider: {e}");
         }
-
-
       }
     }
 

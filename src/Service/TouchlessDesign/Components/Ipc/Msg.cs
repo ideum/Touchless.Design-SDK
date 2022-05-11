@@ -33,7 +33,10 @@ namespace TouchlessDesign.Components.Ipc {
       Hands,
       SetPriority,
       OnboardingQuery,
-      SetOnboarding
+      SetOnboarding,
+      RegisterRemoteClient,
+      UsersQuery,
+      SubscribeToUserChanges
     }
 
     [JsonProperty("T")]
@@ -92,6 +95,9 @@ namespace TouchlessDesign.Components.Ipc {
 
     [JsonProperty("Hands")]
     public Hand[] Hands;
+
+    [JsonProperty("DeviceId")]
+    public int DeviceId;
 
     #endregion
 
@@ -247,12 +253,11 @@ namespace TouchlessDesign.Components.Ipc {
       }
 
       public static Msg AddOnQuery() {
-        return new Msg {Type = Types.AddOnQuery};
+        return new Msg { Type = Types.AddOnQuery };
       }
 
       public static Msg AddOnQuery(bool hasSecondScreen, bool hasLEDs, int width_px = 0, int height_px = 0, int width_mm = 0, int height_mm = 0) {
-        return new Msg
-          {Type = Types.AddOnQuery, Bool = hasSecondScreen, Bool2 = hasLEDs, X = width_px, Y = height_px, W = width_mm, H = height_mm};
+        return new Msg { Type = Types.AddOnQuery, Bool = hasSecondScreen, Bool2 = hasLEDs, X = width_px, Y = height_px, W = width_mm, H = height_mm };
       }
 
       public static Msg SettingsMessage(ConfigDisplay config) {
@@ -289,6 +294,14 @@ namespace TouchlessDesign.Components.Ipc {
 
       public static Msg SetOnboardingMessage(bool onboardingActive) {
         return new Msg { Type = Types.SetOnboarding, Bool = onboardingActive };
+      }
+
+      public static Msg RegistrationMessage() {
+        return new Msg { Type = Types.RegisterRemoteClient };
+      }
+
+      public static Msg UsersQuery() {
+        return new Msg { Type = Types.UsersQuery };
       }
     }
 
@@ -665,5 +678,5 @@ namespace TouchlessDesign.Components.Ipc {
     }
 
     #endregion
-  } 
+  }
 }

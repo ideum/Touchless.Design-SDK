@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using TouchlessDesign.Components.Ipc.Networking;
 using TouchlessDesign.Components.Ipc.Networking.Tcp;
 using TouchlessDesign.Config;
+using System.Linq;
+using TouchlessDesign.Components.Input;
 
 namespace TouchlessDesign.Components.Ipc {
   public class Ipc : AppComponent, Server.IListener {
@@ -10,6 +12,7 @@ namespace TouchlessDesign.Components.Ipc {
     protected override void DoStart() {
       InitializeServers();
       _settingsInterestedClients = new List<Client>();
+      _usersInterestingClients = new List<Client>();
     }
 
     protected override void DoStop() {
@@ -17,6 +20,7 @@ namespace TouchlessDesign.Components.Ipc {
     }
 
     private List<Client> _settingsInterestedClients;
+    private List<Client> _usersInterestingClients;
 
     #region Message Processing
 
@@ -27,6 +31,7 @@ namespace TouchlessDesign.Components.Ipc {
     /// <param name="send">Invoked to send a Msg instance to the desired end point</param>
     public void ProcessMsg(Msg msg, Client c) {
       try {
+        var isRegisteredUser = Input.RegisteredUsers.TryGetValue(msg.DeviceId, out TouchlessUser user);
         switch (msg.Type) {
           case Msg.Types.None:
             break;
@@ -34,6 +39,10 @@ namespace TouchlessDesign.Components.Ipc {
             if (msg.ContainsIncomingServerSideData && msg.Priority >= Input.ClientPriority.Value) {
               Log.Warn($"Changing Hover {Input.HoverState.Value} to {msg.HoverState}");
               Input.HoverState.Value = msg.HoverState;
+            }
+            if (isRegisteredUser) {
+              Log.Warn($"Changing Hover for user {msg.DeviceId} to {msg.HoverState}");
+              user.HoverState = msg.HoverState;
             }
             break;
           case Msg.Types.HoverQuery:
@@ -55,14 +64,19 @@ namespace TouchlessDesign.Components.Ipc {
             break;
           case Msg.Types.Click:
             if (msg.ContainsIncomingServerSideData) {
+              if (isRegisteredUser) {
+                user.IsButtonDown = true;
+              }
               Input.SetMouseButtonDown(msg.Bool.Value);
             }
             break;
           case Msg.Types.ClickQuery:
-            c.Send(Msg.Factories.ClickQuery(Input.IsButtonDown.Value));
+            if (isRegisteredUser)
+              c.Send(Msg.Factories.ClickQuery(user.IsButtonDown));
             break;
           case Msg.Types.ClickAndHoverQuery:
-            c.Send(Msg.Factories.ClickAndHoverQuery(Input.IsButtonDown.Value, Input.HoverState.Value));
+            if (isRegisteredUser)
+              c.Send(Msg.Factories.ClickAndHoverQuery(user.IsButtonDown, user.HoverState));
             break;
           case Msg.Types.Ping:
             c.Send(Msg.Factories.Ping());
@@ -78,10 +92,10 @@ namespace TouchlessDesign.Components.Ipc {
           case Msg.Types.AddOnQuery:
             var dims_px = Ui.AddOnScreenBounds;
             c.Send(Msg.Factories.AddOnQuery(
-              Ui.HasAddOnScreen, 
-              Lighting.NetworkState == TouchlessDesign.Components.Lighting.Lighting.NetworkStates.Connected, 
-              dims_px.Width, 
-              dims_px.Height, 
+              Ui.HasAddOnScreen,
+              Lighting.NetworkState == TouchlessDesign.Components.Lighting.Lighting.NetworkStates.Connected,
+              dims_px.Width,
+              dims_px.Height,
               Ui.AddOnWidth_mm,
               Ui.AddOnHeight_mm));
             break;
@@ -107,6 +121,24 @@ namespace TouchlessDesign.Components.Ipc {
           case Msg.Types.SetOnboarding:
             Input.IsOnboardingActive.Value = msg.Bool.Value;
             break;
+          case Msg.Types.RegisterRemoteClient:
+            if (!Input.RegisteredUsers.ContainsKey(msg.DeviceId)) {
+              Input.RegisteredUsers.Add(msg.DeviceId, new TouchlessUser { Client = c });
+              Log.Info($"Registered User {msg.DeviceId}");
+              foreach (Client interestedClient in _usersInterestingClients) {
+                // Let em know we registered a user
+              }
+            }
+            else {
+              Log.Info($"User {msg.DeviceId} tried to register, but is already in the system.");
+            }
+            break;
+          case Msg.Types.UsersQuery:
+            Log.Info($"Querying for users");
+            break;
+          case Msg.Types.SubscribeToUserChanges:
+
+            break;
           default:
             throw new ArgumentOutOfRangeException();
         }
@@ -115,6 +147,8 @@ namespace TouchlessDesign.Components.Ipc {
         Log.Error($"Caught exception at process msg: {e}");
       }
     }
+
+
 
     #endregion
 
@@ -164,18 +198,41 @@ namespace TouchlessDesign.Components.Ipc {
       }
     }
 
+    public void SendUsersMessage() {
+      Msg msg = Msg.Factories.UsersQuery();
+      foreach (Client c in _usersInterestingClients) {
+        c.Send(msg);
+      }
+    }
+
     public void ServerStarted(Server s) {
+
     }
 
     public void ServerStopped(Server s) {
+
     }
 
     public void ClientConnected(Client c) {
+
     }
 
     public void ClientDisconnected(Client c) {
       if (_settingsInterestedClients.Contains(c)) {
         _settingsInterestedClients.Remove(c);
+      }
+
+      if (_usersInterestingClients.Contains(c)) {
+        _usersInterestingClients.Remove(c);
+      }
+
+      var userKeys = Input.RegisteredUsers.Keys;
+      foreach (var userKey in userKeys) {
+        if (Input.RegisteredUsers[userKey].Client == c) {
+          Log.Info($"User with ID {userKey} has disconnected.");
+          Input.RegisteredUsers.Remove(userKey);
+          break;
+        }
       }
     }
 
