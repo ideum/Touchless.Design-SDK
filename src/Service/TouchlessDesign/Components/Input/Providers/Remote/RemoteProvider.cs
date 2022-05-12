@@ -45,7 +45,7 @@ namespace TouchlessDesign.Components.Input.Providers.Remote {
       _server.Stop();
     }
 
-    public bool Update(Dictionary<int, List<Hand>> hands) {
+    public bool Update(Dictionary<int, TouchlessUser> users) {
       if (!_server.Running) {
         return false;
       }
@@ -55,10 +55,13 @@ namespace TouchlessDesign.Components.Input.Providers.Remote {
       _updateFlag = false;
       lock (_lock) {
         //hands.Clear();
-        foreach (var handKey in hands) {
-          handKey.Value.Clear();
-          foreach (Hand hand in _handBuffer[handKey.Key]) {
-            handKey.Value.Add(hand);
+        foreach (var userKeyValue in users) {
+          var user = userKeyValue.Value;
+          user.Hands.Clear();
+          if(_handBuffer.ContainsKey(userKeyValue.Key)) {
+            foreach (Hand hand in _handBuffer[userKeyValue.Key]) {
+              user.Hands.Add(hand);
+            }
           }
         }
         //foreach(Hand h in _handBuffer) {
@@ -80,14 +83,15 @@ namespace TouchlessDesign.Components.Input.Providers.Remote {
         return;
       }
 
+      Log.Info($"Recieved message from Device {msg.DeviceId}");
       lock (_lock) {
-        //bool userRegistered = AppComponent.Input.RegisteredUsers.TryGetValue(msg.DeviceId, out TouchlessUser user);
-        //if(userRegistered) {
-        //  user.Hands.Clear();
-        //  user.Hands = msg.Hands.ToList();
-        //}
         _handBuffer.Clear();
-        _handBuffer[msg.DeviceId] = msg.Hands.ToList();
+        if(!_handBuffer.ContainsKey(msg.DeviceId)) {
+          _handBuffer.Add(msg.DeviceId, msg.Hands.ToList());
+        }
+        else {
+          _handBuffer[msg.DeviceId] = msg.Hands.ToList();
+        }
         _updateFlag = true;
       }
     }

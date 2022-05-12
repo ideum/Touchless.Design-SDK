@@ -39,12 +39,13 @@ namespace TouchlessDesign.Components.Input.Providers.LeapMotion {
       Log.Info("Leap Disconnected");
     }
 
-    public bool Update(Dictionary<int, List<Hand>> hands) {
+    public bool Update(Dictionary<int, TouchlessUser> users) {
       if (_controller == null || !_controller.IsConnected) {
         return false;
       }
-      var handList = hands.First().Value;
-      var f = _controller.Frame(0);
+
+      List<Hand> handList = users.First().Value.Hands; // We're going to assume that the first user is the user that should be assigned hand data from a local input provider.
+      Frame f = _controller.Frame(0);
       _handsToRemoveBuffer.AddRange(handList);
       foreach (var leapHand in f.Hands) {
         Hand foundHand = handList.Find(h => h.Id == leapHand.Id);
@@ -59,13 +60,11 @@ namespace TouchlessDesign.Components.Input.Providers.LeapMotion {
       }
 
       foreach (var hand in _handsToRemoveBuffer) { //remove all hands that were not added or updated this frame
-        hands.Remove(hand.Id);
+        handList.RemoveAll(h => h.Id == hand.Id);
       }
       _handsToRemoveBuffer.Clear();
       return true;
     }
-
-
 
     //private void HandleTimerTick(object state) {
     //  if (_controller == null || !_controller.IsConnected) return;

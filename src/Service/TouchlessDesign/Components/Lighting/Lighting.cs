@@ -54,32 +54,49 @@ namespace TouchlessDesign.Components.Lighting {
     private States _state;
 
     private void InitializeStateHandling() {
-      Input.HoverState.AddChangedListener(HandleHoverStateChanged, false);
+      //Input.HoverState.AddChangedListener(HandleHoverStateChanged, false);
+      Input.StateUserHoverChanged += HandleHoverStateChanged;
       Input.IsNoTouch.AddChangedListener(HandleIsNoTouchChanged, false);
-      Input.IsButtonDown.AddChangedListener(HandleInputButtonDownChanged, true);
+      //Input.IsButtonDown.AddChangedListener(HandleInputButtonDownChanged, true);
+      Input.StateUserButtonChanged += HandleInputButtonDownChanged;
     }
 
     private void DeInitializeStateHandling() {
-      Input.HoverState.RemoveChangedListener(HandleHoverStateChanged);
+      //Input.HoverState.RemoveChangedListener(HandleHoverStateChanged);
       Input.IsNoTouch.RemoveChangedListener(HandleIsNoTouchChanged);
-      Input.IsButtonDown.RemoveChangedListener(HandleInputButtonDownChanged);
-
+      //Input.IsButtonDown.RemoveChangedListener(HandleInputButtonDownChanged);
+      Input.StateUserButtonChanged -= HandleInputButtonDownChanged;
     }
 
-    private void HandleHoverStateChanged(Property<HoverStates> property, HoverStates oldValue, HoverStates value) {
-      var state = MapHoverStateToState(value, Input.IsButtonDown.Value, Input.IsNoTouch.Value);
+    private void HandleHoverStateChanged(HoverStates oldState, HoverStates newState) {
+      var state = MapHoverStateToState(newState, Input.stateUser.IsButtonDown.Value, Input.IsNoTouch.Value);
       SetState(state);
     }
+
+    
+
+    //private void HandleHoverStateChanged(Property<HoverStates> property, HoverStates oldValue, HoverStates value) {
+    //  var state = MapHoverStateToState(value, Input.IsButtonDown.Value, Input.IsNoTouch.Value);
+    //  SetState(state);
+    //}
 
 
     private void HandleIsNoTouchChanged(Property<bool> property, bool oldValue, bool value) {
-      var state = MapHoverStateToState(Input.HoverState.Value, Input.IsButtonDown.Value, value);
+      if(Input.stateUser == null) {
+        Log.Error("No touch invoked, but there's no user");
+        return;
+      }
+      var state = MapHoverStateToState(Input.stateUser.HoverState.Value, Input.stateUser.IsButtonDown.Value, value);
       SetState(state);
     }
 
-    private void HandleInputButtonDownChanged(Property<bool> property, bool oldValue, bool value) {
-      var state = MapHoverStateToState(Input.HoverState.Value, value, Input.IsNoTouch.Value);
-      SetState(state);
+    //private void HandleInputButtonDownChanged(Property<bool> property, bool oldValue, bool value) {
+    //  var state = MapHoverStateToState(Input.HoverState.Value, value, Input.IsNoTouch.Value);
+    //  SetState(state);
+    //}
+
+    private void HandleInputButtonDownChanged(bool oldValue, bool newValue) {
+      var state = MapHoverStateToState(Input.stateUser.HoverState.Value, newValue, Input.IsNoTouch.Value);
     }
 
     private void SetState(States state) {

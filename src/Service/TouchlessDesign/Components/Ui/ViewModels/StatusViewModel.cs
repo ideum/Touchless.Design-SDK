@@ -120,11 +120,11 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
       var mc = $"{i.MouseDownConfidence:0.000}";
       i.GetComputedPosition(out var x, out var y);
       OverallOpacity = em ? 1 : 0.5;
-      HoverState = i.HoverState.Value.ToString();
+      HoverState = i.stateUser != null ? i.stateUser.HoverState.Value.ToString() : "N/A";
       MouseEmulation = em ? "Enabled" : "Disabled";
-      MouseDownStatus = i.IsButtonDown.Value ? $"Down ({mc})" : $"Up ({mc})";
+      MouseDownStatus = i.stateUser != null ? (i.stateUser.IsButtonDown.Value ? $"Down ({mc})" : $"Up ({mc})") : "N/A";
       MousePosition = $"x:{x,5}, y:{y,5}";
-      MouseDownStatusColor = i.IsButtonDown.Value ? SelectedBrush : NormalBrush;
+      MouseDownStatusColor = i.stateUser != null ? (i.stateUser.IsButtonDown.Value ? SelectedBrush : NormalBrush) : NormalBrush;
       ClickStatus = i.GetIsClicking() ? "True" : "False";
       ClickStatusBrush = i.GetIsClicking() ? SelectedBrush : NormalBrush;
       ConnectedClients = n.ClientsCount.ToString();

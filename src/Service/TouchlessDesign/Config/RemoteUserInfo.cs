@@ -7,6 +7,6 @@ using System.Threading.Tasks;
 namespace TouchlessDesign.Config {
   public class RemoteUserInfo {
     public string IpAddress;
-    public int Id;
+    public int DeviceId;
   }
 }

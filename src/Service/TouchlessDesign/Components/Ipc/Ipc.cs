@@ -37,16 +37,18 @@ namespace TouchlessDesign.Components.Ipc {
             break;
           case Msg.Types.Hover:
             if (msg.ContainsIncomingServerSideData && msg.Priority >= Input.ClientPriority.Value) {
-              Log.Warn($"Changing Hover {Input.HoverState.Value} to {msg.HoverState}");
-              Input.HoverState.Value = msg.HoverState;
+              Log.Warn($"Changing Hover {user.HoverState} to {msg.HoverState}");
+              user.HoverState.Value = msg.HoverState;
             }
             if (isRegisteredUser) {
               Log.Warn($"Changing Hover for user {msg.DeviceId} to {msg.HoverState}");
-              user.HoverState = msg.HoverState;
+              user.HoverState.Value = msg.HoverState;
             }
             break;
           case Msg.Types.HoverQuery:
-            c.Send(Msg.Factories.HoverQuery(Input.HoverState.Value));
+            if (isRegisteredUser) {
+              c.Send(Msg.Factories.HoverQuery(user.HoverState.Value));
+            }
             break;
           case Msg.Types.Quit:
 
@@ -55,7 +57,9 @@ namespace TouchlessDesign.Components.Ipc {
 
             break;
           case Msg.Types.DimensionsQuery:
-            c.Send(Msg.Factories.DimensionsQuery(Input.Bounds.Left, Input.Bounds.Top, Input.Bounds.Width, Input.Bounds.Height));
+            if (isRegisteredUser) {
+              c.Send(Msg.Factories.DimensionsQuery(user.Bounds.Left, user.Bounds.Top, user.Bounds.Width, user.Bounds.Height));
+            }
             break;
           case Msg.Types.Position:
             if (msg.ContainsIncomingServerSideData && msg.Priority >= Input.ClientPriority.Value) {
@@ -65,18 +69,20 @@ namespace TouchlessDesign.Components.Ipc {
           case Msg.Types.Click:
             if (msg.ContainsIncomingServerSideData) {
               if (isRegisteredUser) {
-                user.IsButtonDown = true;
+                // TODO: Send message to actual user client instead of just setting variables for that user.
+                user.IsButtonDown.Value = true;
               }
               Input.SetMouseButtonDown(msg.Bool.Value);
             }
             break;
           case Msg.Types.ClickQuery:
             if (isRegisteredUser)
-              c.Send(Msg.Factories.ClickQuery(user.IsButtonDown));
+              c.Send(Msg.Factories.ClickQuery(user.IsButtonDown.Value));
             break;
           case Msg.Types.ClickAndHoverQuery:
-            if (isRegisteredUser)
-              c.Send(Msg.Factories.ClickAndHoverQuery(user.IsButtonDown, user.HoverState));
+            if (isRegisteredUser) {
+              c.Send(Msg.Factories.ClickAndHoverQuery(user.IsButtonDown.Value, user.HoverState.Value));
+            }
             break;
           case Msg.Types.Ping:
             c.Send(Msg.Factories.Ping());
@@ -109,8 +115,10 @@ namespace TouchlessDesign.Components.Ipc {
           case Msg.Types.DisplaySettingsChanged:
             break;
           case Msg.Types.HandCountQuery:
-            int handCount = Input.HandCount.Value;
-            c.Send(Msg.Factories.HandCountQuery(handCount));
+            if (isRegisteredUser) {
+              int handCount = user.HandCount;
+              c.Send(Msg.Factories.HandCountQuery(handCount));
+            }
             break;
           case Msg.Types.SetPriority:
             Input.ClientPriority.Value = msg.Priority;
@@ -122,8 +130,11 @@ namespace TouchlessDesign.Components.Ipc {
             Input.IsOnboardingActive.Value = msg.Bool.Value;
             break;
           case Msg.Types.RegisterRemoteClient:
+            if(Config.Input.InputProvider != 1) {
+              Log.Warn($"User attempted to register, but the service is running in local mode");
+            }
             if (!Input.RegisteredUsers.ContainsKey(msg.DeviceId)) {
-              Input.RegisteredUsers.Add(msg.DeviceId, new TouchlessUser { Client = c });
+              Input.RegisteredUsers.Add(msg.DeviceId, new TouchlessUser(msg.DeviceId, c.Connection.Destination, c));
               Log.Info($"Registered User {msg.DeviceId}");
               foreach (Client interestedClient in _usersInterestingClients) {
                 // Let em know we registered a user
@@ -228,12 +239,14 @@ namespace TouchlessDesign.Components.Ipc {
         _usersInterestingClients.Remove(c);
       }
 
-      var userKeys = Input.RegisteredUsers.Keys;
-      foreach (var userKey in userKeys) {
-        if (Input.RegisteredUsers[userKey].Client == c) {
-          Log.Info($"User with ID {userKey} has disconnected.");
-          Input.RegisteredUsers.Remove(userKey);
-          break;
+      if(Input != null) { 
+        var userKeys = Input.RegisteredUsers.Keys;
+        foreach (var userKey in userKeys) {
+          if (Input.RegisteredUsers[userKey].Client == c) {
+            Log.Info($"User with ID {userKey} has disconnected.");
+            Input.RegisteredUsers.Remove(userKey);
+            break;
+          }
         }
       }
     }

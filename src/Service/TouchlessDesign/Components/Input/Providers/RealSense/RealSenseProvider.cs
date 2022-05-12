@@ -86,7 +86,7 @@ namespace TouchlessDesign.Components.Input.Providers.RealSense {
     //  HSVUpdate?.Invoke(values);
     //}
 
-    public bool Update(Dictionary<int, List<Hand>> hands) {
+    public bool Update(Dictionary<int, TouchlessUser> users) {
       if(!_listener.ClientFound || !_listener.Running) {
         return false;
       }
