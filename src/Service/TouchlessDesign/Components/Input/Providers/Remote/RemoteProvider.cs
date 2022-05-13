@@ -83,10 +83,10 @@ namespace TouchlessDesign.Components.Input.Providers.Remote {
         return;
       }
 
-      Log.Info($"Recieved message from Device {msg.DeviceId}");
       lock (_lock) {
         _handBuffer.Clear();
         if(!_handBuffer.ContainsKey(msg.DeviceId)) {
+          //Log.Info($"Recieved message from Device {msg.DeviceId}");
           _handBuffer.Add(msg.DeviceId, msg.Hands.ToList());
         }
         else {

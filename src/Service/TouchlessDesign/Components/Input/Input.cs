@@ -16,11 +16,9 @@ using TouchlessDesign.Components.Ipc.Networking.Tcp;
 using TouchlessDesign.Components.Remote;
 using Timer = System.Threading.Timer;
 
-namespace TouchlessDesign.Components.Input
-{
+namespace TouchlessDesign.Components.Input {
 
-  public class Input : AppComponent, Client.IListener
-  {
+  public class Input : AppComponent, Client.IListener {
     public Property<bool> IsEmulationEnabled { get; } = new Property<bool>(true);
 
     public Property<bool> IsNoTouch { get; } = new Property<bool>(false);
@@ -75,17 +73,17 @@ namespace TouchlessDesign.Components.Input
       DeinitializeInputProvider();
       DeInitializeClickHandling();
       DeInitializeHooks();
-      
+
       if (Config.General.RemoteProviderMode) {
         _udpClient?.Stop();
       }
     }
 
     public void RegisterUser(TouchlessUser user) {
-      if(user == null) {
+      if (user == null) {
         Log.Error($"Tried to register null user");
       }
-      else if(RegisteredUsers.ContainsKey(user.RemoteUserInfo.DeviceId)) {
+      else if (RegisteredUsers.ContainsKey(user.RemoteUserInfo.DeviceId)) {
         Log.Error($"Tried to register already-existing user {user.RemoteUserInfo.DeviceId}");
       }
       else {
@@ -93,7 +91,7 @@ namespace TouchlessDesign.Components.Input
         Log.Info($"Successfully registered user {user.RemoteUserInfo.DeviceId}");
 
         // If we don't have a mouse user assigned, make this user our mouse user until the user disconnects.
-        if(stateUser == null) {
+        if (stateUser == null) {
           stateUser = user;
           InitializeClickHandling();
         }
@@ -101,7 +99,7 @@ namespace TouchlessDesign.Components.Input
     }
 
     public void DeregisterUser(TouchlessUser user) {
-      if(user == null) {
+      if (user == null) {
         Log.Error($"Tried to deregister a null user");
       }
       else if (!RegisteredUsers.ContainsKey(user.RemoteUserInfo.DeviceId)) {
@@ -116,7 +114,7 @@ namespace TouchlessDesign.Components.Input
           DeInitializeClickHandling();
           stateUser = null;
           Log.Warn($"Assigned mouse user has disconnected.");
-          if(RegisteredUsers.Count > 0) {
+          if (RegisteredUsers.Count > 0) {
             stateUser = RegisteredUsers.First().Value;
             InitializeClickHandling();
             Log.Warn($"Assigning user {stateUser.RemoteUserInfo.DeviceId} as new mouse user.");
@@ -137,7 +135,8 @@ namespace TouchlessDesign.Components.Input
           Log.Info("Connected. Attempting to register as a remote client");
           _remoteClient.Send(new Msg(Msg.Types.RegisterRemoteClient, Config.General.DeviceID));
         }
-      } catch (Exception e) {
+      }
+      catch (Exception e) {
         Log.Error($"Connection error: {e}");
       }
     }
@@ -146,7 +145,7 @@ namespace TouchlessDesign.Components.Input
       if (!_remoteClientActive) return;
       switch (msg.Type) {
         case Msg.Types.ClickAndHoverQuery:
-          if(stateUser != null && msg.DeviceId == stateUser.RemoteUserInfo.DeviceId) {
+          if (stateUser != null && msg.DeviceId == stateUser.RemoteUserInfo.DeviceId) {
             stateUser.HoverState.Value = msg.HoverState;
             stateUser.SetMouseButtonDown(msg.Bool.Value);
           }
@@ -286,7 +285,7 @@ namespace TouchlessDesign.Components.Input
       }
 
       // Add our local user if needed
-      if(providerType == typeof(LeapMotionProvider)) {
+      if (providerType == typeof(LeapMotionProvider)) {
         RegisterUser(new TouchlessUser(Config.General.DeviceID, "127.0.0.1"));
       }
 
@@ -294,7 +293,8 @@ namespace TouchlessDesign.Components.Input
       try {
         instance = Activator.CreateInstance(providerType);
         _provider = (IInputProvider)instance;
-      } catch (Exception e) {
+      }
+      catch (Exception e) {
         Log.Error($"Exception thrown when instantiating or casting provider '{instance?.GetType().Name}': {e}");
         return;
       }
@@ -311,10 +311,12 @@ namespace TouchlessDesign.Components.Input
         Log.Info($"Input provider '{_provider.GetType().Name}' started.");
         if (Config.General.RemoteProviderMode) {
           _inputProviderTimer = new Timer(HandleRemoteUpdate, null, 0, Config.Input.UpdateRate_ms);
-        } else {
+        }
+        else {
           _inputProviderTimer = new Timer(HandleProviderUpdate, null, 0, Config.Input.UpdateRate_ms);
         }
-      } catch (Exception e) {
+      }
+      catch (Exception e) {
         Log.Error($"Exception caught while starting {_provider.GetType().Name}. {e}");
       }
     }
@@ -349,7 +351,7 @@ namespace TouchlessDesign.Components.Input
               user.HandCount = user.Hands.Count;
 
               //position
-              if (user == stateUser) {
+              if (user == stateUser && IsEmulationEnabled.Value) {
                 Config.Input.NormalizedPosition(hand.X, hand.Y, hand.Z, out var h, out var v);
                 var pixelX = (int)Math.Round(h * Bounds.Width + Bounds.Left);
                 var pixelY = (int)Math.Round(v * Bounds.Height + Bounds.Top);
@@ -384,7 +386,8 @@ namespace TouchlessDesign.Components.Input
               }
             }
           }
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
           Log.Error($"Caught exception while updating input provider: {e}");
         }
       }
@@ -395,7 +398,9 @@ namespace TouchlessDesign.Components.Input
       _inputProviderTimer = null;
       _provider?.Stop();
       lock (RegisteredUsers) {
-        stateUser.Hands.Clear();
+        if (stateUser != null) {
+          stateUser.Hands.Clear();
+        }
       }
     }
 
@@ -421,7 +426,8 @@ namespace TouchlessDesign.Components.Input
     private void HandleToggleEmulationKeyCombination() {
       if (_timeSinceToggleEmulationKeyCombination == null) {
         DoToggleEmulation();
-      } else {
+      }
+      else {
         var now = DateTime.Now;
         var delta = now - _timeSinceToggleEmulationKeyCombination.Value;
         if (delta.TotalMilliseconds > Config.Input.ToggleEmulationToggleSpeed_ms) {
@@ -520,8 +526,7 @@ namespace TouchlessDesign.Components.Input
 
     #region mouse_event
     [Flags]
-    public enum MouseEventFlags : uint
-    {
+    public enum MouseEventFlags : uint {
       LeftDown = 0x00000002,
       LeftUp = 0x00000004,
       MiddleDown = 0x00000020,
@@ -538,8 +543,7 @@ namespace TouchlessDesign.Components.Input
     //Use the values of this enum for the 'dwData' parameter
     //to specify an X button when using MouseEventFlags.XDown or
     //MouseEventFlags.XUp for the dwFlags parameter.
-    public enum MouseEventDataXButtons : uint
-    {
+    public enum MouseEventDataXButtons : uint {
       XButton1 = 0x00000001,
       XButton2 = 0x00000002
     }
@@ -555,8 +559,7 @@ namespace TouchlessDesign.Components.Input
 
     #region GetCursorInfo
 
-    private struct CursorInfo
-    {
+    private struct CursorInfo {
       public bool IsShown;
       public int X, Y;
     }
@@ -565,15 +568,13 @@ namespace TouchlessDesign.Components.Input
     private const int CURSOR_SUPPRESSED = 0x00000002;
 
     [StructLayout(LayoutKind.Sequential)]
-    private struct POINT
-    {
+    private struct POINT {
       public int x;
       public int y;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    private struct CURSORINFO
-    {
+    private struct CURSORINFO {
       public int cbSize;        // Specifies the size, in bytes, of the structure.
                                 // The caller must set this to Marshal.SizeOf(typeof(CURSORINFO)).
       public int flags;         // Specifies the cursor state. This parameter can be one of the following values:
@@ -600,7 +601,8 @@ namespace TouchlessDesign.Components.Input
           Y = nativeCursorInfo.ptScreenPos.y,
           IsShown = nativeCursorInfo.flags == CURSOR_SHOWING
         };
-      } else {
+      }
+      else {
         return new CursorInfo();
       }
     }
@@ -609,7 +611,8 @@ namespace TouchlessDesign.Components.Input
       if (GetCursor(out var cursor)) {
         x = cursor.ptScreenPos.x;
         y = cursor.ptScreenPos.y;
-      } else {
+      }
+      else {
         x = y = 0;
       }
     }
@@ -618,7 +621,8 @@ namespace TouchlessDesign.Components.Input
       get {
         if (GetCursor(out var cursor)) {
           return cursor.flags == CURSOR_SHOWING;
-        } else {
+        }
+        else {
           return false;
         }
       }

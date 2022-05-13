@@ -31,7 +31,12 @@ namespace TouchlessDesign.Components.Ipc {
     /// <param name="send">Invoked to send a Msg instance to the desired end point</param>
     public void ProcessMsg(Msg msg, Client c) {
       try {
-        var isRegisteredUser = Input.RegisteredUsers.TryGetValue(msg.DeviceId, out TouchlessUser user);
+        bool isRegisteredUser = false;
+        TouchlessUser user = null;
+        if (Input != null) {
+          isRegisteredUser = Input.RegisteredUsers.TryGetValue(msg.DeviceId, out user);
+        }
+        
         switch (msg.Type) {
           case Msg.Types.None:
             break;
@@ -141,6 +146,7 @@ namespace TouchlessDesign.Components.Ipc {
               foreach (Client interestedClient in _usersInterestingClients) {
                 // Let em know we registered a user
               }
+              c.Send(Msg.Factories.Ping());
             }
             else {
               Log.Info($"User {msg.DeviceId} tried to register, but is already in the system.");
