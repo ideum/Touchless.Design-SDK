@@ -22,6 +22,7 @@
         <ColumnDefinition />
         <ColumnDefinition />
         <ColumnDefinition Width="80"/>
+        <ColumnDefinition Width="120"/>
       </Grid.ColumnDefinitions>
       <TextBlock Grid.Column="0" Margin="10 0" HorizontalAlignment="Left" VerticalAlignment="Center">
         <Run FontWeight="Bold" Foreground="{StaticResource Ideum.Brush.Foreground}">STATUS:</Run>
@@ -46,6 +47,10 @@
         <Run>Clients: </Run>
         <Run Foreground="{StaticResource Ideum.Brush.Foreground}" Text="{Binding ConnectedClients}" />
       </TextBlock>
-    </Grid>
+      <TextBlock Grid.Column="6" HorizontalAlignment="Center" Margin="10 0" VerticalAlignment="Center">
+        <Run>Providers: </Run>
+        <Run Foreground="{StaticResource Ideum.Brush.Foreground}" Text="{Binding ConnectedProviders}" />
+      </TextBlock>
+        </Grid>
   </Border>
 </UserControl>

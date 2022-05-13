@@ -70,9 +70,9 @@ namespace TouchlessDesign.Components.Ipc {
             if (msg.ContainsIncomingServerSideData) {
               if (isRegisteredUser) {
                 // TODO: Send message to actual user client instead of just setting variables for that user.
-                user.IsButtonDown.Value = true;
+                user.SetMouseButtonDown(msg.Bool.Value);
               }
-              Input.SetMouseButtonDown(msg.Bool.Value);
+              //Input.HandleStateUserButtonDown(msg.Bool.Value);
             }
             break;
           case Msg.Types.ClickQuery:
@@ -134,7 +134,9 @@ namespace TouchlessDesign.Components.Ipc {
               Log.Warn($"User attempted to register, but the service is running in local mode");
             }
             if (!Input.RegisteredUsers.ContainsKey(msg.DeviceId)) {
-              Input.RegisteredUsers.Add(msg.DeviceId, new TouchlessUser(msg.DeviceId, c.Connection.Destination, c));
+
+              TouchlessUser newUser = new TouchlessUser(msg.DeviceId, c.Connection.Destination, c);
+              Input.RegisterUser(newUser);
               Log.Info($"Registered User {msg.DeviceId}");
               foreach (Client interestedClient in _usersInterestingClients) {
                 // Let em know we registered a user
@@ -243,8 +245,7 @@ namespace TouchlessDesign.Components.Ipc {
         var userKeys = Input.RegisteredUsers.Keys;
         foreach (var userKey in userKeys) {
           if (Input.RegisteredUsers[userKey].Client == c) {
-            Log.Info($"User with ID {userKey} has disconnected.");
-            Input.RegisteredUsers.Remove(userKey);
+            Input.
             break;
           }
         }

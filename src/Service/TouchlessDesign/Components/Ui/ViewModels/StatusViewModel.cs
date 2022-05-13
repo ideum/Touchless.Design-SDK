@@ -86,6 +86,15 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
     }
 
 
+    public static readonly DependencyProperty ConnectedProvidersProperty = DependencyProperty.Register(
+      "ConnectedProviders", typeof(string), typeof(StatusViewModel), new PropertyMetadata(default(string)));
+
+    public string ConnectedProviders {
+      get { return (string)GetValue(ConnectedClientsProperty); }
+      set { SetValue(ConnectedProvidersProperty, value); }
+    }
+
+
     public static readonly DependencyProperty MousePositionProperty = DependencyProperty.Register(
       "MousePosition", typeof(string), typeof(StatusViewModel), new PropertyMetadata(default(string)));
 
@@ -117,7 +126,7 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
       var i = AppComponent.Input;
       var n = AppComponent.Ipc;
       var em = i.IsEmulationEnabled.Value;
-      var mc = $"{i.MouseDownConfidence:0.000}";
+      var mc = i.stateUser != null ? $"{i.stateUser.MouseDownConfidence:0.000}" : "0";
       i.GetComputedPosition(out var x, out var y);
       OverallOpacity = em ? 1 : 0.5;
       HoverState = i.stateUser != null ? i.stateUser.HoverState.Value.ToString() : "N/A";
@@ -128,6 +137,7 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
       ClickStatus = i.GetIsClicking() ? "True" : "False";
       ClickStatusBrush = i.GetIsClicking() ? SelectedBrush : NormalBrush;
       ConnectedClients = n.ClientsCount.ToString();
+      ConnectedProviders = i.RegisteredUsers.Count.ToString();
     }
 
     public void Stop() {

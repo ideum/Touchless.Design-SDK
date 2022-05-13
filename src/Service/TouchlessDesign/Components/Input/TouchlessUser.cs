@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using TouchlessDesign.Components.Ipc.Networking;
 using TouchlessDesign.Config;
@@ -19,6 +20,7 @@ namespace TouchlessDesign.Components.Input {
     public TouchlessUser(int deviceID, string ipAddress) {
       RemoteUserInfo = new RemoteUserInfo() { DeviceId = deviceID, IpAddress = ipAddress };
       Hands = new List<Hand>();
+      _clickTimer = new Timer(HandleClickCallback, null, Timeout.Infinite, Timeout.Infinite);
     }
 
     public TouchlessUser(int deviceID, string ipAddress, Client client) : this(deviceID, ipAddress) {
@@ -29,11 +31,11 @@ namespace TouchlessDesign.Components.Input {
       if (Client != null) {
         Client.Dispose();
       }
-      if (_clickTimer != null) {
-        _clickTimer.Dispose();
-      }
+      _clickTimer.Dispose();
     }
 
+    public event Action<bool> ClickCallback;
+    public event Action<bool> MouseButtonStateSet;
 
     public RemoteUserInfo RemoteUserInfo;
 
@@ -67,11 +69,48 @@ namespace TouchlessDesign.Components.Input {
     /// </summary>
     public Client Client;
 
-    public Timer _clickTimer;
+    private Timer _clickTimer;
 
-    private bool _isClicking;
-    private bool _hasClicked;
+    public bool IsClicking;
+    public bool HasClicked;
+    public double MouseDownConfidence;
 
 
+    public void SetMouseDownConfidence(double value) {
+      MouseDownConfidence = value;
+    }
+
+    public void SetMouseButtonDown(bool isDown) {
+      if (IsButtonDown.Value == isDown) return;
+      IsButtonDown.Value = isDown;
+      if (IsClicking && !isDown) {
+        StopClickCountdown();
+      }
+      MouseButtonStateSet?.Invoke(isDown);
+    }
+
+    public void DoClick() {
+      //if (!Config.Input.ClickEnabled) return;
+      if (IsClicking) return;
+      SetMouseButtonDown(true);
+      StartClickCountdown(AppComponent.Config.Input.ClickDuration_ms);
+    }
+
+    public void StopClickCountdown() {
+      _clickTimer.Change(Timeout.Infinite, Timeout.Infinite);
+      IsClicking = false;
+    }
+
+    public void StartClickCountdown(int clickDurationMs) {
+      IsClicking = true;
+      _clickTimer.Change(clickDurationMs, clickDurationMs);
+    }
+
+    private void HandleClickCallback(object state) {
+      if (!IsClicking) return;
+      StopClickCountdown();
+      SetMouseButtonDown(false);
+      ClickCallback?.Invoke(false);
+    }
   }
 }

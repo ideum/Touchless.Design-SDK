@@ -21,12 +21,7 @@ namespace TouchlessDesign.Components.Input
 
   public class Input : AppComponent, Client.IListener
   {
-
     public Property<bool> IsEmulationEnabled { get; } = new Property<bool>(true);
-
-    //public Property<HoverStates> HoverState { get; } = new Property<HoverStates>(HoverStates.None);
-
-    //public Property<bool> IsButtonDown { get; } = new Property<bool>(false);
 
     public Property<bool> IsNoTouch { get; } = new Property<bool>(false);
 
@@ -86,7 +81,7 @@ namespace TouchlessDesign.Components.Input
       }
     }
 
-    protected void RegisterUser(TouchlessUser user) {
+    public void RegisterUser(TouchlessUser user) {
       if(user == null) {
         Log.Error($"Tried to register null user");
       }
@@ -105,7 +100,7 @@ namespace TouchlessDesign.Components.Input
       }
     }
 
-    protected void DeregisterUser(TouchlessUser user) {
+    public void DeregisterUser(TouchlessUser user) {
       if(user == null) {
         Log.Error($"Tried to deregister a null user");
       }
@@ -153,7 +148,7 @@ namespace TouchlessDesign.Components.Input
         case Msg.Types.ClickAndHoverQuery:
           if(stateUser != null && msg.DeviceId == stateUser.RemoteUserInfo.DeviceId) {
             stateUser.HoverState.Value = msg.HoverState;
-            SetMouseButtonDown(msg.Bool.Value);
+            stateUser.SetMouseButtonDown(msg.Bool.Value);
           }
           break;
         case Msg.Types.NoTouchQuery:
@@ -208,52 +203,58 @@ namespace TouchlessDesign.Components.Input
 
     #region Click Handling
 
-    private bool _isClicking;
-    private Timer _clickTimer;
+    //private bool _isClicking;
+    //private Timer _clickTimer;
 
     private void InitializeClickHandling() {
       stateUser.HoverState.AddChangedListener(HandleHoverStateChangedForClick);
-      stateUser.IsButtonDown.AddChangedListener(HandleButtonDownChanged);
-      _clickTimer = new Timer(HandleClickCallback, null, Timeout.Infinite, Timeout.Infinite);
+      stateUser.IsButtonDown.AddChangedListener(HandleButtonPropertyChanged);
+      stateUser.MouseButtonStateSet += HandleStateUserButtonDown;
+      //stateUser.ClickCallback += HandleStateUserButtonDown;
+      //_clickTimer = new Timer(HandleClickCallback, null, Timeout.Infinite, Timeout.Infinite);
     }
 
-    private void HandleButtonDownChanged(Property<bool> property, bool oldValue, bool value) {
+    private void DeInitializeClickHandling() {
+      if (stateUser != null) {
+        stateUser.HoverState.RemoveChangedListener(HandleHoverStateChangedForClick);
+        stateUser.IsButtonDown.RemoveChangedListener(HandleButtonPropertyChanged);
+        stateUser.MouseButtonStateSet -= HandleStateUserButtonDown;
+        //stateUser.ClickCallback -= HandleStateUserButtonDown;
+      }
+      //_clickTimer.Dispose();
+      //_clickTimer = null;
+    }
+
+    private void HandleButtonPropertyChanged(Property<bool> property, bool oldValue, bool value) {
       StateUserButtonChanged?.Invoke(oldValue, value);
     }
 
     private void HandleHoverStateChangedForClick(Property<HoverStates> property, HoverStates oldValue, HoverStates value) {
       StateUserHoverChanged?.Invoke(oldValue, value);
-      if (value != HoverStates.Click && _isClicking) {
+      if (value != HoverStates.Click && stateUser.IsClicking) {
         if (stateUser.IsButtonDown.Value) {
-          SetMouseButtonDown(false);
+          stateUser.SetMouseButtonDown(false);
         }
-        StopClickCountdown();
+        stateUser.StopClickCountdown();
       }
     }
 
-    private void StartClickCountdown() {
-      _isClicking = true;
-      _clickTimer.Change(Config.Input.ClickDuration_ms, Config.Input.ClickDuration_ms);
-    }
+    //private void StartClickCountdown() {
+    //  _isClicking = true;
+    //  _clickTimer.Change(Config.Input.ClickDuration_ms, Config.Input.ClickDuration_ms);
+    //}
 
-    private void StopClickCountdown() {
-      _clickTimer.Change(Timeout.Infinite, Timeout.Infinite);
-      _isClicking = false;
-    }
+    //private void StopClickCountdown() {
+    //  _clickTimer.Change(Timeout.Infinite, Timeout.Infinite);
+    //  _isClicking = false;
+    //}
 
-    private void HandleClickCallback(object state) {
-      if (!_isClicking) return;
-      StopClickCountdown();
-      SetMouseButtonDown(false);
-    }
+    //private void HandleClickCallback(object state) {
+    //  if (!_isClicking) return;
+    //  HandleStateUserButtonDown(false);
+    //}
 
-    private void DeInitializeClickHandling() {
-      if(stateUser != null) {
-        stateUser.HoverState.RemoveChangedListener(HandleHoverStateChangedForClick);
-      }
-      _clickTimer.Dispose();
-      _clickTimer = null;
-    }
+
 
     #endregion
 
@@ -318,56 +319,69 @@ namespace TouchlessDesign.Components.Input
       }
     }
 
-    private bool _hasClicked;
+    //private bool _hasClicked;
 
     private void HandleProviderUpdate(object state) {
       if (!IsEmulationEnabled.Value) return;
       lock (RegisteredUsers) {
         try {
 
-          var targetUser = stateUser;
           if (!_provider.Update(RegisteredUsers)) {
-            targetUser.Hands.Clear();
+            foreach (var userKey in RegisteredUsers) {
+              userKey.Value.Hands.Clear();
+            }
           }
 
-          if (targetUser.Hands.Count <= 0) {
-            targetUser.HandCount = 0;
-            if (targetUser.IsButtonDown.Value) {
-              SetMouseButtonDown(false);
-            }
-
-            if (_hasClicked) {
-              _hasClicked = false;
-            }
-          } else {
-            var hand = targetUser.Hands.First();
-            targetUser.HandCount = targetUser.Hands.Count;
-
-            //position
-            Config.Input.NormalizedPosition(hand.X, hand.Y, hand.Z, out var h, out var v);
-            var pixelX = (int)Math.Round(h * Bounds.Width + Bounds.Left);
-            var pixelY = (int)Math.Round(v * Bounds.Height + Bounds.Top);
-            SetPosition(pixelX, pixelY);
-
-            //click
-            var isGrabbing = hand.GrabStrength > Config.Input.GrabClickThreshold;
-            SetMouseDownConfidence(hand.GrabStrength);
-            var hoverState = targetUser.HoverState.Value;
-            if (isGrabbing && !targetUser.IsButtonDown.Value) {
-              if (hoverState == HoverStates.Click) {
-                if (!_hasClicked) {
-                  _hasClicked = true;
-                  DoClick();
-                }
-              } else {
-                SetMouseButtonDown(true);
+          foreach (var userKey in RegisteredUsers) {
+            var user = userKey.Value;
+            if (user.Hands.Count <= 0) {
+              user.HandCount = 0;
+              if (user.IsButtonDown.Value) {
+                user.SetMouseButtonDown(false);
               }
-            } else if (!isGrabbing && targetUser.IsButtonDown.Value) {
-              SetMouseButtonDown(false);
-            }
 
-            if (!isGrabbing && _hasClicked) {
-              _hasClicked = false;
+              if (user.HasClicked) {
+                user.HasClicked = false;
+              }
+            }
+            else {
+              var hand = user.Hands.First();
+              user.HandCount = user.Hands.Count;
+
+              //position
+              if (user == stateUser) {
+                Config.Input.NormalizedPosition(hand.X, hand.Y, hand.Z, out var h, out var v);
+                var pixelX = (int)Math.Round(h * Bounds.Width + Bounds.Left);
+                var pixelY = (int)Math.Round(v * Bounds.Height + Bounds.Top);
+                SetPosition(pixelX, pixelY);
+              }
+
+              //click
+              var isGrabbing = hand.GrabStrength > Config.Input.GrabClickThreshold;
+              user.SetMouseDownConfidence(hand.GrabStrength);
+              // SetMouseDownConfidence(hand.GrabStrength);
+              var hoverState = user.HoverState.Value;
+              if (isGrabbing && !user.IsButtonDown.Value) {
+                if (hoverState == HoverStates.Click) {
+                  if (!user.HasClicked) {
+                    user.HasClicked = true;
+                    //_hasClicked = true;
+                    user.DoClick();
+                    //DoClick();
+                  }
+                }
+                else {
+                  user.SetMouseButtonDown(true);
+                }
+              }
+              else if (!isGrabbing && user.IsButtonDown.Value) {
+                user.SetMouseButtonDown(false);
+              }
+
+              if (!isGrabbing && user.HasClicked) {
+                //_hasClicked = false;
+                user.HasClicked = false;
+              }
             }
           }
         } catch (Exception e) {
@@ -417,12 +431,16 @@ namespace TouchlessDesign.Components.Input
     }
 
     private void OnGlobalMouseUp(object sender, MouseEventArgs e) {
+      if (stateUser == null) return;
+
       if (stateUser.IsButtonDown.Value) {
         stateUser.IsButtonDown.Value = false;
       }
     }
 
     private void OnGlobalMouseDown(object sender, MouseEventArgs e) {
+      if (stateUser == null) return;
+
       if (!stateUser.IsButtonDown.Value) {
         stateUser.IsButtonDown.Value = true;
       }
@@ -431,8 +449,9 @@ namespace TouchlessDesign.Components.Input
     private void DoToggleEmulation() {
       _timeSinceToggleEmulationKeyCombination = DateTime.Now;
       var v = IsEmulationEnabled.Value;
-      if (stateUser.IsButtonDown.Value) {
-        SetMouseButtonDown(false);
+      if (stateUser != null && stateUser.IsButtonDown.Value) {
+        //HandleStateUserButtonDown(false);
+        stateUser.SetMouseButtonDown(false);
       }
       IsEmulationEnabled.Value = v = !v;
 
@@ -458,26 +477,27 @@ namespace TouchlessDesign.Components.Input
     public int PosX { get; private set; }
     public int PosY { get; private set; }
 
-    public void SetMouseButtonDown(bool isDown) {
+    public void HandleStateUserButtonDown(bool isDown) {
       if (!IsEmulationEnabled.Value) return;
-      if (stateUser.IsButtonDown.Value == isDown) return;
-      stateUser.IsButtonDown.Value = isDown;
-      if (_isClicking && !isDown) {
-        StopClickCountdown();
-      }
+      if (!Config.Input.ClickEnabled) return;
+      //if (stateUser.IsButtonDown.Value == isDown) return;
+      //stateUser.IsButtonDown.Value = isDown;
+      //if (_isClicking && !isDown) {
+      //  StopClickCountdown();
+      //}
       var status = isDown ? MouseEventFlags.LeftDown : MouseEventFlags.LeftUp;
       mouse_event((uint)status, 0, 0, 0, 0);
     }
 
-    public void DoClick() {
-      if (!Config.Input.ClickEnabled) return;
-      if (_isClicking) return;
-      SetMouseButtonDown(true);
-      StartClickCountdown();
-    }
+    //public void DoClick() {
+    //  if (!Config.Input.ClickEnabled) return;
+    //  if (_isClicking) return;
+    //  HandleStateUserButtonDown(true);
+    //  StartClickCountdown();
+    //}
 
     public bool GetIsClicking() {
-      return _isClicking;
+      return stateUser != null && stateUser.IsClicking;
     }
 
     public bool GetClickingEnabled() {
