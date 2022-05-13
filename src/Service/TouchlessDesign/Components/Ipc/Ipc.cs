@@ -245,7 +245,7 @@ namespace TouchlessDesign.Components.Ipc {
         var userKeys = Input.RegisteredUsers.Keys;
         foreach (var userKey in userKeys) {
           if (Input.RegisteredUsers[userKey].Client == c) {
-            Input.
+            Input.DeregisterUser(Input.RegisteredUsers[userKey]);
             break;
           }
         }
