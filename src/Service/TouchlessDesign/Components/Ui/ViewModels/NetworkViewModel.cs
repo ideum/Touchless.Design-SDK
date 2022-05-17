@@ -35,6 +35,13 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
       set { SetValue(TcpPortProperty, value); }
     }
 
+    public static readonly DependencyProperty SdkLoopbackProperty = Reg<NetworkViewModel, bool>("SdkLoopback", true, PropertyTypes.Restart);
+
+    public bool SdkLoopback {
+      get { return (bool)GetValue(SdkLoopbackProperty); }
+      set { SetValue(SdkLoopbackProperty, value); }
+    }
+
     public static readonly DependencyProperty WsEnabledProperty = Reg<NetworkViewModel, bool>("WsEnabled", true, PropertyTypes.Restart);
 
     public bool WsEnabled {
@@ -88,6 +95,7 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
     public override void ApplyValuesToModel() {
       Model.TcpEnabled = TcpEnabled;
       Model.TcpData.Port = TcpPort;
+      Model.TcpData.SdkLoopback = SdkLoopback;
       Model.WsEnabled = WsEnabled;
       Model.WsData.Port = WsPort;
       Model.UdpEnabled = UdpEnabled;
@@ -99,6 +107,7 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
     public override void UpdateValuesFromModel() {
       TcpEnabled = Model.TcpEnabled;
       TcpPort = Model.TcpData.Port;
+      SdkLoopback = Model.TcpData.SdkLoopback;
       WsEnabled = Model.WsEnabled;
       WsPort = Model.WsData.Port;
       UdpEnabled = Model.UdpEnabled;

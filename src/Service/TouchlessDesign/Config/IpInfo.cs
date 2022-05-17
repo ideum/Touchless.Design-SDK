@@ -5,6 +5,7 @@ namespace TouchlessDesign.Config {
 
     public string Address;
     public bool Loopback;
+    public bool SdkLoopback;
     public int Port;
 
     public virtual IPEndPoint GetEndPoint() {

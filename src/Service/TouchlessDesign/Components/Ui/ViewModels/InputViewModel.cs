@@ -251,6 +251,7 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
       Model.GrabClickThreshold = (float) ClickThreshold;
       Model.MinConfidence = (float)MinHandConfidence;
       Model.ClickDuration_ms = ClickEmulationDuration;
+      Model.MouseEmulationEnabled = MouseEmulation;
       Model.ClickEnabled = ClickEmulation;
       Model.UpdateRate_ms = TickRate;
       Model.InputProvider = InputProvider ? 1 : 0;
@@ -273,6 +274,7 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
     }
 
     public override void UpdateValuesFromModel() {
+      MouseEmulation = Model.MouseEmulationEnabled;
       MouseEmulationKeyboardShortcut = Model.ToggleEmulationKeyCombination;
       ClickThreshold = Model.GrabClickThreshold;
       MinHandConfidence = Model.MinConfidence;

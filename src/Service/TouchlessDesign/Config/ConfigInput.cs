@@ -9,6 +9,7 @@ namespace TouchlessDesign.Config {
     public double ToggleEmulationToggleSpeed_ms = 1500;
     
     public float GrabClickThreshold = 0.75f;
+    public bool MouseEmulationEnabled = true;
     public int ClickDuration_ms = 500;
     public bool ClickEnabled = true;
 
@@ -109,6 +110,8 @@ namespace TouchlessDesign.Config {
       ToggleEmulationKeyCombination = i.ToggleEmulationKeyCombination;
       ToggleEmulationToggleSpeed_ms = i.ToggleEmulationToggleSpeed_ms;
       GrabClickThreshold = i.GrabClickThreshold;
+      ClickEnabled = i.ClickEnabled;
+      MouseEmulationEnabled = i.MouseEmulationEnabled;
       UpdateRate_ms = i.UpdateRate_ms;
       InputProvider = i.InputProvider;
       FlipYAxis = i.FlipYAxis;

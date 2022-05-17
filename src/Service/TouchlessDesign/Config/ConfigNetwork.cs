@@ -12,6 +12,7 @@ namespace TouchlessDesign.Config {
     public IpInfo TcpData = new IpInfo {
       Address = null,
       Loopback = true,
+      SdkLoopback = true,
       Port = 4949
     };
 

@@ -32,7 +32,10 @@
                        Min="1" Max="15000"
                        SmallChange="1" LargeChange="10"
                        NumberFormatter="{StaticResource IntNumberFormatter}"/>
-      <Label Margin="0 6 0 0" FontSize="16" FontWeight="Bold" Content="Web Socket"/>
+        <c:BoolControl Value="{Binding SdkLoopback, Mode=TwoWay}" 
+                    Header="SDK Loopback"
+                    LabelMinWidth="150"/>
+            <Label Margin="0 6 0 0" FontSize="16" FontWeight="Bold" Content="Web Socket"/>
       <c:BoolControl Value="{Binding WsEnabled, Mode=TwoWay}" 
                      Header="Enabled"
                      LabelMinWidth="150"/>
