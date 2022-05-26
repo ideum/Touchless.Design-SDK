@@ -60,7 +60,7 @@ namespace Ideum {
     void Update() {
       if(_selectable != null) {
         if(!_selectable.interactable && _isHover) {
-          DoPointerExitLogic();
+          ClearHoveredUsers();
         }
         if(!_selectable.interactable && _grabbed) {
           DoDragEndLogic();

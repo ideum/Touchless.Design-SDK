@@ -36,7 +36,11 @@ namespace TouchlessDesign.Components.Ipc {
       SetOnboarding,
       RegisterRemoteClient,
       UsersQuery,
-      SubscribeToUserChanges
+      SubscribeToUserUpdates,
+      UserUpdate,
+      UserAdded,
+      UserRemoved,
+      QueryStateUserId,
     }
 
     [JsonProperty("T")]
@@ -95,6 +99,12 @@ namespace TouchlessDesign.Components.Ipc {
 
     [JsonProperty("Hands")]
     public Hand[] Hands;
+
+    [JsonProperty("HandCount")]
+    public int HandCount;
+
+    [JsonProperty("IsClicking")]
+    public bool IsClicking;
 
     [JsonProperty("Users")]
     public int[] Users;
@@ -167,10 +177,11 @@ namespace TouchlessDesign.Components.Ipc {
         };
       }
 
-      public static Msg HoverQuery(HoverStates hover) {
+      public static Msg HoverQuery(int deviceId, HoverStates hover) {
         return new Msg {
           Type = Types.HoverQuery,
-          HoverState = hover
+          HoverState = hover,
+          DeviceId = deviceId
         };
       }
 
@@ -303,8 +314,24 @@ namespace TouchlessDesign.Components.Ipc {
         return new Msg { Type = Types.RegisterRemoteClient };
       }
 
-      public static Msg UsersQuery() {
-        return new Msg { Type = Types.UsersQuery };
+      public static Msg UsersQuery(int[] userIds) {
+        return new Msg { Type = Types.UsersQuery, Users = userIds };
+      }
+
+      public static Msg UserUpdate(int deviceId, HoverStates hoverstate, int handCount, int screenPosX, int screenPosY, bool isClicking, bool pressed, bool released) {
+        return new Msg { Type = Types.UserUpdate, DeviceId = deviceId, HoverState = hoverstate, HandCount = handCount, X = screenPosX, Y = screenPosY, IsClicking = isClicking, Bool = pressed, Bool2 = released };
+      }
+
+      public static Msg UserAdded(int deviceId) {
+        return new Msg {  Type = Types.UserAdded, DeviceId = deviceId };
+      }
+
+      public static Msg UserRemoved(int deviceId) {
+        return new Msg { Type = Types.UserRemoved, DeviceId = deviceId };
+      }
+
+      public static Msg StateUserQuery(int deviceId) {
+        return new Msg { Type = Types.QueryStateUserId, DeviceId = deviceId };
       }
     }
 

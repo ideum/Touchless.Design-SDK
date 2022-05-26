@@ -41,7 +41,14 @@ namespace Ideum.Data {
       Hands,
       SetPriority,
       OnboardingQuery,
-      SetOnboarding
+      SetOnboarding,
+      RegisterRemoteClient,
+      UsersQuery,
+      SubscribeToUserUpdates,
+      UserUpdate,
+      UserAdded,
+      UserRemoved,
+      QueryStateUserId,
     }
 
     [JsonProperty("T")]
@@ -97,6 +104,18 @@ namespace Ideum.Data {
 
     [JsonProperty("Config")]
     public ConfigDisplay Config;
+
+    [JsonProperty("HandCount")]
+    public int HandCount;
+
+    [JsonProperty("IsClicking")]
+    public bool IsClicking;
+
+    [JsonProperty("Users")]
+    public int[] Users;
+
+    [JsonProperty("DeviceId")]
+    public int DeviceId;
 
     #endregion
 
@@ -274,6 +293,10 @@ namespace Ideum.Data {
 
       public static Msg SubscribeMessage() {
         return new Msg { Type = Types.SubscribeToDisplaySettings };
+      }
+
+      public static Msg UserSubscribeMessage() {
+        return new Msg { Type = Types.SubscribeToUserUpdates };
       }
 
       public static Msg HandMessage() {

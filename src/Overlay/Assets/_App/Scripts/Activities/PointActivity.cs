@@ -87,7 +87,7 @@ namespace Ideum {
       _seq.Append(_cg.DOFade(0.0f, 0.5f));
     }
 
-    private void HandlePointerExit() {
+    private void HandlePointerExit(int pointerId) {
       if (!_active || !_enterFlag) return;
 
       _handInfo = new HandInfo();
@@ -103,7 +103,7 @@ namespace Ideum {
       _seq.Join(InnerCircle.DOColor(CircleColorInactive, 0.5f));
     }
 
-    private void HandlePointerEnter() {
+    private void HandlePointerEnter(int pointerId) {
       if (!_active || _enterFlag) return;
 
       _handInfo = new HandInfo();

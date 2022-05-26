@@ -10,6 +10,9 @@ namespace Ideum {
     #region General
 
     public static event Action<Msg> SettingChanged;
+    public static Dictionary<int, TouchlessUser> Users;
+    public static event Action<TouchlessUser> UserAdded;
+    public static event Action<TouchlessUser> UserRemoved;
 
     private const string DefaultDirectory = "%appdata%/Ideum/TouchlessDesign";
 
@@ -21,6 +24,7 @@ namespace Ideum {
       if (string.IsNullOrEmpty(dataDir)) {
         dataDir = DefaultDirectory;
       }
+      Users = new Dictionary<int, TouchlessUser>();
       dataDir = Environment.ExpandEnvironmentVariables(dataDir);
       MonoBehaviourHooks.InitializeHooks();
       InitializeNetworking(dataDir);
@@ -125,8 +129,64 @@ namespace Ideum {
         case Msg.Types.OnboardingQuery:
           OnboardingQueries.SyncClearInvoke(msg);
           break;
+        case Msg.Types.SubscribeToUserUpdates:
+          break;
+        case Msg.Types.UserAdded:
+          Sync(() => AddUser(msg.DeviceId));
+          break;
+        case Msg.Types.UserRemoved:
+          Sync(() => RemoveUser(msg.DeviceId));
+          break;
+        case Msg.Types.UserUpdate:
+          Sync(() => { Msg message = msg; int msgId = message.DeviceId; UpdateUser(msgId, message); });
+          break;
+        case Msg.Types.UsersQuery:
+          Sync(() => {
+            if (msg.Users != null) {
+              foreach (int deviceId in msg.Users) {
+                AddUser(deviceId);
+              }
+              // Remove all users that no longer exist.
+              foreach (var deviceId in msg.Users) {
+                if (!Users.ContainsKey(deviceId)) {
+                  RemoveUser(deviceId);
+                }
+              }
+            }
+          });
+          break;
         default:
           throw new ArgumentOutOfRangeException();
+      }
+    }
+
+    private static void AddUser(int deviceId) {
+      if (!Users.ContainsKey(deviceId)) {
+        TouchlessUser user = new TouchlessUser();
+        user.DeviceId = deviceId;
+        Users.Add(deviceId, user);
+        Log.Info($"User {deviceId} connected.");
+        UserAdded?.Invoke(user);
+      }
+    }
+
+    private static void RemoveUser(int deviceId) {
+      bool canremove = Users.TryGetValue(deviceId, out TouchlessUser userToRemove);
+      if (canremove) {
+        Users.Remove(deviceId);
+        UserRemoved?.Invoke(userToRemove);
+        Log.Info($"User {deviceId} has disconnected!");
+      }
+    }
+
+    private static void UpdateUser(int deviceId, Msg msg) {
+      bool userFound = Users.TryGetValue(deviceId, out TouchlessUser user);
+      if(!userFound) {
+        Log.Error($"Device ID for user update not found");
+      }
+      else {
+        //Log.Info($"Updating user {deviceId}");
+        user.Update(msg);
       }
     }
 
@@ -158,8 +218,9 @@ namespace Ideum {
     /// Sets the hover-state
     /// </summary>
     /// <param name="hover"></param>
-    public static void SetHoverState(HoverStates hover, int priority = 0) {
+    public static void SetHoverState(int deviceId, HoverStates hover, int priority = 0) {
       Msg msg = Msg.Factories.Hover(hover);
+      msg.DeviceId = deviceId;
       msg.Priority = priority;
       _connectionManager.Send(msg);
     }
@@ -229,11 +290,17 @@ namespace Ideum {
 
     public static void QueryHandCount(Msg.HandCountQueryDelegate callback) {
       HandQueries.Add(callback);
-      _connectionManager.Send(Msg.Factories.HandCountQuery());
+      Msg msg = Msg.Factories.HandCountQuery();
+      msg.DeviceId = 1;
+      _connectionManager.Send(msg);
     }
 
     public static void SubscribeToDisplayConfig() {
       _connectionManager.Send(Msg.Factories.SubscribeMessage());
+    }
+
+    public static void SubscribeToUserUpdates() {
+      _connectionManager.Send(Msg.Factories.UserSubscribeMessage());
     }
 
     public static void SetPriority(int priority) {

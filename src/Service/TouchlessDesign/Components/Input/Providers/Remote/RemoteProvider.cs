@@ -56,9 +56,9 @@ namespace TouchlessDesign.Components.Input.Providers.Remote {
       lock (_lock) {
         //hands.Clear();
         foreach (var userKeyValue in users) {
-          var user = userKeyValue.Value;
-          user.Hands.Clear();
           if(_handBuffer.ContainsKey(userKeyValue.Key)) {
+            var user = userKeyValue.Value;
+            user.Hands.Clear();
             foreach (Hand hand in _handBuffer[userKeyValue.Key]) {
               user.Hands.Add(hand);
             }

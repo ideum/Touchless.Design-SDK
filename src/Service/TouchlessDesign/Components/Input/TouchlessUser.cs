@@ -69,10 +69,15 @@ namespace TouchlessDesign.Components.Input {
     /// </summary>
     public Client Client;
 
+    public int ScreenX;
+    public int ScreenY;
+
     private Timer _clickTimer;
 
     public bool IsClicking;
     public bool HasClicked;
+    public bool InitialPress;
+    public bool InitialRelease;
     public double MouseDownConfidence;
 
 
@@ -83,6 +88,12 @@ namespace TouchlessDesign.Components.Input {
     public void SetMouseButtonDown(bool isDown) {
       if (IsButtonDown.Value == isDown) return;
       IsButtonDown.Value = isDown;
+      if (!isDown) {
+        InitialRelease = true;
+      }
+      else {
+        InitialPress = true;
+      }
       if (IsClicking && !isDown) {
         StopClickCountdown();
       }

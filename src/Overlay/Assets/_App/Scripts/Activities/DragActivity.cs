@@ -140,16 +140,16 @@ namespace Ideum {
       });
     }
 
-    private void HandleHoverExit() {
+    private void HandleHoverExit(int userId) {
       if (!_active) return;
 
-      TouchlessDesign.SetHoverState(Data.HoverStates.None, 1);
+      TouchlessDesign.SetHoverState(userId, Data.HoverStates.None, 1);
     }
 
-    private void HandleHoverEnter() {
+    private void HandleHoverEnter(int userId) {
       if (!_active) return;
 
-      TouchlessDesign.SetHoverState(Data.HoverStates.Drag, 1);
+      TouchlessDesign.SetHoverState(userId, Data.HoverStates.Drag, 1);
     }
 
     private void HandleDragUpdate(Vector2 pos) {

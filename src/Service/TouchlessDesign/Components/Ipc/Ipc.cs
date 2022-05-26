@@ -36,23 +36,23 @@ namespace TouchlessDesign.Components.Ipc {
         if (Input != null) {
           isRegisteredUser = Input.RegisteredUsers.TryGetValue(msg.DeviceId, out user);
         }
-        
+
         switch (msg.Type) {
           case Msg.Types.None:
             break;
           case Msg.Types.Hover:
-            if (msg.ContainsIncomingServerSideData && msg.Priority >= Input.ClientPriority.Value) {
+            if ((isRegisteredUser) && msg.ContainsIncomingServerSideData && msg.Priority >= Input.ClientPriority.Value) {
               Log.Warn($"Changing Hover {user.HoverState} to {msg.HoverState}");
               user.HoverState.Value = msg.HoverState;
             }
-            if (isRegisteredUser) {
-              Log.Warn($"Changing Hover for user {msg.DeviceId} to {msg.HoverState}");
-              user.HoverState.Value = msg.HoverState;
-            }
+            //if (isRegisteredUser) {
+            //  Log.Warn($"Changing Hover for user {msg.DeviceId} to {msg.HoverState}");
+            //  user.HoverState.Value = msg.HoverState;
+            //}
             break;
           case Msg.Types.HoverQuery:
             if (isRegisteredUser) {
-              c.Send(Msg.Factories.HoverQuery(user.HoverState.Value));
+              c.Send(Msg.Factories.HoverQuery(user.RemoteUserInfo.DeviceId, user.HoverState.Value));
             }
             break;
           case Msg.Types.Quit:
@@ -134,31 +134,38 @@ namespace TouchlessDesign.Components.Ipc {
           case Msg.Types.SetOnboarding:
             Input.IsOnboardingActive.Value = msg.Bool.Value;
             break;
+          case Msg.Types.SubscribeToUserUpdates:
+            c.Send(new Msg(Msg.Types.SubscribeToUserUpdates));
+            if (!_usersInterestingClients.Contains(c)) {
+              _usersInterestingClients.Add(c);
+              Log.Info($"Client from {c.Connection.Destination} subscribed to user updates.");
+              c.Send(Msg.Factories.UsersQuery(Input.RegisteredUsers.Keys.ToArray()));
+            }
+            break;
           case Msg.Types.RegisterRemoteClient:
-            if(Config.Input.InputProvider != 1) {
+            if (Config.Input.InputProvider != 1) {
               Log.Warn($"User attempted to register, but the service is running in local mode");
             }
             if (!Input.RegisteredUsers.ContainsKey(msg.DeviceId)) {
 
               TouchlessUser newUser = new TouchlessUser(msg.DeviceId, c.Connection.Destination, c);
+              SendUserAdded(newUser.RemoteUserInfo.DeviceId);
               Input.RegisterUser(newUser);
               Log.Info($"Registered User {msg.DeviceId}");
               foreach (Client interestedClient in _usersInterestingClients) {
-                // Let em know we registered a user
+                interestedClient.Send(Msg.Factories.UserAdded(newUser.RemoteUserInfo.DeviceId));
               }
               c.Send(Msg.Factories.Ping());
             }
             else {
-              Log.Info($"User {msg.DeviceId} tried to register, but is already in the system.");
+              Log.Info($"User { msg.DeviceId } tried to register, but is already in the system.");
             }
             break;
           case Msg.Types.UsersQuery:
-            Log.Info($"Querying for users");
+            c.Send(Msg.Factories.UsersQuery(Input.RegisteredUsers.Keys.ToArray()));
             break;
-          case Msg.Types.SubscribeToUserChanges:
-            if(!_usersInterestingClients.Contains(c)) {
-              _usersInterestingClients.Add(c);
-            }
+          case Msg.Types.QueryStateUserId:
+              c.Send(Msg.Factories.StateUserQuery(Input.stateUser != null ? Input.stateUser.RemoteUserInfo.DeviceId : -1));            
             break;
           default:
             throw new ArgumentOutOfRangeException();
@@ -219,10 +226,23 @@ namespace TouchlessDesign.Components.Ipc {
       }
     }
 
-    public void SendUsersMessage() {
-      Msg msg = Msg.Factories.UsersQuery();
+    public void SendUserUpdate(TouchlessUser user) {
+      Msg msg = Msg.Factories.UserUpdate(user.RemoteUserInfo.DeviceId, user.HoverState.Value, user.HandCount, user.ScreenX, user.ScreenY, user.IsButtonDown.Value, user.InitialPress, user.InitialRelease);
+      // Log.Debug($"Updating user {user.RemoteUserInfo.DeviceId} with position {msg.X}, {msg.Y}");
       foreach (Client c in _usersInterestingClients) {
         c.Send(msg);
+      }
+    }
+
+    public void SendUserAdded(int deviceId) {
+      foreach (Client c in _usersInterestingClients) {
+        c.Send(Msg.Factories.UserAdded(deviceId));
+      }
+    }
+
+    public void SendUserRemoved(int deviceId) {
+      foreach (Client c in _usersInterestingClients) {
+        c.Send(Msg.Factories.UserRemoved(deviceId));
       }
     }
 
@@ -247,10 +267,11 @@ namespace TouchlessDesign.Components.Ipc {
         _usersInterestingClients.Remove(c);
       }
 
-      if(Input != null) { 
+      if (Input != null) {
         var userKeys = Input.RegisteredUsers.Keys;
         foreach (var userKey in userKeys) {
           if (Input.RegisteredUsers[userKey].Client == c) {
+            Ipc.SendUserRemoved(userKey);
             Input.DeregisterUser(Input.RegisteredUsers[userKey]);
             break;
           }

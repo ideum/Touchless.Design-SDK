@@ -88,16 +88,16 @@ namespace Ideum {
       _seq.Append(_cg.DOFade(0.0f, 0.5f));
     }
 
-    private void HandlePointerExit() {
+    private void HandlePointerExit(int pointerId) {
       if (!_active) return;
 
-      TouchlessDesign.SetHoverState(Data.HoverStates.None, 1);
+      TouchlessDesign.SetHoverState(pointerId, Data.HoverStates.None, 1);
     }
 
-    private void HandlePointerEnter() {
+    private void HandlePointerEnter(int pointerId) {
       if (!_active) return;
 
-      TouchlessDesign.SetHoverState(Data.HoverStates.Click, 1);
+      TouchlessDesign.SetHoverState(pointerId, Data.HoverStates.Click, 1);
     }
 
     private void HandleClick() {

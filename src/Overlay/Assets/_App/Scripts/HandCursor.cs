@@ -1,12 +1,16 @@
 ﻿using DG.Tweening;
 using Ideum;
 using Ideum.Data;
+using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class HandCursor : Cursor {
 
   public HoverStates State;
+
+  public TouchlessUser User;
 
   public Image PointerHand;
   public UiCircle Ring;
@@ -33,7 +37,7 @@ public class HandCursor : Cursor {
   private Color _selectedColor = Color.green;
   private Color _errorColor = Color.red;
 
-  private bool _selected; 
+  private bool _selected;
   private Sequence _seq;
 
   private float _borderWidthFull;
@@ -52,7 +56,8 @@ public class HandCursor : Cursor {
     if (IsHD) {
       _borderWidthFull = BorderWidthFull * HDMultipler;
       _borderWidthSmall = BorderWidthSmall * HDMultipler;
-    } else {
+    }
+    else {
       _borderWidthFull = BorderWidthFull;
       _borderWidthSmall = BorderWidthSmall;
     }
@@ -71,11 +76,27 @@ public class HandCursor : Cursor {
 
   private void Update() {
     var canvas = GetComponentInParent<Canvas>();
-    RectTransformUtility.ScreenPointToLocalPointInRectangle(canvas.GetComponent<RectTransform>(), Input.mousePosition, canvas.worldCamera, out var pos);
+    _pointerHandRect = PointerHand.GetComponent<RectTransform>();
+    Vector3 position = User != null ? User.ScreenPosition : Input.mousePosition;
+    if(User != null) {
+      DoStateChange(User.HoverState, User.IsButtonDown);
+    }
+    RectTransformUtility.ScreenPointToLocalPointInRectangle(canvas.GetComponent<RectTransform>(), position, canvas.worldCamera, out var pos);
     _cursorRect.position = canvas.transform.TransformPoint(pos);
   }
 
+  //public void SetTouchlessUser(TouchlessUser user) {
+  //  User = user;
+  //  if(User != null) {
+  //    user.HoverStateChanged += HandleUserStateChange;
+  //  }
+  //}
+
   public override void DoStateChange(HoverStates state, bool selected) {
+    _pointerHandRect = PointerHand.GetComponent<RectTransform>();
+    _pointerHandCG = PointerHand.GetComponent<CanvasGroup>();
+    _dragHandCG = DragHand.GetComponent<CanvasGroup>();
+    _cursorRect = GetComponent<RectTransform>();
     if (State == state && _selected == selected) return;
     if (_clicking || _touchWarningShowing) return;
     Log.Info(state + " " + selected);
@@ -90,7 +111,8 @@ public class HandCursor : Cursor {
       case HoverStates.Click:
         if (selected) {
           ClickSelect();
-        } else {
+        }
+        else {
           _clickAnimationCounter = 0;
           HoverClick();
         }

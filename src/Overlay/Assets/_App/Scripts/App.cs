@@ -9,6 +9,7 @@
 using DG.Tweening;
 using Ideum.Data;
 using System;
+using System.Collections.Generic;
 using TouchlessDesign.Config;
 using UnityEngine;
 
@@ -19,6 +20,11 @@ namespace Ideum {
     public CanvasGroup WarningBackground;
     public TransparentWindow Window;
     public Onboarding Onboarding;
+    public HandCursor HandCursorPrefab;
+    public Canvas Canvas;
+    public Color[] HandColors;
+
+    private List<HandCursor> _cursors;
 
     private bool _noTouchWarningEnabled = true;
 
@@ -45,6 +51,9 @@ namespace Ideum {
       TouchlessDesign.Initialize(AppSettings.Get().DataDirectory.GetPath());
       TouchlessDesign.Connected += OnConnected;
       TouchlessDesign.Disconnected += OnDisconnected;
+      TouchlessDesign.UserAdded += HandleUserAdded;
+      TouchlessDesign.UserRemoved += HandleUserRemoved;
+      _cursors = new List<HandCursor>();
       Onboarding.SetActive += SetOnboarding;
       Onboarding.Initialize(AppSettings.Get().IsPedestal);
       Cursor.GetComponent<CanvasGroup>().alpha = 0.0f;
@@ -90,8 +99,29 @@ namespace Ideum {
     private void OnConnected() {
       Log.Info("Connected. Starting to query...");
       TouchlessDesign.SubscribeToDisplayConfig();
+      Log.Info("Subscribing to User Updates...");
+      TouchlessDesign.SubscribeToUserUpdates();
+
+
       TouchlessDesign.SettingChanged += HandleSettingChanged;
       _connected = true;
+    }
+
+    private void HandleUserRemoved(TouchlessUser user) {
+      foreach(HandCursor c in _cursors) {
+        if(c.User == user) {
+          Destroy(c.gameObject);
+          _cursors.Remove(c);
+          break;
+        }
+      }
+    }
+
+    private void HandleUserAdded(TouchlessUser user) {
+      Log.Info("Adding cursor");
+      HandCursor newCursor = Instantiate(HandCursorPrefab, Canvas.transform);
+      newCursor.User = user;
+      _cursors.Add(newCursor);
     }
 
     // At a regular interval, query the click and hover states, as well as the no touch state, passing respective method delegates. Also manages onboarding timeout
@@ -153,7 +183,12 @@ namespace Ideum {
 
     // Method delegate to handle a change in the number of tracked hands. This is used to manage the timeout, and reset of the onboarding.
     private void HandleHandCount(int handCount) {
-      if(_handCount != handCount) {
+      int hCount = 0;
+      foreach (TouchlessUser user in TouchlessDesign.Users.Values) {
+        hCount += user.HandCount;
+      }
+
+      if (_handCount != handCount) {
         if (_handCount == 0 && handCount > 0 && _onboardingResetFlag && Onboarding.Enabled) {
           SetOnboarding(true);
           _onboardingResetTimer = 0f;

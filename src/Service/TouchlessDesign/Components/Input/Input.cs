@@ -335,7 +335,9 @@ namespace TouchlessDesign.Components.Input {
           }
 
           foreach (var userKey in RegisteredUsers) {
-            var user = userKey.Value;
+            TouchlessUser user = userKey.Value;
+            user.InitialPress = false;
+            user.InitialRelease = false;
             if (user.Hands.Count <= 0) {
               user.HandCount = 0;
               if (user.IsButtonDown.Value) {
@@ -345,16 +347,24 @@ namespace TouchlessDesign.Components.Input {
               if (user.HasClicked) {
                 user.HasClicked = false;
               }
+
+              user.ScreenX = user.ScreenY = 0;
+
+              if (user.Client != null) {
+                Ipc.SendUserUpdate(user);
+              }
             }
             else {
               var hand = user.Hands.First();
               user.HandCount = user.Hands.Count;
 
               //position
-              if (user == stateUser && IsEmulationEnabled.Value) {
-                Config.Input.NormalizedPosition(hand.X, hand.Y, hand.Z, out var h, out var v);
-                var pixelX = (int)Math.Round(h * Bounds.Width + Bounds.Left);
-                var pixelY = (int)Math.Round(v * Bounds.Height + Bounds.Top);
+              Config.Input.NormalizedPosition(hand.X, hand.Y, hand.Z, out var h, out var v);
+              var pixelX = (int)Math.Round(h * Bounds.Width + Bounds.Left);
+              var pixelY = (int)Math.Round(v * Bounds.Height + Bounds.Top);
+              user.ScreenX = pixelX; 
+              user.ScreenY = pixelY;
+              if (user == stateUser && Config.Input.MouseEmulationEnabled) {
                 SetPosition(pixelX, pixelY);
               }
 
@@ -367,9 +377,7 @@ namespace TouchlessDesign.Components.Input {
                 if (hoverState == HoverStates.Click) {
                   if (!user.HasClicked) {
                     user.HasClicked = true;
-                    //_hasClicked = true;
                     user.DoClick();
-                    //DoClick();
                   }
                 }
                 else {
@@ -383,6 +391,11 @@ namespace TouchlessDesign.Components.Input {
               if (!isGrabbing && user.HasClicked) {
                 //_hasClicked = false;
                 user.HasClicked = false;
+              }
+
+              if (user.Client != null) {
+                Ipc.SendUserUpdate(user);
+                //user.Client.Send(Msg.Factories.UserUpdate(user.RemoteUserInfo.DeviceId, user.HandCount, pixelX, pixelY, user.IsButtonDown.Value));
               }
             }
           }

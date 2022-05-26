@@ -2,23 +2,24 @@
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System;
+using System.Collections.Generic;
 
 namespace Ideum {
   public class DetectHover : UIBehaviour, IPointerEnterHandler, IPointerExitHandler {
 
-    public Action HoverEnter;
-    public Action HoverExit;
+    public Action<int> HoverEnter;
+    public Action<int> HoverExit;
+    private List<int> _hoveringUsers = new List<int>();
 
     protected Selectable _selectable;
     protected bool _isHover = false;
 
     public void OnPointerEnter(PointerEventData eventData) {
-      DoPointerEnterLogic();
+      DoPointerEnterLogic(eventData.pointerId);
     }
 
     public void OnPointerExit(PointerEventData eventData) {
-      DoPointerExitLogic();
-
+      DoPointerExitLogic(eventData.pointerId);
     }
 
     protected override void OnEnable() {
@@ -31,36 +32,50 @@ namespace Ideum {
     void Update() {
       if (_selectable != null) {
         if (!_selectable.interactable && _isHover) {
-          DoPointerExitLogic();
+          foreach(var userId in _hoveringUsers) {
+            DoPointerExitLogic(userId);
+          }
+          _hoveringUsers.Clear();
         }
       }
     }
 
     protected override void OnDisable() {
-      DoPointerExitLogic();
+      ClearHoveredUsers();
       base.OnDisable();
 
     }
 
     protected override void OnDestroy() {
-      DoPointerExitLogic();
+      ClearHoveredUsers();
       base.OnDestroy();
     }
 
-    private void DoPointerEnterLogic() {
+    protected void ClearHoveredUsers() {
+      foreach (var userId in _hoveringUsers) {
+        DoPointerExitLogic(userId);
+      }
+      _hoveringUsers.Clear();
+    }
+
+    private void DoPointerEnterLogic(int pointerId) {
       if (_selectable != null && !_selectable.interactable) return;
       _isHover = true;
-      HoverEnter?.Invoke();
+      _hoveringUsers.Add(pointerId);
+      HoverEnter?.Invoke(pointerId);
       //if (TouchlessNetwork.Instance != null) {
       //  TouchlessNetwork.Instance.HoverAreaActive(Ideum.Data.HoverStates.Click);
       //}
       //Debug.Log("Hover Enter");
     }
 
-    protected void DoPointerExitLogic() {
+    protected void DoPointerExitLogic(int pointerId) {
       if (!_isHover) return;
-      _isHover = false;
-      HoverExit?.Invoke();
+      _hoveringUsers.Remove(pointerId);
+      if(_hoveringUsers.Count == 0) {
+        _isHover = false;
+      }
+      HoverExit?.Invoke(pointerId);
       //if (TouchlessNetwork.Instance != null) {
       //  TouchlessNetwork.Instance.HoverAreaDeactive();
       //}
