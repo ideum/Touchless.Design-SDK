@@ -86,7 +86,7 @@ namespace TouchlessDesign.Components.Ipc {
             break;
           case Msg.Types.ClickAndHoverQuery:
             if (isRegisteredUser) {
-              c.Send(Msg.Factories.ClickAndHoverQuery(user.IsButtonDown.Value, user.HoverState.Value));
+              c.Send(Msg.Factories.ClickAndHoverQuery(user.RemoteUserInfo.DeviceId, user.IsButtonDown.Value, user.HoverState.Value));
             }
             break;
           case Msg.Types.Ping:

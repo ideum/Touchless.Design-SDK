@@ -242,11 +242,12 @@ namespace TouchlessDesign.Components.Ipc {
         return new Msg { Type = Types.ClickAndHoverQuery, DeviceId = deviceId };
       }
 
-      public static Msg ClickAndHoverQuery(bool click, HoverStates hover) {
+      public static Msg ClickAndHoverQuery(int deviceId, bool click, HoverStates hover) {
         return new Msg {
           Type = Types.ClickAndHoverQuery,
           Bool = click,
-          HoverState = hover
+          HoverState = hover,
+          DeviceId = deviceId
         };
       }
 
