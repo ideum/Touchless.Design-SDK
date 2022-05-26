@@ -238,8 +238,8 @@ namespace TouchlessDesign.Components.Ipc {
         };
       }
 
-      public static Msg ClickAndHoverQuery() {
-        return new Msg { Type = Types.ClickAndHoverQuery };
+      public static Msg ClickAndHoverQuery(int deviceId) {
+        return new Msg { Type = Types.ClickAndHoverQuery, DeviceId = deviceId };
       }
 
       public static Msg ClickAndHoverQuery(bool click, HoverStates hover) {
@@ -258,8 +258,8 @@ namespace TouchlessDesign.Components.Ipc {
         return new Msg { Type = Types.NoTouch, Bool = isNoTouch };
       }
 
-      public static Msg NoTouchQuery() {
-        return new Msg(Types.NoTouchQuery);
+      public static Msg NoTouchQuery(int deviceId) {
+        return new Msg(Types.NoTouchQuery, deviceId);
       }
 
       public static Msg NoTouchQuery(bool isNoTouch) {

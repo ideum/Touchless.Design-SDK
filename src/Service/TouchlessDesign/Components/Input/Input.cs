@@ -189,13 +189,13 @@ namespace TouchlessDesign.Components.Input {
 
     private void QueryClickAndHoverState() {
       if (_remoteClientActive) {
-        _remoteClient.Send(Msg.Factories.ClickAndHoverQuery());
+        _remoteClient.Send(Msg.Factories.ClickAndHoverQuery(Config.General.DeviceID));
       }
     }
 
     private void QueryNoTouch() {
       if (_remoteClientActive) {
-        _remoteClient.Send(Msg.Factories.NoTouchQuery());
+        _remoteClient.Send(Msg.Factories.NoTouchQuery(Config.General.DeviceID));
       }
     }
     #endregion
