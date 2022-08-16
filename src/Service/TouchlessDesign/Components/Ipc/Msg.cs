@@ -106,11 +106,17 @@ namespace TouchlessDesign.Components.Ipc {
     [JsonProperty("IsClicking")]
     public bool IsClicking;
 
-    [JsonProperty("Users")]
-    public int[] Users;
+    [JsonProperty("UserIds")]
+    public int[] UserIds;
 
     [JsonProperty("DeviceId")]
     public int DeviceId;
+
+    [JsonProperty("TouchlessUserInfo")]
+    public Msg[] TouchlessUserInfo;
+
+    [JsonProperty("MouseDriverId")]
+    public int MouseDriverId = -1;
 
     #endregion
 
@@ -315,8 +321,14 @@ namespace TouchlessDesign.Components.Ipc {
         return new Msg { Type = Types.RegisterRemoteClient };
       }
 
-      public static Msg UsersQuery(int[] userIds) {
-        return new Msg { Type = Types.UsersQuery, Users = userIds };
+      public static Msg UsersQuery(int[] userIds, TouchlessUser[] touchlessUsers, int stateUserId, bool usingMouseEmulation) {
+
+        List<Msg> userUpdates = new List<Msg>();
+        foreach (TouchlessUser u in touchlessUsers) {
+          userUpdates.Add(UserUpdate(u.RemoteUserInfo.DeviceId, u.HoverState.Value, u.HandCount, u.ScreenX, u.ScreenY, u.IsButtonDown.Value, u.InitialPress, u.InitialRelease));
+        }
+
+        return new Msg { Type = Types.UsersQuery, UserIds = userIds, TouchlessUserInfo = userUpdates.ToArray(), MouseDriverId = usingMouseEmulation ? stateUserId : -1 };
       }
 
       public static Msg UserUpdate(int deviceId, HoverStates hoverstate, int handCount, int screenPosX, int screenPosY, bool isClicking, bool pressed, bool released) {

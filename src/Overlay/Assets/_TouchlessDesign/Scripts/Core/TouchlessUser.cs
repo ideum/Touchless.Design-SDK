@@ -58,100 +58,40 @@ namespace Ideum {
     public int X { get; private set; }
     public int Y { get; private set; }
 
+    /// <summary>
+    /// Whether or not mouse emulation is enabled for this user
+    /// </summary>
+    public bool MouseEmulationEnabled { get; private set; }
 
-    public Vector3 ScreenPosition { get { return new Vector2(X, Y); } }
 
-
-    #region Pointer
-    public bool HoverChanged;
-    //public MouseState MouseState;
-    // public PointerEventData PointerEventData { get; private set; }
-    private GameObject _currentHoverGo;
-    private GameObject _oldHoverGo;
-//    private Vector2 screenDelta;
-    private List<RaycastResult> _hitData = new List<RaycastResult>();
+    private Vector2 _screenPosition = new Vector2();
+    public Vector3 ScreenPosition { get { return _screenPosition; } }
 
     /// <summary>
     /// This should be called every time data is updated from a <see cref="Ideum.Data.Msg.Types.UserUpdate"/> message
     /// </summary>
     public void Update(Msg msg) {
-      //UpdateCursorPositon();
       PrevX = X;
       PrevY = Y;
       X = msg.X ?? -1;
       Y = msg.Y ?? -1;
+      _screenPosition.x = X;
+      _screenPosition.y = Y;
       HandCount = msg.HandCount;
 
+      InitialPress = !IsButtonDown && msg.IsClicking;
+      InitialRelease = IsButtonDown && !msg.IsClicking;
+      
       IsButtonDown = msg.IsClicking;
 
-      if(!InitialPress)
-        InitialPress = msg.Bool ?? false;
+      //if(IsButtonDown && !InitialPress)
+      //  InitialPress = true;
 
-      if(!InitialRelease)
-        InitialRelease = msg.Bool2 ?? false;
+      //if(!IsButtonDown && !InitialRelease)
+      //  InitialRelease = msg.IsClicking;
 
-      HoverStates prevState = HoverState;
       HoverState = msg.HoverState;
-      //if (HoverState != prevState) {
-      //  HoverStateChanged?.Invoke(HoverState);
-      //}
-      //PointerEventData = new PointerEventData(EventSystem.current);
-      UpdateCursorPosition();
-      UpdateCursorHit();
     }
-
-    public GameObject GetOldHoverGo() {
-      return _oldHoverGo;
-    }
-
-    private void UpdateCursorPosition() {
-      // screenDelta = new Vector2(X - PrevX, Y - PrevY);
-      //PointerEventData.delta = screenDelta;
-      //PointerEventData.position = new Vector2(X, Y);
-      //PointerEventData.pointerId = DeviceId;
-    }
-
-    public void SetHoverGo(GameObject go) {
-      if (_currentHoverGo == go) return;
-      _oldHoverGo = _currentHoverGo;
-      _currentHoverGo = go;
-      //PointerEventData.pointerEnter = go;
-      HoverChanged = true;
-    }
-
-    private void UpdateCursorHit() {
-      //if (PointerEventData == null)
-       // return;
-
-      _hitData.Clear();
-      //EventSystem.current.RaycastAll(PointerEventData, _hitData);
-      //TouchlessDesign.Instance.GraphicRaycaster.Raycast(PointerEventData, _hitData);
-
-      if (_hitData.Count > 0) {
-        var firstRaycast = FindFirstRaycast(_hitData);
-        //PointerEventData.pointerCurrentRaycast = firstRaycast;
-        //PointerEventData.pointerEnter = firstRaycast.gameObject;
-        //SetHoverGo(PointerEventData.pointerEnter);
-      }
-      else {
-        //PointerEventData.pointerCurrentRaycast = new RaycastResult();
-        SetHoverGo(null);
-      }
-    }
-
-    protected static RaycastResult FindFirstRaycast(List<RaycastResult> candidates) {
-      RaycastResult result = new RaycastResult();
-      for (var i = 0; i < candidates.Count; ++i) {
-        if (candidates[i].gameObject == null)
-          continue;
-
-        return candidates[i];
-      }
-      return result;
-    }
-
-
-    #endregion
 
   }
 }

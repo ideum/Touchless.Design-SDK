@@ -89,15 +89,17 @@ namespace Ideum {
     }
 
     private void HandlePointerExit(int pointerId) {
-      if (!_active) return;
+      var user = TouchlessDesign.GetTouchlessUserFromPointerID(pointerId);
+      if (!_active || user == null) return;
 
-      TouchlessDesign.SetHoverState(pointerId, Data.HoverStates.None, 1);
+      TouchlessDesign.SetHoverState(user.DeviceId, Data.HoverStates.None, 1);
     }
 
     private void HandlePointerEnter(int pointerId) {
-      if (!_active) return;
+      var user = TouchlessDesign.GetTouchlessUserFromPointerID(pointerId);
+      if (!_active || user == null) return;
 
-      TouchlessDesign.SetHoverState(pointerId, Data.HoverStates.Click, 1);
+      TouchlessDesign.SetHoverState(user.DeviceId, Data.HoverStates.Click, 1);
     }
 
     private void HandleClick() {

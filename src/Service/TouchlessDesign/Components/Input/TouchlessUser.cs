@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -36,27 +37,31 @@ namespace TouchlessDesign.Components.Input {
 
     public event Action<bool> ClickCallback;
     public event Action<bool> MouseButtonStateSet;
-
+    //[JsonIgnore]
     public RemoteUserInfo RemoteUserInfo;
 
     /// <summary>
     /// Current hover state of this user
     /// </summary>
+    
     public Property<HoverStates> HoverState = new Property<HoverStates>();
 
     /// <summary>
     /// Recorded hands for this user.
     /// </summary>
+    //[JsonProperty("Hands")]
     public List<Hand> Hands;
 
     /// <summary>
     /// The number of hands this user is tracking.
     /// </summary>
+    //[JsonProperty("HandCount")]
     public int HandCount;
 
     /// <summary>
     /// Whether or not this user's grab threshold has been met (for dragging or clicking)
     /// </summary>
+
     public Property<bool> IsButtonDown = new Property<bool>();
 
     /// <summary>

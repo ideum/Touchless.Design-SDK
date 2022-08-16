@@ -120,8 +120,17 @@ namespace TouchlessDesign.Components.Ipc {
           case Msg.Types.DisplaySettingsChanged:
             break;
           case Msg.Types.HandCountQuery:
+            int handCount = 0;
             if (isRegisteredUser) {
-              int handCount = user.HandCount;
+              handCount = user.HandCount;
+              c.Send(Msg.Factories.HandCountQuery(handCount));
+            }
+            else {
+              if(Input != null) {
+                foreach (var userValue in Input.RegisteredUsers.Values) {
+                  handCount += userValue.HandCount;
+                }
+              }
               c.Send(Msg.Factories.HandCountQuery(handCount));
             }
             break;
@@ -139,7 +148,6 @@ namespace TouchlessDesign.Components.Ipc {
             if (!_usersInterestingClients.Contains(c)) {
               _usersInterestingClients.Add(c);
               Log.Info($"Client from {c.Connection.Destination} subscribed to user updates.");
-              c.Send(Msg.Factories.UsersQuery(Input.RegisteredUsers.Keys.ToArray()));
             }
             break;
           case Msg.Types.RegisterRemoteClient:
@@ -162,10 +170,10 @@ namespace TouchlessDesign.Components.Ipc {
             }
             break;
           case Msg.Types.UsersQuery:
-            c.Send(Msg.Factories.UsersQuery(Input.RegisteredUsers.Keys.ToArray()));
+            c.Send(Msg.Factories.UsersQuery(Input.RegisteredUsers.Keys.ToArray(), Input.RegisteredUsers.Values.ToArray(), Input.GetStateUserId(), Config.Input.MouseEmulationEnabled));
             break;
           case Msg.Types.QueryStateUserId:
-              c.Send(Msg.Factories.StateUserQuery(Input.stateUser != null ? Input.stateUser.RemoteUserInfo.DeviceId : -1));            
+            c.Send(Msg.Factories.StateUserQuery(Input.GetStateUserId()));
             break;
           default:
             throw new ArgumentOutOfRangeException();

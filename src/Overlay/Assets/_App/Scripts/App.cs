@@ -29,7 +29,7 @@ namespace Ideum {
     private bool _noTouchWarningEnabled = true;
 
     private bool _connected;
-    private float _queryInterval = 0.25f;
+    private float _queryInterval = 1f / 60f;
     private float _timer;
     private int _handCount = 0;
 
@@ -87,9 +87,9 @@ namespace Ideum {
       if (_config.OnboardingNoHandTimeout_s != _onboardingTimeoutInterval) {
         _onboardingTimeoutInterval = _config.OnboardingNoHandTimeout_s;
       }
-      if(_config.CursorEnabled != Cursor.gameObject.activeInHierarchy) {
-        Cursor.gameObject.SetActive(_config.CursorEnabled);
-      }
+      //if(_config.CursorEnabled != Cursor.gameObject.activeInHierarchy) {
+      //  Cursor.gameObject.SetActive(_config.CursorEnabled);
+      //}
       if(_config.NoTouchEnabled != _noTouchWarningEnabled) {
         _noTouchWarningEnabled = _config.NoTouchEnabled;
       }
@@ -101,8 +101,6 @@ namespace Ideum {
       TouchlessDesign.SubscribeToDisplayConfig();
       Log.Info("Subscribing to User Updates...");
       TouchlessDesign.SubscribeToUserUpdates();
-
-
       TouchlessDesign.SettingChanged += HandleSettingChanged;
       _connected = true;
     }
@@ -161,9 +159,10 @@ namespace Ideum {
       if (_connected) {
         _timer += Time.deltaTime;
         if(_timer > _queryInterval) {
-          TouchlessDesign.QueryClickAndHoverState(HandleQueryResponse);
+          // TouchlessDesign.QueryClickAndHoverState(HandleQueryResponse);
           TouchlessDesign.QueryNoTouchState(HandleNoTouch);
-          TouchlessDesign.QueryHandCount(HandleHandCount);
+          TouchlessDesign.QueryUsers();
+          HandleHandCount();
           _timer = 0f;
         }
       }
@@ -182,20 +181,20 @@ namespace Ideum {
     }
 
     // Method delegate to handle a change in the number of tracked hands. This is used to manage the timeout, and reset of the onboarding.
-    private void HandleHandCount(int handCount) {
+    private void HandleHandCount() {
       int hCount = 0;
       foreach (TouchlessUser user in TouchlessDesign.Users.Values) {
         hCount += user.HandCount;
       }
 
-      if (_handCount != handCount) {
-        if (_handCount == 0 && handCount > 0 && _onboardingResetFlag && Onboarding.Enabled) {
+      if (_handCount != hCount) {
+        if (_handCount == 0 && hCount > 0 && _onboardingResetFlag && Onboarding.Enabled) {
           SetOnboarding(true);
           _onboardingResetTimer = 0f;
           _onboardingResetFlag = false;
         }
-        Cursor.GetComponent<CanvasGroup>().alpha = handCount > 0 ? 1.0f : 0.0f;
-        _handCount = handCount;
+        //Cursor.GetComponent<CanvasGroup>().alpha = hCount > 0 ? 1.0f : 0.0f;
+        _handCount = hCount;
       }
       if (_handCount > 0) {
         _onboardingResetTimer = 0f;
@@ -209,7 +208,10 @@ namespace Ideum {
       if (!_noTouchWarningEnabled) return;
 
       if (noTouch) {
-        Cursor.ShowNoTouch();
+        foreach(Cursor c in _cursors) {
+          c.ShowNoTouch();
+        }
+        // Cursor.ShowNoTouch();
       }
 
       if (!noTouch && _touchWarningActive) {
@@ -231,6 +233,10 @@ namespace Ideum {
     private void HandleQueryResponse(bool clickState, HoverStates hoverState) {
       Cursor.DoStateChange(hoverState, clickState);
     }
+
+    //private void HandleStateUserResponse(int id) {
+
+    //}
 
   }
 }

@@ -11,6 +11,7 @@ namespace Ideum {
 
     public static event Action<Msg> SettingChanged;
     public static Dictionary<int, TouchlessUser> Users;
+    private static int _mouseDriverId;
     public static event Action<TouchlessUser> UserAdded;
     public static event Action<TouchlessUser> UserRemoved;
 
@@ -43,11 +44,13 @@ namespace Ideum {
 
     private static ClientManager _connectionManager;
     private static NetworkSettings _networkSettings;
+    private static GeneralSettings _generalSettings;
 
     public static bool IsConnected { get; private set; }
 
     private static void InitializeNetworking(string dataDir = null) {
       _networkSettings = NetworkSettings.Get(dataDir);
+      _generalSettings = GeneralSettings.Get(dataDir);
       _connectionManager = new ClientManager(_networkSettings);
       _connectionManager.OnConnected += OnConnected;
       _connectionManager.OnDisconnected += OnDisconnected;
@@ -67,6 +70,10 @@ namespace Ideum {
     private static void OnDisconnected() {
       IsConnected = false;
       Disconnected?.Invoke();
+    }
+
+    public static TouchlessUser GetTouchlessUserFromPointerID(int pointerId) {
+      return pointerId == -1 ? Users[_mouseDriverId] : Users[pointerId];
     }
 
     private static void OnMessageReceived(Msg msg) {
@@ -142,9 +149,11 @@ namespace Ideum {
           break;
         case Msg.Types.UsersQuery:
           Sync(() => {
-            if (msg.Users != null) {
-              foreach (int deviceId in msg.Users) {
-                AddUser(deviceId);
+            // Debug.Log($"Users: {msg.Users}");
+            if (msg.TouchlesUserInfo != null) {
+              foreach (var user in msg.TouchlesUserInfo) {
+                AddUser(user.DeviceId);
+                UpdateUser(user.DeviceId, user);
               }
               // Remove all users that no longer exist.
               foreach (var deviceId in msg.Users) {
@@ -153,6 +162,7 @@ namespace Ideum {
                 }
               }
             }
+            _mouseDriverId = msg.MouseDriverId;
           });
           break;
         default:
@@ -185,7 +195,9 @@ namespace Ideum {
         Log.Error($"Device ID for user update not found");
       }
       else {
-        //Log.Info($"Updating user {deviceId}");
+        if(deviceId == 0) {
+          Debug.Log($"Updating user {deviceId}");
+        }
         user.Update(msg);
       }
     }
@@ -208,10 +220,14 @@ namespace Ideum {
     private static readonly Msg.Callback AddOnQueries = new Msg.Callback(Msg.Types.AddOnQuery);
     private static readonly Msg.Callback HandQueries = new Msg.Callback(Msg.Types.HandCountQuery);
     private static readonly Msg.Callback OnboardingQueries = new Msg.Callback(Msg.Types.OnboardingQuery);
+    private static readonly Msg.Callback StateUserQueries = new Msg.Callback(Msg.Types.QueryStateUserId);
+    private static readonly Msg.Callback UsersQueries = new Msg.Callback(Msg.Types.UsersQuery);
 
     public static void QueryDimensions(Msg.QueryDimsDelegate callback) {
       DimsQueries.Add(callback);
-      _connectionManager.Send(Msg.Factories.DimensionsQuery());
+      Msg msg = Msg.Factories.DimensionsQuery();
+      msg.DeviceId = _generalSettings.DeviceID;
+      _connectionManager.Send(msg);
     }
 
     /// <summary>
@@ -232,50 +248,64 @@ namespace Ideum {
     public static void SetHoverState(bool isHovering, int priority = 0) {
       Msg msg = Msg.Factories.Hover(isHovering ? HoverStates.Click : HoverStates.None);
       msg.Priority = priority;
+      msg.DeviceId = _generalSettings.DeviceID;
       _connectionManager.Send(msg);
     }
 
     public static void QueryHoverState(Msg.BoolDelegate callback) {
       HoverQueries.Add(callback);
-      _connectionManager.Send(Msg.Factories.HoverQuery());
+      var msg = Msg.Factories.HoverQuery();
+      msg.DeviceId = _generalSettings.DeviceID;
+      _connectionManager.Send(msg);
     }
 
     public static void QueryHoverState(Msg.HoverStateDelegate callback) {
       HoverQueries.Add(callback);
-      _connectionManager.Send(Msg.Factories.HoverQuery());
+      var msg = Msg.Factories.HoverQuery();
+      msg.DeviceId = _generalSettings.DeviceID;
+      _connectionManager.Send(msg);
     }
 
     public static void SetPosition(int x, int y, int priority = 0) {
       Msg msg = Msg.Factories.Position(x, y);
       msg.Priority = priority;
+      msg.DeviceId = _generalSettings.DeviceID;
       _connectionManager.Send(msg);
     }
 
     public static void SetClickState(bool isDown, int priority = 0) {
       Msg msg = Msg.Factories.Click(isDown);
       msg.Priority = priority;
+      msg.DeviceId = _generalSettings.DeviceID;
       _connectionManager.Send(msg);
     }
 
     public static void SetNoTouchState(bool value, int priority = 0) {
       Msg msg = Msg.Factories.NoTouch(value);
       msg.Priority = priority;
+      msg.DeviceId = _generalSettings.DeviceID;
       _connectionManager.Send(msg);
     }
 
     public static void QueryClickState(Msg.BoolDelegate callback) {
       ClickQueries.Add(callback);
-      _connectionManager.Send(Msg.Factories.ClickQuery());
+      Msg msg = Msg.Factories.ClickQuery();
+      msg.DeviceId = _generalSettings.DeviceID;
+      _connectionManager.Send(msg);
     }
 
     public static void QueryClickAndHoverState(Msg.ClickAndHoverDelegate callback) {
       ClickAndHoverQueries.Add(callback);
-      _connectionManager.Send(Msg.Factories.ClickAndHoverQuery());
+      Msg msg = Msg.Factories.ClickAndHoverQuery();
+      msg.DeviceId = _generalSettings.DeviceID;
+      _connectionManager.Send(msg);
     }
 
     public static void QueryClickAndHoverState(Msg.ClickAndHoverBoolDelegate callback) {
       ClickAndHoverQueries.Add(callback);
-      _connectionManager.Send(Msg.Factories.ClickAndHoverQuery());
+      Msg msg = Msg.Factories.ClickAndHoverQuery();
+      msg.DeviceId = _generalSettings.DeviceID;
+      _connectionManager.Send(msg);
     }
 
     public static void QueryNoTouchState(Msg.NoTouchDelegate callback) {
@@ -285,13 +315,15 @@ namespace Ideum {
 
     public static void QueryAddOn(Msg.AddOnQueryDelegate callback) {
       AddOnQueries.Add(callback);
-      _connectionManager.Send(Msg.Factories.AddOnQuery());
+      Msg msg = Msg.Factories.AddOnQuery();
+      msg.DeviceId = _generalSettings.DeviceID;
+      _connectionManager.Send(msg);
     }
 
     public static void QueryHandCount(Msg.HandCountQueryDelegate callback) {
       HandQueries.Add(callback);
       Msg msg = Msg.Factories.HandCountQuery();
-      msg.DeviceId = 1;
+      msg.DeviceId = _generalSettings.DeviceID;
       _connectionManager.Send(msg);
     }
 
@@ -314,6 +346,29 @@ namespace Ideum {
     public static void QueryOnboarding(Msg.OnboardingQueryDelegate callback) {
       OnboardingQueries.Add(callback);
       _connectionManager.Send(Msg.Factories.OnboardingQueryMessage());
+    }
+
+    public static void QueryStateUserId(Msg.StateUserQueryDelegate callback) {
+      StateUserQueries.Add(callback);
+      _connectionManager.Send(Msg.Factories.QueryStateUserId());
+    }
+
+    public static void QueryUsers() {
+      _connectionManager.Send(Msg.Factories.UsersQuery());
+    }
+
+    public static int GetMouseDriverId() {
+      return _mouseDriverId;
+    }
+
+    public static TouchlessUser GetUserFromPointerId(int pointerId) {
+      if(pointerId == -1) {
+        if(GetMouseDriverId() == -1) {
+          return null;
+        }
+        return Users[GetMouseDriverId()];
+      }
+      return Users[pointerId];
     }
 
     #endregion

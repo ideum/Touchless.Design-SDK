@@ -76,6 +76,7 @@ namespace TouchlessDesign.Components.Input.Providers.Remote {
       _server.SendBroadcast(Encoding.UTF8.GetBytes(discovery));
     }
 
+    // private int _inc;
     private void HandleMessageReceived(string messageRaw, IPEndPoint endpoint) {
       Msg msg;
       if(!Msg.TryDeserialize(messageRaw, out msg)) {
@@ -84,12 +85,16 @@ namespace TouchlessDesign.Components.Input.Providers.Remote {
       }
 
       lock (_lock) {
-        _handBuffer.Clear();
         if(!_handBuffer.ContainsKey(msg.DeviceId)) {
           //Log.Info($"Recieved message from Device {msg.DeviceId}");
+          //if (msg.DeviceId == 1) {
+          //  Log.Info($"Recieved message from Device {msg.DeviceId} with inc {_inc++}");
+          //  //Log.Debug($"{user.ScreenX}, {user.ScreenY}");
+          //}
           _handBuffer.Add(msg.DeviceId, msg.Hands.ToList());
         }
         else {
+          _handBuffer[msg.DeviceId].Clear();
           _handBuffer[msg.DeviceId] = msg.Hands.ToList();
         }
         _updateFlag = true;

@@ -52,8 +52,9 @@ namespace Ideum {
     }
 
     protected void ClearHoveredUsers() {
-      foreach (var userId in _hoveringUsers) {
-        DoPointerExitLogic(userId);
+      for(int i = _hoveringUsers.Count - 1; i >= 0; i--) {
+        DoPointerExitLogic(_hoveringUsers[i]);
+
       }
       _hoveringUsers.Clear();
     }

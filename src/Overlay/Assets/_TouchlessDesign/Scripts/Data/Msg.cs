@@ -111,11 +111,17 @@ namespace Ideum.Data {
     [JsonProperty("IsClicking")]
     public bool IsClicking;
 
-    [JsonProperty("Users")]
+    [JsonProperty("UserIds")]
     public int[] Users;
 
     [JsonProperty("DeviceId")]
     public int DeviceId;
+
+    [JsonProperty("TouchlessUserInfo")]
+    public Msg[] TouchlesUserInfo;
+
+    [JsonProperty("MouseDriverId")]
+    public int MouseDriverId = -1;
 
     #endregion
 
@@ -178,7 +184,7 @@ namespace Ideum.Data {
 
       public static Msg HoverQuery() {
         return new Msg {
-          Type = Types.HoverQuery
+          Type = Types.HoverQuery,
         };
       }
 
@@ -271,12 +277,11 @@ namespace Ideum.Data {
       }
 
       public static Msg AddOnQuery() {
-        return new Msg {Type = Types.AddOnQuery};
+        return new Msg { Type = Types.AddOnQuery };
       }
 
       public static Msg AddOnQuery(bool hasSecondScreen, bool hasLEDs, int width_px = 0, int height_px = 0, int width_mm = 0, int height_mm = 0) {
-        return new Msg
-          {Type = Types.AddOnQuery, Bool = hasSecondScreen, Bool2 = hasLEDs, X = width_px, Y = height_px, W = width_mm, H = height_mm};
+        return new Msg { Type = Types.AddOnQuery, Bool = hasSecondScreen, Bool2 = hasLEDs, X = width_px, Y = height_px, W = width_mm, H = height_mm };
       }
 
       public static Msg SettingsMessage(ConfigDisplay config) {
@@ -318,6 +323,14 @@ namespace Ideum.Data {
       public static Msg SetOnboardingMessage(bool onboardingActive) {
         return new Msg { Type = Types.SetOnboarding, Bool = onboardingActive };
       }
+
+      public static Msg UsersQuery() {
+        return new Msg { Type = Types.UsersQuery };
+      }
+
+      public static Msg QueryStateUserId() {
+        return new Msg { Type = Types.QueryStateUserId };
+      }
     }
 
     #endregion
@@ -345,6 +358,10 @@ namespace Ideum.Data {
     public delegate void HandCountQueryDelegate(int handCount);
 
     public delegate void OnboardingQueryDelegate(bool onboardingActive);
+
+    public delegate void StateUserQueryDelegate(int deviceId);
+
+    public delegate void UsersQueryDelegate(TouchlessUser[] users);
 
     public class Callback {
 
@@ -488,6 +505,9 @@ namespace Ideum.Data {
             break;
           case Types.SetOnboarding:
             break;
+          case Types.QueryStateUserId:
+            Operate(collection.OfType<StateUserQueryDelegate>(), p => p(msg.DeviceId));
+            break;
           default:
             throw new ArgumentOutOfRangeException();
         }
@@ -562,6 +582,12 @@ namespace Ideum.Data {
       }
 
       public void Add(OnboardingQueryDelegate a) {
+        lock (_callbacks) {
+          _callbacks.Add(a);
+        }
+      }
+
+      public void Add(StateUserQueryDelegate a) {
         lock (_callbacks) {
           _callbacks.Add(a);
         }

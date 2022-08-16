@@ -79,6 +79,10 @@ namespace TouchlessDesign.Components.Input {
       }
     }
 
+    public int GetStateUserId() {
+      return stateUser != null ? stateUser.RemoteUserInfo.DeviceId : -1;
+    }
+
     public void RegisterUser(TouchlessUser user) {
       if (user == null) {
         Log.Error($"Tried to register null user");
@@ -350,9 +354,6 @@ namespace TouchlessDesign.Components.Input {
 
               user.ScreenX = user.ScreenY = 0;
 
-              if (user.Client != null) {
-                Ipc.SendUserUpdate(user);
-              }
             }
             else {
               var hand = user.Hands.First();
@@ -394,7 +395,7 @@ namespace TouchlessDesign.Components.Input {
               }
 
               if (user.Client != null) {
-                Ipc.SendUserUpdate(user);
+                //Ipc.SendUserUpdate(user);
                 //user.Client.Send(Msg.Factories.UserUpdate(user.RemoteUserInfo.DeviceId, user.HandCount, pixelX, pixelY, user.IsButtonDown.Value));
               }
             }

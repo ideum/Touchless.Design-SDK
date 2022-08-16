@@ -302,6 +302,10 @@ namespace Ideum {
 
     protected void ProcessTouchlessEvents() {
       foreach(TouchlessUser user in TouchlessDesign.Users.Values) {
+        if(user.DeviceId == TouchlessDesign.GetMouseDriverId()) {
+          continue;
+        }
+
         var pointerData = GetTouchlessPointerData(user.DeviceId);
         var pressData = pointerData.GetButtonState(PointerEventData.InputButton.Left).eventData;
 

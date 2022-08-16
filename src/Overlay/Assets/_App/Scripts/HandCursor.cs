@@ -77,20 +77,14 @@ public class HandCursor : Cursor {
   private void Update() {
     var canvas = GetComponentInParent<Canvas>();
     _pointerHandRect = PointerHand.GetComponent<RectTransform>();
-    Vector3 position = User != null ? User.ScreenPosition : Input.mousePosition;
+
+    Vector3 position = (User != null && User.DeviceId != Ideum.TouchlessDesign.GetMouseDriverId()) ? User.ScreenPosition : Input.mousePosition;
     if(User != null) {
       DoStateChange(User.HoverState, User.IsButtonDown);
     }
     RectTransformUtility.ScreenPointToLocalPointInRectangle(canvas.GetComponent<RectTransform>(), position, canvas.worldCamera, out var pos);
     _cursorRect.position = canvas.transform.TransformPoint(pos);
   }
-
-  //public void SetTouchlessUser(TouchlessUser user) {
-  //  User = user;
-  //  if(User != null) {
-  //    user.HoverStateChanged += HandleUserStateChange;
-  //  }
-  //}
 
   public override void DoStateChange(HoverStates state, bool selected) {
     _pointerHandRect = PointerHand.GetComponent<RectTransform>();
