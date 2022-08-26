@@ -324,7 +324,7 @@ namespace Ideum.Data {
         return new Msg { Type = Types.SetOnboarding, Bool = onboardingActive };
       }
 
-      public static Msg UsersQuery() {
+      public static Msg UsersQuery(int priority = 0) {
         return new Msg { Type = Types.UsersQuery };
       }
 
@@ -361,7 +361,7 @@ namespace Ideum.Data {
 
     public delegate void StateUserQueryDelegate(int deviceId);
 
-    public delegate void UsersQueryDelegate(TouchlessUser[] users);
+    public delegate void UsersQueryDelegate();
 
     public class Callback {
 
@@ -425,6 +425,11 @@ namespace Ideum.Data {
       }
 
       public Callback(Types type, params OnboardingQueryDelegate[] callbacks) {
+        Type = type;
+        _callbacks = new HashSet<object>(callbacks);
+      }
+
+      public Callback(Types type, params UsersQueryDelegate[] callbacks) {
         Type = type;
         _callbacks = new HashSet<object>(callbacks);
       }
@@ -588,6 +593,12 @@ namespace Ideum.Data {
       }
 
       public void Add(StateUserQueryDelegate a) {
+        lock (_callbacks) {
+          _callbacks.Add(a);
+        }
+      }
+
+      public void Add(UsersQueryDelegate a) {
         lock (_callbacks) {
           _callbacks.Add(a);
         }

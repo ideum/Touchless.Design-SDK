@@ -160,7 +160,7 @@ namespace Ideum {
         if(_timer > _queryInterval) {
           // TouchlessDesign.QueryClickAndHoverState(HandleQueryResponse);
           TouchlessDesign.QueryNoTouchState(HandleNoTouch);
-          TouchlessDesign.QueryUsers();
+          TouchlessDesign.QueryUserUpdates(1);
           HandleHandCount();
           _timer = 0f;
         }

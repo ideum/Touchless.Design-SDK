@@ -10,7 +10,7 @@ namespace Ideum {
     #region General
 
     public static event Action<Msg> SettingChanged;
-    public static Dictionary<int, TouchlessUser> Users;
+    public static Dictionary<int, TouchlessUser> Users { get; private set; }
     private static int _mouseDriverId;
     public static event Action<TouchlessUser> UserAdded;
     public static event Action<TouchlessUser> UserRemoved;
@@ -242,6 +242,13 @@ namespace Ideum {
       _connectionManager.Send(msg);
     }
 
+    public static void SetHoverState(HoverStates hover, int priority = 0) {
+      Msg msg = Msg.Factories.Hover(hover);
+      msg.DeviceId = _generalSettings.DeviceID;
+      msg.Priority = priority;
+      _connectionManager.Send(msg);
+    }
+
     /// <summary>
     /// Sets the hover-state of the cursor. 
     /// </summary>
@@ -354,22 +361,21 @@ namespace Ideum {
       _connectionManager.Send(Msg.Factories.QueryStateUserId());
     }
 
-    public static void QueryUsers() {
-      _connectionManager.Send(Msg.Factories.UsersQuery());
+    /// <summary>
+    /// <para>
+    /// Instructs Touchless to query for realtime user state from the service.
+    /// This callback is fired once a response is recieved. Once a message is recieved, you may 
+    /// utilize information in <see cref="Users"/> and set hover states for various users based on pointer or device ID.
+    /// </para>
+    /// See Also: <seealso cref="GetTouchlessUserFromPointerID(int)"/>
+    /// </summary>
+    /// <param name="callback"></param>
+    public static void QueryUserUpdates(int priority) {
+      _connectionManager.Send(Msg.Factories.UsersQuery(priority));
     }
 
     public static int GetMouseDriverId() {
       return _mouseDriverId;
-    }
-
-    public static TouchlessUser GetUserFromPointerId(int pointerId) {
-      if (pointerId == -1) {
-        if (GetMouseDriverId() == -1) {
-          return null;
-        }
-        return Users[GetMouseDriverId()];
-      }
-      return Users[pointerId];
     }
 
     #endregion

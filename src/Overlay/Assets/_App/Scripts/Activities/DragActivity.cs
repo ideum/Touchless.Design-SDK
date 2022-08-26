@@ -142,16 +142,26 @@ namespace Ideum {
 
     private void HandleHoverExit(int pointerId) {
       var user = TouchlessDesign.GetTouchlessUserFromPointerID(pointerId);
-      if (!_active || user == null) return;
+      if (!_active) return;
 
-      TouchlessDesign.SetHoverState(user.DeviceId, Data.HoverStates.None, 1);
+      if (user != null) {
+        TouchlessDesign.SetHoverState(user.DeviceId, Data.HoverStates.None, 1);
+      }
+      else {
+        TouchlessDesign.SetHoverState(Data.HoverStates.None, 1); // Use general ID from local settings
+      }
     }
 
     private void HandleHoverEnter(int pointerId) {
       var user = TouchlessDesign.GetTouchlessUserFromPointerID(pointerId);
-      if (!_active || user == null) return;
+      if (!_active) return;
 
-      TouchlessDesign.SetHoverState(user.DeviceId, Data.HoverStates.Drag, 1);
+      if (user != null) {
+        TouchlessDesign.SetHoverState(user.DeviceId, Data.HoverStates.Drag, 1);
+      }
+      else {
+        TouchlessDesign.SetHoverState(Data.HoverStates.Drag, 1); // Use general ID from local settings
+      }
     }
 
     private void HandleDragUpdate(Vector2 pos) {
