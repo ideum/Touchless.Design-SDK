@@ -4,11 +4,11 @@
  **/
 
 using System;
-using Ideum;
 using Ideum.Data;
 using System.IO;
 using UnityEngine;
 using Newtonsoft.Json.Linq;
+using Ideum;
 
 public class App : MonoBehaviour
 {
@@ -67,14 +67,14 @@ public class App : MonoBehaviour
 #endif
 
 
-    TouchlessDesign.Initialize(AppSettings.Get().DataDirectory.GetPath());
-    TouchlessDesign.Connected += OnConnected;
-    TouchlessDesign.Disconnected += OnDisconnected;
+    Ideum.TouchlessDesign.Initialize(AppSettings.Get().DataDirectory.GetPath());
+    Ideum.TouchlessDesign.Connected += OnConnected;
+    Ideum.TouchlessDesign.Disconnected += OnDisconnected;
   }
 
   // Deinitialize TouchlessDesign
   void OnApplicationQuit() {
-    TouchlessDesign.DeInitialize();
+    Ideum.TouchlessDesign.DeInitialize();
   }
 
   private void OnDisconnected() {
@@ -88,7 +88,7 @@ public class App : MonoBehaviour
     _connected = true;
 
 #if UNITY_EDITOR
-    TouchlessDesign.Sync(() => {
+    Ideum.TouchlessDesign.Sync(() => {
       int width = Display.main.renderingWidth;
       int height = Display.main.renderingHeight;
       HandleAddOnQuery(true, true, width, height, width, height);
@@ -114,8 +114,8 @@ public class App : MonoBehaviour
     if (_connected) {
       _timer += Time.deltaTime;
       if (_timer > _queryInterval) {
-        TouchlessDesign.QueryClickAndHoverState(HandleQueryResponse);
-        TouchlessDesign.QueryNoTouchState(HandleNoTouchState);
+        Ideum.TouchlessDesign.QueryClickAndHoverState(HandleQueryResponse);
+        Ideum.TouchlessDesign.QueryNoTouchState(HandleNoTouchState);
         _timer = 0f;
       }
     }
