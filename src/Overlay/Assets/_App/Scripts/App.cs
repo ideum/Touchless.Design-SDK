@@ -27,7 +27,7 @@ namespace Ideum {
     private bool _noTouchWarningEnabled = true;
 
     private bool _connected;
-    private float _queryInterval = 1f / 60f;
+    private float _queryInterval = 0.009f;
     private float _timer;
     private int _handCount = 0;
 
