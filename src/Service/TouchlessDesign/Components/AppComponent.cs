@@ -23,7 +23,6 @@ namespace TouchlessDesign.Components {
     public bool IsStarted { get; private set; }
     public string DataDir { get; private set; }
 
-
     public void Start() {
       if (IsStarted) return;
       IsStarted = true;

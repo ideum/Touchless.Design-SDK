@@ -73,6 +73,7 @@ namespace Ideum {
     }
 
     public static TouchlessUser GetTouchlessUserFromPointerID(int pointerId) {
+      if (_mouseDriverId == -1 && pointerId == -1) { return null; }
       return pointerId == -1 ? Users[_mouseDriverId] : Users[pointerId];
     }
 
@@ -191,11 +192,11 @@ namespace Ideum {
 
     private static void UpdateUser(int deviceId, Msg msg) {
       bool userFound = Users.TryGetValue(deviceId, out TouchlessUser user);
-      if(!userFound) {
+      if (!userFound) {
         Log.Error($"Device ID for user update not found");
       }
       else {
-        if(deviceId == 0) {
+        if (deviceId == 0) {
           Debug.Log($"Updating user {deviceId}");
         }
         user.Update(msg);
@@ -362,8 +363,8 @@ namespace Ideum {
     }
 
     public static TouchlessUser GetUserFromPointerId(int pointerId) {
-      if(pointerId == -1) {
-        if(GetMouseDriverId() == -1) {
+      if (pointerId == -1) {
+        if (GetMouseDriverId() == -1) {
           return null;
         }
         return Users[GetMouseDriverId()];

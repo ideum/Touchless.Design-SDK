@@ -87,12 +87,12 @@ public class HandCursor : Cursor {
   }
 
   public override void DoStateChange(HoverStates state, bool selected) {
+    if (State == state && _selected == selected) return;
+    if (_clicking || _touchWarningShowing) return;
     _pointerHandRect = PointerHand.GetComponent<RectTransform>();
     _pointerHandCG = PointerHand.GetComponent<CanvasGroup>();
     _dragHandCG = DragHand.GetComponent<CanvasGroup>();
     _cursorRect = GetComponent<RectTransform>();
-    if (State == state && _selected == selected) return;
-    if (_clicking || _touchWarningShowing) return;
     Log.Info(state + " " + selected);
 
     State = state;
@@ -138,6 +138,13 @@ public class HandCursor : Cursor {
       _touchWarningShowing = false;
       Idle();
     });
+  }
+
+  public void SetHoverColor(Color color, bool forceIdle) {
+    _hoverColor = color;
+    if(forceIdle) {
+      Idle();
+    }
   }
 
   private void Idle() {

@@ -15,8 +15,6 @@ using UnityEngine;
 
 namespace Ideum {
   public class App : MonoBehaviour {
-
-    public Cursor Cursor;
     public CanvasGroup WarningBackground;
     public TransparentWindow Window;
     public Onboarding Onboarding;
@@ -56,7 +54,6 @@ namespace Ideum {
       _cursors = new List<HandCursor>();
       Onboarding.SetActive += SetOnboarding;
       Onboarding.Initialize(AppSettings.Get().IsPedestal);
-      Cursor.GetComponent<CanvasGroup>().alpha = 0.0f;
     }
 
     // Deinitialize TouchlessDesign
@@ -66,7 +63,6 @@ namespace Ideum {
 
     private void OnDisconnected() {
       Log.Info("Disconnected. Suspending queries");
-      Cursor.DoStateChange(HoverStates.None, false);
       TouchlessDesign.SettingChanged -= HandleSettingChanged;
       _connected = false;
     }
@@ -119,6 +115,9 @@ namespace Ideum {
       Log.Info("Adding cursor");
       HandCursor newCursor = Instantiate(HandCursorPrefab, Canvas.transform);
       newCursor.User = user;
+      Color targetColor = HandColors[user.DeviceId % HandColors.Length];
+      newCursor.SetHoverColor(targetColor, true);
+      Debug.Log($"Setting Hover Color for ID {user.DeviceId} to {targetColor}");
       _cursors.Add(newCursor);
     }
 
@@ -183,8 +182,10 @@ namespace Ideum {
     // Method delegate to handle a change in the number of tracked hands. This is used to manage the timeout, and reset of the onboarding.
     private void HandleHandCount() {
       int hCount = 0;
-      foreach (TouchlessUser user in TouchlessDesign.Users.Values) {
-        hCount += user.HandCount;
+
+      foreach(HandCursor cursor in _cursors) {
+        cursor.GetComponent<CanvasGroup>().alpha = cursor.User.HandCount > 0 ? 1.0f : 0.0f;
+        hCount += cursor.User.HandCount;
       }
 
       if (_handCount != hCount) {
@@ -230,9 +231,9 @@ namespace Ideum {
     }
 
     // Method delegate to handle TouchlessDesign response to QueryClickAndHoverState. Passes both values on to the cursor.
-    private void HandleQueryResponse(bool clickState, HoverStates hoverState) {
-      Cursor.DoStateChange(hoverState, clickState);
-    }
+    //private void HandleQueryResponse(bool clickState, HoverStates hoverState) {
+    //  Cursor.DoStateChange(hoverState, clickState);
+    //}
 
     //private void HandleStateUserResponse(int id) {
 
