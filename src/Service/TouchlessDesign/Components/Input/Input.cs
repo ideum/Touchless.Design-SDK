@@ -52,7 +52,6 @@ namespace TouchlessDesign.Components.Input {
     private bool _remoteClientActive = false;
 
     private RemoteClient _udpClient;
-    private RemoteClient _userDataClient;
 
     protected override void DoStart() {
       RegisteredUsers = new Dictionary<int, TouchlessUser>();

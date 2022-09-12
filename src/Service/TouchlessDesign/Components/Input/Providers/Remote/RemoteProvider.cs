@@ -100,5 +100,9 @@ namespace TouchlessDesign.Components.Input.Providers.Remote {
         _updateFlag = true;
       }
     }
+
+    ~RemoteProvider() {
+      _server?.Stop();
+    }
   }
 }
