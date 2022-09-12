@@ -108,6 +108,7 @@ namespace TouchlessDesign.Components.Remote {
         string[] splitStr = messageStr.Split(' ');
         if(splitStr[0] == "Touchless_discovery") {
           if (_sendReady) return;
+                    Log.Debug("Recieved touchless discovery");
 
           int sendPort, tcpPort;
 
@@ -118,9 +119,12 @@ namespace TouchlessDesign.Components.Remote {
 
           _sendEndPoint = new IPEndPoint(broadcasterEndpoint.Address, sendPort);
 
-          AppComponent.Input.MakeRemoteConnection(new IPEndPoint(broadcasterEndpoint.Address, tcpPort));
 
-          _sendReady = true;
+          if(AppComponent.Input.MakeRemoteConnection(new IPEndPoint(broadcasterEndpoint.Address, tcpPort)))
+                    {
+                        _sendReady = true;
+                    }
+
         }
 
       } catch (ObjectDisposedException) {

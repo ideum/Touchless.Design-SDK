@@ -128,7 +128,7 @@ namespace TouchlessDesign.Components.Input {
     }
 
     #region Remote Input
-    public void MakeRemoteConnection(IPEndPoint endpoint) {
+    public bool MakeRemoteConnection(IPEndPoint endpoint) {
       try {
         TcpConnection connection;
         if (TcpConnection.TryOpen(endpoint, out connection)) {
@@ -138,11 +138,13 @@ namespace TouchlessDesign.Components.Input {
           _remoteClientActive = true;
           Log.Info("Connected. Attempting to register as a remote client");
           _remoteClient.Send(new Msg(Msg.Types.RegisterRemoteClient, Config.General.DeviceID));
+          return true;
         }
       }
       catch (Exception e) {
         Log.Error($"Connection error: {e}");
       }
+      return false;
     }
 
     public void MessageReceived(Client client, Msg msg) {
