@@ -169,6 +169,8 @@ namespace TouchlessDesign.Components.Input {
     public void OnException(Client client, Exception e) {
       Log.Error("Exception caught with remote client connection: " + e.ToString());
       _remoteClientActive = false;
+      _remoteClient.Connection?.Close();
+      _remoteClient.Connection?.Dispose();
       _udpClient.Disconnect();
     }
 
