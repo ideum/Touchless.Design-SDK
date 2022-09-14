@@ -94,7 +94,7 @@ public class App : MonoBehaviour
       HandleAddOnQuery(true, true, width, height, width, height);
     });
 #else
-    TouchlessDesign.QueryAddOn(HandleAddOnQuery);
+    Ideum.TouchlessDesign.QueryAddOn(HandleAddOnQuery);
 #endif
   }
 

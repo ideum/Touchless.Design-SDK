@@ -34,6 +34,8 @@ namespace TouchlessDesign.Config {
 
     public bool AddOnEnabled = true;
 
+    public bool PedestalMode = false;
+
     public DisplayInfo AddOnDisplay = new DisplayInfo {
       Primary = false,
       Index = 1

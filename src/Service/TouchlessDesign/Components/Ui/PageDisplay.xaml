@@ -89,7 +89,10 @@
                            LabelMinWidth="60"
                            ValueMinWidth="180"
                            ItemTemplate="{StaticResource DisplayComboBoxItemTemplateStyle}"/>
-      </ui:SimpleStackPanel>
+        <c:BoolControl Value="{Binding PedestalMode, Mode=TwoWay}" 
+                Header="Pedestal Mode"
+                LabelMinWidth="60"/>
+       </ui:SimpleStackPanel>
     </TabItem>
     <TabItem Header="Lighting">
       <ui:SimpleStackPanel Spacing="5" Margin="0 6 0 0">

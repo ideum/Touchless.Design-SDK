@@ -118,6 +118,13 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
       set { SetValue(AddOnEnabledProperty, value); }
     }
 
+    public static readonly DependencyProperty PedestalModeProperty = Reg<DisplayViewModel, bool>("PedestalMode", true, PropertyTypes.Save);
+
+    public bool PedestalMode {
+      get { return (bool)GetValue(PedestalModeProperty); }
+      set { SetValue(PedestalModeProperty, value); }
+    }
+
     public static readonly DependencyProperty AddOnDisplayProperty = Reg<DisplayViewModel, ScreenViewModel>("AddOnDisplay", null, PropertyTypes.Save);
 
     public ScreenViewModel AddOnDisplay {
@@ -220,6 +227,7 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
       Model.Onboarding2Enabled = Onboarding2Enabled;
       Model.Onboarding3Enabled = Onboarding3Enabled;
       Model.AddOnEnabled = AddOnEnabled;
+      Model.PedestalMode = PedestalMode;
       Model.LightingEnabled = LEDsEnabled;
       Model.LightingIntensity = (float) LEDIntensity;
     }
@@ -241,6 +249,7 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
       Onboarding2Enabled = Model.Onboarding2Enabled;
       Onboarding3Enabled = Model.Onboarding3Enabled;
       AddOnEnabled = Model.AddOnEnabled;
+      PedestalMode = Model.PedestalMode;
       AddOnDisplay = FindClosestDisplay(Model.AddOnDisplay);
       LEDsEnabled = Model.LightingEnabled;
       LEDIntensity = Model.LightingIntensity;

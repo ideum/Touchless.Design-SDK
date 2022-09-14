@@ -98,10 +98,13 @@ namespace TouchlessDesign.Components.Ipc {
             }
             break;
           case Msg.Types.NoTouchQuery:
-            c.Send(Msg.Factories.NoTouchQuery(Input.IsNoTouch.Value));
+            if(Input != null) {
+              c.Send(Msg.Factories.NoTouchQuery(Input.IsNoTouch.Value));
+            }
             break;
           case Msg.Types.AddOnQuery:
             var dims_px = Ui.AddOnScreenBounds;
+            Log.Debug("Recieved query for addon");
             c.Send(Msg.Factories.AddOnQuery(
               Ui.HasAddOnScreen,
               Lighting.NetworkState == TouchlessDesign.Components.Lighting.Lighting.NetworkStates.Connected,
@@ -170,7 +173,9 @@ namespace TouchlessDesign.Components.Ipc {
             }
             break;
           case Msg.Types.UsersQuery:
-            c.Send(Msg.Factories.UsersQuery(Input.RegisteredUsers.Keys.ToArray(), Input.RegisteredUsers.Values.ToArray(), Input.GetStateUserId(), Config.Input.MouseEmulationEnabled));
+            if(Input != null) {
+              c.Send(Msg.Factories.UsersQuery(Input.RegisteredUsers.Keys.ToArray(), Input.RegisteredUsers.Values.ToArray(), Input.GetStateUserId(), Config.Input.MouseEmulationEnabled));
+            }
             break;
           case Msg.Types.QueryStateUserId:
             c.Send(Msg.Factories.StateUserQuery(Input.GetStateUserId()));
