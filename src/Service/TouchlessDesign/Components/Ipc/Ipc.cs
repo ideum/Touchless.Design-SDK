@@ -41,7 +41,7 @@ namespace TouchlessDesign.Components.Ipc {
           case Msg.Types.None:
             break;
           case Msg.Types.Hover:
-            if ((isRegisteredUser) && msg.ContainsIncomingServerSideData && msg.Priority >= Input.ClientPriority.Value) {
+            if (isRegisteredUser && msg.ContainsIncomingServerSideData && msg.Priority >= Input.ClientPriority.Value) {
               Log.Warn($"Changing Hover {user.HoverState} to {msg.HoverState}");
               user.HoverState.Value = msg.HoverState;
             }
@@ -146,6 +146,15 @@ namespace TouchlessDesign.Components.Ipc {
           case Msg.Types.SetOnboarding:
             Input.IsOnboardingActive.Value = msg.Bool.Value;
             break;
+          case Msg.Types.OverlayCursorVisibilityQuery:
+            if(Input != null) {
+              c.Send(Msg.Factories.OverlayCursorVisibilityQuery(Input.OverlayCursorVisible.Value));
+            }
+            break;
+          case Msg.Types.SetOverlayCursorVisible:
+              Input.OverlayCursorVisible.Value = msg.Bool.Value;
+            Log.Warn($"Changing cursor visible state from {Input.OverlayCursorVisible} to {msg.Bool.Value}");
+            break;
           case Msg.Types.SubscribeToUserUpdates:
             c.Send(new Msg(Msg.Types.SubscribeToUserUpdates));
             if (!_usersInterestingClients.Contains(c)) {
@@ -173,7 +182,7 @@ namespace TouchlessDesign.Components.Ipc {
             }
             break;
           case Msg.Types.UsersQuery:
-            if(Input != null) {
+            if(Input != null && msg.Priority >= Input.ClientPriority.Value) {
               c.Send(Msg.Factories.UsersQuery(Input.RegisteredUsers.Keys.ToArray(), Input.RegisteredUsers.Values.ToArray(), Input.GetStateUserId(), Config.Input.MouseEmulationEnabled));
             }
             break;
@@ -186,6 +195,7 @@ namespace TouchlessDesign.Components.Ipc {
       }
       catch (Exception e) {
         Log.Error($"Caught exception at process msg: {e}");
+        Log.Error(e.StackTrace);
       }
     }
 

@@ -25,6 +25,8 @@ namespace TouchlessDesign.Components.Input {
 
     public Property<bool> IsOnboardingActive { get; } = new Property<bool>(false);
 
+    public Property<bool> OverlayCursorVisible { get; } = new Property<bool> (true);
+
     public TouchlessUser stateUser;
     public Dictionary<int, TouchlessUser> RegisteredUsers;
     public event Action<HoverStates, HoverStates> StateUserHoverChanged;

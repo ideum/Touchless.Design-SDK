@@ -137,6 +137,11 @@ namespace Ideum {
         case Msg.Types.OnboardingQuery:
           OnboardingQueries.SyncClearInvoke(msg);
           break;
+        case Msg.Types.OverlayCursorVisibilityQuery:
+          OverlayCursorVisibilityQueries.SyncClearInvoke(msg);
+          break;
+        case Msg.Types.SetOverlayCursorVisible:
+          break;
         case Msg.Types.SubscribeToUserUpdates:
           break;
         case Msg.Types.UserAdded:
@@ -196,9 +201,6 @@ namespace Ideum {
         Log.Error($"Device ID for user update not found");
       }
       else {
-        if (deviceId == 0) {
-          Debug.Log($"Updating user {deviceId}");
-        }
         user.Update(msg);
       }
     }
@@ -223,6 +225,7 @@ namespace Ideum {
     private static readonly Msg.Callback OnboardingQueries = new Msg.Callback(Msg.Types.OnboardingQuery);
     private static readonly Msg.Callback StateUserQueries = new Msg.Callback(Msg.Types.QueryStateUserId);
     private static readonly Msg.Callback UsersQueries = new Msg.Callback(Msg.Types.UsersQuery);
+    private static readonly Msg.Callback OverlayCursorVisibilityQueries = new Msg.Callback(Msg.Types.OverlayCursorVisibilityQuery);
 
     public static void QueryDimensions(Msg.QueryDimsDelegate callback) {
       DimsQueries.Add(callback);
@@ -243,10 +246,7 @@ namespace Ideum {
     }
 
     public static void SetHoverState(HoverStates hover, int priority = 0) {
-      Msg msg = Msg.Factories.Hover(hover);
-      msg.DeviceId = _generalSettings.DeviceID;
-      msg.Priority = priority;
-      _connectionManager.Send(msg);
+      SetHoverState(_generalSettings.DeviceID, hover, priority);
     }
 
     /// <summary>
@@ -254,11 +254,16 @@ namespace Ideum {
     /// </summary>
     /// <param name="isHovering">If isHovering is true, the hover-state will be set to HoverStates.Click. If false, the hover-state will be set to HoverStates.None</param>
     public static void SetHoverState(bool isHovering, int priority = 0) {
+      SetHoverState(_generalSettings.DeviceID, isHovering, priority);
+    }
+
+    public static void SetHoverState(int deviceId, bool isHovering, int priority = 0) {
       Msg msg = Msg.Factories.Hover(isHovering ? HoverStates.Click : HoverStates.None);
       msg.Priority = priority;
-      msg.DeviceId = _generalSettings.DeviceID;
+      msg.DeviceId = deviceId;
       _connectionManager.Send(msg);
     }
+
 
     public static void QueryHoverState(Msg.BoolDelegate callback) {
       HoverQueries.Add(callback);
@@ -354,6 +359,15 @@ namespace Ideum {
     public static void QueryOnboarding(Msg.OnboardingQueryDelegate callback) {
       OnboardingQueries.Add(callback);
       _connectionManager.Send(Msg.Factories.OnboardingQueryMessage());
+    }
+
+    public static void QueryOverlayCursorVisibility(Msg.OverlayCursorVisibilityDelegate callback) {
+      OverlayCursorVisibilityQueries.Add(callback);
+      _connectionManager.Send(Msg.Factories.OverlayCursorVisibilityQuery());
+    }
+
+    public static void SetOverlayCursorVisibility(bool visible) {
+      _connectionManager.Send(Msg.Factories.SetOverlayCursorVisible(visible));
     }
 
     public static void QueryStateUserId(Msg.StateUserQueryDelegate callback) {

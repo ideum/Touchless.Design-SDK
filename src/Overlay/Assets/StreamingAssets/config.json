@@ -3,5 +3,11 @@
     "Path": "%appdata%/Ideum/TouchlessDesign",
     "Type": "FileSystem"
   },
-  "IsPedestal" : true
+  "IsPedestal" : true,
+  "HandColors": [
+    "#FFFE00",
+    "#2EFFCE",
+    "#D537FF",
+    "#A89FFF"
+  ]
 }

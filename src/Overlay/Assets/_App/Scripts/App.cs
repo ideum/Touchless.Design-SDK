@@ -47,6 +47,21 @@ namespace Ideum {
     // Initialize the TouchlessDesign and path directory to Service and subscribe to OnConnect and OnDisconnect events.
     void Start() {
       TouchlessDesign.Initialize(AppSettings.Get().DataDirectory.GetPath());
+
+      // Attempt to register all of our hand colors
+      List<Color> configHandColors = new List<Color>();
+      foreach(string colorString in AppSettings.Get().HandColors) {
+        if(ColorUtility.TryParseHtmlString(colorString, out var col)) {
+          configHandColors.Add(col);
+        }
+        else {
+          Log.Error($"Failed to parse color string {colorString}");
+        }
+      }
+      if(configHandColors.Count > 0) {
+        HandColors = configHandColors.ToArray();
+      }
+
       TouchlessDesign.Connected += OnConnected;
       TouchlessDesign.Disconnected += OnDisconnected;
       TouchlessDesign.UserAdded += HandleUserAdded;
@@ -159,11 +174,23 @@ namespace Ideum {
         _timer += Time.deltaTime;
         if(_timer > _queryInterval) {
           // TouchlessDesign.QueryClickAndHoverState(HandleQueryResponse);
+          TouchlessDesign.QueryOverlayCursorVisibility(HandleCursorVisibilityQuery);
           TouchlessDesign.QueryNoTouchState(HandleNoTouch);
           TouchlessDesign.QueryUserUpdates(1);
           HandleHandCount();
           _timer = 0f;
         }
+      }
+    }
+
+    private void HandleCursorVisibilityQuery(bool cursorVisible) {
+      foreach(HandCursor c in _cursors) {
+          if(cursorVisible) {
+            c.Show();
+          }
+          else {
+            c.Hide();
+          }
       }
     }
 
@@ -184,7 +211,7 @@ namespace Ideum {
       int hCount = 0;
 
       foreach(HandCursor cursor in _cursors) {
-        cursor.GetComponent<CanvasGroup>().alpha = cursor.User.HandCount > 0 ? 1.0f : 0.0f;
+        cursor.gameObject.SetActive(cursor.User.HandCount > 0); //GetComponent<CanvasGroup>().alpha = cursor.User.HandCount > 0 ? 1.0f : 0.0f;
         hCount += cursor.User.HandCount;
       }
 
@@ -209,7 +236,7 @@ namespace Ideum {
       if (!_noTouchWarningEnabled) return;
 
       if (noTouch) {
-        foreach(Cursor c in _cursors) {
+        foreach(HandCursor c in _cursors) {
           c.ShowNoTouch();
         }
         // Cursor.ShowNoTouch();

@@ -34,6 +34,8 @@ namespace TouchlessDesign.Components.Ipc {
       SetPriority,
       OnboardingQuery,
       SetOnboarding,
+      OverlayCursorVisibilityQuery,
+      SetOverlayCursorVisible,
       RegisterRemoteClient,
       UsersQuery,
       SubscribeToUserUpdates,
@@ -315,6 +317,10 @@ namespace TouchlessDesign.Components.Ipc {
 
       public static Msg SetOnboardingMessage(bool onboardingActive) {
         return new Msg { Type = Types.SetOnboarding, Bool = onboardingActive };
+      }
+
+      public static Msg OverlayCursorVisibilityQuery(bool cursorVisible) {
+        return new Msg { Type = Types.OverlayCursorVisibilityQuery, Bool = cursorVisible };
       }
 
       public static Msg RegistrationMessage() {
@@ -658,6 +664,8 @@ namespace TouchlessDesign.Components.Ipc {
             return true;
           case Types.SetOnboarding:
             return false;
+          case Types.UsersQuery:
+            return false;
           default:
             throw new ArgumentOutOfRangeException();
         }
@@ -709,6 +717,8 @@ namespace TouchlessDesign.Components.Ipc {
           case Types.OnboardingQuery:
             return Bool.HasValue;
           case Types.SetOnboarding:
+            return true;
+          case Types.UsersQuery:
             return true;
           default:
             throw new ArgumentOutOfRangeException();

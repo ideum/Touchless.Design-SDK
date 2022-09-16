@@ -402,9 +402,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   State: 0
+  User:
+    DeviceId: 0
+    HoverState: 0
+    InitialPress: 0
+    InitialRelease: 0
+    PrevX: 0
+    PrevY: 0
   PointerHand: {fileID: 5716137351097073387}
   Ring: {fileID: 5716137350914761754}
   DragHand: {fileID: 5716137350801972660}
+  CanvasGroup: {fileID: 5716137351951860346}
   SizeHover: 180
   SizeShrink: 150
   BorderWidthFull: 16

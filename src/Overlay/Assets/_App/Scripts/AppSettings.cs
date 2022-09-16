@@ -17,6 +17,7 @@ namespace Ideum.Data {
 
     public PathInfo DataDirectory;
     public bool IsPedestal;
+    public string[] HandColors;
 
     public static AppSettings Get() {
       var path = DefaultFilePathInfo.GetPath();
@@ -28,7 +29,9 @@ namespace Ideum.Data {
         DataDirectory = new PathInfo {
           Type = PathInfo.Types.FileSystem,
           Path = DefaultDirectory
-        }
+        },
+        IsPedestal = true,
+        HandColors = new string[]{ "#FFFE00", "#2EFFCE", "#D537FF", "#A89FFF" }
       };
     }
 

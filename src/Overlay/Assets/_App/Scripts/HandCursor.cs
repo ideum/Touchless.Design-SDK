@@ -15,6 +15,7 @@ public class HandCursor : Cursor {
   public Image PointerHand;
   public UiCircle Ring;
   public Image DragHand;
+  public CanvasGroup CanvasGroup;
 
   public float SizeHover = 180f;
   public float SizeShrink = 150f;
@@ -47,6 +48,7 @@ public class HandCursor : Cursor {
   private bool _clicking = false;
 
   private bool _touchWarningShowing = false;
+  bool _visible = true;
 
   private void Awake() {
     _pointerHandRect = PointerHand.GetComponent<RectTransform>();
@@ -158,6 +160,22 @@ public class HandCursor : Cursor {
     _seq.Join(_pointerHandRect.DOSizeDelta(new Vector2(_pointerHandRect.sizeDelta.x, _pointerHandHeight), 0.5f));
     _seq.Join(DOTween.To(() => Ring.BorderWidth, x => Ring.BorderWidth = x, _borderWidthSmall, 0.5f));
     _seq.Join(_cursorRect.DOSizeDelta(new Vector2(SizeHover, SizeHover), 0.5f));
+  }
+
+  public void Hide() {
+    if (!_visible) return;
+    _visible = false;
+    _seq?.Kill();
+    _seq = DOTween.Sequence();
+    _seq.Append(CanvasGroup.DOFade(0, 0.5f));
+  }
+
+  public void Show() {
+    if (_visible) return;
+    _visible = true;
+    _seq?.Kill();
+    _seq = DOTween.Sequence();
+    _seq.Append(CanvasGroup.DOFade(1, 0.5f));
   }
 
   private void HoverClick() {

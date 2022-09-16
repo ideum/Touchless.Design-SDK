@@ -9,8 +9,6 @@ namespace Ideum {
   [System.Serializable]
   public class TouchlessUser {
 
-    public event Action<HoverStates> HoverStateChanged;
-
     /// <summary>
     /// The device ID of this touchless user.
     /// </summary>

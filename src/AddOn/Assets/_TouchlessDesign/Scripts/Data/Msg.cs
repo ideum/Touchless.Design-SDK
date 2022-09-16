@@ -11,7 +11,7 @@ namespace Ideum.Data {
     Click,
     Drag,
     DragHorizontal,
-    DragVertical
+    DragVertical,
   }
 
   public class Msg : IPayload {
@@ -42,6 +42,8 @@ namespace Ideum.Data {
       SetPriority,
       OnboardingQuery,
       SetOnboarding,
+      OverlayCursorVisibilityQuery,
+      SetOverlayCursorVisible,
       RegisterRemoteClient,
       UsersQuery,
       SubscribeToUserUpdates,
@@ -324,8 +326,16 @@ namespace Ideum.Data {
         return new Msg { Type = Types.SetOnboarding, Bool = onboardingActive };
       }
 
+      public static Msg OverlayCursorVisibilityQuery() {
+        return new Msg { Type = Types.OverlayCursorVisibilityQuery };
+      }
+
+      public static Msg SetOverlayCursorVisible(bool value) {
+        return new Msg { Type = Types.SetOverlayCursorVisible, Bool = value };
+      }
+
       public static Msg UsersQuery(int priority = 0) {
-        return new Msg { Type = Types.UsersQuery };
+        return new Msg { Type = Types.UsersQuery, Priority = priority };
       }
 
       public static Msg QueryStateUserId() {
@@ -358,6 +368,8 @@ namespace Ideum.Data {
     public delegate void HandCountQueryDelegate(int handCount);
 
     public delegate void OnboardingQueryDelegate(bool onboardingActive);
+
+    public delegate void OverlayCursorVisibilityDelegate(bool cursorVisible);
 
     public delegate void StateUserQueryDelegate(int deviceId);
 
@@ -425,6 +437,11 @@ namespace Ideum.Data {
       }
 
       public Callback(Types type, params OnboardingQueryDelegate[] callbacks) {
+        Type = type;
+        _callbacks = new HashSet<object>(callbacks);
+      }
+
+      public Callback(Types type, params OverlayCursorVisibilityDelegate[] callbacks) {
         Type = type;
         _callbacks = new HashSet<object>(callbacks);
       }
@@ -508,6 +525,9 @@ namespace Ideum.Data {
           case Types.OnboardingQuery:
             Operate(collection.OfType<OnboardingQueryDelegate>(), p => p(msg.Bool.Value));
             break;
+          case Types.OverlayCursorVisibilityQuery:
+            Operate(collection.OfType<OverlayCursorVisibilityDelegate>(), p => p(msg.Bool.Value));
+            break;
           case Types.SetOnboarding:
             break;
           case Types.QueryStateUserId:
@@ -587,6 +607,12 @@ namespace Ideum.Data {
       }
 
       public void Add(OnboardingQueryDelegate a) {
+        lock (_callbacks) {
+          _callbacks.Add(a);
+        }
+      }
+
+      public void Add(OverlayCursorVisibilityDelegate a) {
         lock (_callbacks) {
           _callbacks.Add(a);
         }
