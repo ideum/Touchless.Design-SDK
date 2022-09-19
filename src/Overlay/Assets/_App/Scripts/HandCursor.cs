@@ -15,7 +15,8 @@ public class HandCursor : Cursor {
   public Image PointerHand;
   public UiCircle Ring;
   public Image DragHand;
-  public CanvasGroup CanvasGroup;
+  public CanvasGroup EnabledCanvas;
+  public CanvasGroup VisibilityCanvas;
 
   public float SizeHover = 180f;
   public float SizeShrink = 150f;
@@ -165,17 +166,15 @@ public class HandCursor : Cursor {
   public void Hide() {
     if (!_visible) return;
     _visible = false;
-    _seq?.Kill();
-    _seq = DOTween.Sequence();
-    _seq.Append(CanvasGroup.DOFade(0, 0.5f));
+    VisibilityCanvas?.DOKill();
+    VisibilityCanvas.DOFade(0, 0.5f);
   }
 
   public void Show() {
     if (_visible) return;
     _visible = true;
-    _seq?.Kill();
-    _seq = DOTween.Sequence();
-    _seq.Append(CanvasGroup.DOFade(1, 0.5f));
+    VisibilityCanvas?.DOKill();
+    VisibilityCanvas.DOFade(1, 0.5f);
   }
 
   private void HoverClick() {

@@ -148,12 +148,11 @@ namespace TouchlessDesign.Components.Ipc {
             break;
           case Msg.Types.OverlayCursorVisibilityQuery:
             if(Input != null) {
-              c.Send(Msg.Factories.OverlayCursorVisibilityQuery(Input.OverlayCursorVisible.Value));
+              c.Send(Msg.Factories.OverlayCursorVisibilityQuery(Config.Display.OverlayEnabled && Input.OverlayCursorVisible.Value));
             }
             break;
           case Msg.Types.SetOverlayCursorVisible:
               Input.OverlayCursorVisible.Value = msg.Bool.Value;
-            Log.Warn($"Changing cursor visible state from {Input.OverlayCursorVisible} to {msg.Bool.Value}");
             break;
           case Msg.Types.SubscribeToUserUpdates:
             c.Send(new Msg(Msg.Types.SubscribeToUserUpdates));

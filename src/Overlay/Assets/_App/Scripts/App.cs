@@ -211,7 +211,7 @@ namespace Ideum {
       int hCount = 0;
 
       foreach(HandCursor cursor in _cursors) {
-        cursor.gameObject.SetActive(cursor.User.HandCount > 0); //GetComponent<CanvasGroup>().alpha = cursor.User.HandCount > 0 ? 1.0f : 0.0f;
+        cursor.EnabledCanvas.alpha = cursor.User.HandCount > 0 ? 1.0f : 0.0f;
         hCount += cursor.User.HandCount;
       }
 

@@ -47,7 +47,7 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
 
     //public IntClampedProperty MaxValue { get; set; } = new IntClampedProperty { Name = "Max", Minimum = 0, Maximum = 255, Prop = 255 };
 
-    public static readonly DependencyProperty MouseEmulationProperty = Reg<InputViewModel, bool>("MouseEmulation", true);
+    public static readonly DependencyProperty MouseEmulationProperty = Reg<InputViewModel, bool>("MouseEmulation", true, PropertyTypes.Save);
 
     public bool MouseEmulation {
       get { return (bool) GetValue(MouseEmulationProperty); }
@@ -223,6 +223,7 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
       Model.GrabClickThreshold = (float)ClickThreshold;
       Model.ClickDuration_ms = ClickEmulationDuration;
       Model.ClickEnabled = ClickEmulation;
+      Model.MouseEmulationEnabled = MouseEmulation;
 
       Model.FlipYAxis = FlipYAxis;
       Model.UseXY = UseXy;
