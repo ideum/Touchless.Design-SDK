@@ -47,6 +47,9 @@
     <StartupObject>TouchlessDesign.Startup</StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ColorPicker, Version=3.3.1.0, Culture=neutral, PublicKeyToken=1c61eec504ce2276, processorArchitecture=MSIL">
+      <HintPath>..\packages\PixiEditor.ColorPicker.3.3.1\lib\net451\ColorPicker.dll</HintPath>
+    </Reference>
     <Reference Include="Gma.System.MouseKeyHook, Version=5.6.130.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MouseKeyHook.5.6.0\lib\net40\Gma.System.MouseKeyHook.dll</HintPath>
     </Reference>
@@ -55,6 +58,9 @@
     </Reference>
     <Reference Include="MathNet.Spatial, Version=0.6.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MathNet.Spatial.0.6.0\lib\net461\MathNet.Spatial.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Xaml.Behaviors, Version=1.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Xaml.Behaviors.Wpf.1.1.31\lib\net45\Microsoft.Xaml.Behaviors.dll</HintPath>
     </Reference>
     <Reference Include="ModernWpf, Version=0.9.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ModernWpfUI.0.9.1\lib\net462\ModernWpf.dll</HintPath>

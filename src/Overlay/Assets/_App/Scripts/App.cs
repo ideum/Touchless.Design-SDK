@@ -143,10 +143,10 @@ namespace Ideum {
         HandleNewConfig();
       }
 
-      if(Input.touchCount > 0 && !_touchWarningActive) {
+      if(Input.touchCount > 0 && !_touchWarningActive && Onboarding.Active) {
         Debug.LogError("TOUCH");
         TouchlessDesign.SetNoTouchState(true, 1);
-      } else if(Input.touchCount < 1 && _touchWarningActive) {
+      } else if(Input.touchCount < 1 && _touchWarningActive && Onboarding.Active) {
         Debug.LogError("NOTOUCH");
         TouchlessDesign.SetNoTouchState(false, 1);
       }
