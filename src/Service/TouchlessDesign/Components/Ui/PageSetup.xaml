@@ -1,0 +1,113 @@
+﻿<UserControl x:Class="TouchlessDesign.Components.Ui.PageSetup"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:ui="http://schemas.modernwpf.com/2019"
+             xmlns:viewModels="clr-namespace:TouchlessDesign.Components.Ui.ViewModels"
+             xmlns:c="clr-namespace:TouchlessDesign.Components.Ui.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+  <Grid Margin="8">
+    <ui:SimpleStackPanel Spacing="5" HorizontalAlignment="Left">
+      <!--Setup Instructions-->
+      <Label Margin="0 0 0 0" FontSize="16" FontWeight="Bold" Content="Setup Instructions"/>
+      <BulletDecorator>
+        <BulletDecorator.Bullet>
+          <TextBlock>Step 1</TextBlock>
+        </BulletDecorator.Bullet>
+        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Foreground="#FFFFFF" Margin="5 0 0 0" MaxWidth="600">
+          Install the touch device version of Touchless onto the touch device / computer, and the pedestal version of Touchless onto the pedestal(s).
+        </TextBlock>
+      </BulletDecorator>
+      <BulletDecorator>
+        <BulletDecorator.Bullet>
+          <TextBlock>Step 2</TextBlock>
+        </BulletDecorator.Bullet>
+        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Foreground="#FFFFFF" Margin="5 0 0 0" MaxWidth="600">
+          Connect both/all devices to the same network. Make sure firewalls allow Touchless.Design.exe.
+        </TextBlock>
+      </BulletDecorator>
+      <BulletDecorator>
+        <BulletDecorator.Bullet>
+          <TextBlock>Step 3</TextBlock>
+        </BulletDecorator.Bullet>
+        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Foreground="#FFFFFF" Margin="5 0 0 0" MaxWidth="600">
+          Run Touchless.Design on the touch device / computer.
+        </TextBlock>
+      </BulletDecorator>
+      <BulletDecorator>
+        <BulletDecorator.Bullet>
+          <TextBlock>Step 4</TextBlock>
+        </BulletDecorator.Bullet>
+        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Foreground="#FFFFFF" Margin="5 0 0 0" MaxWidth="600">
+         Run Touchless.Design on the pedestal(s).
+        </TextBlock>
+      </BulletDecorator>
+
+      <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Foreground="#FFFFFF" Margin="0 20 0 0" MaxWidth="600">
+        Note:  Everything that connects to the Touchless.Design service is considered a Client. Pedestals will also show up as Providers on the touch device / computer since they are providing input data to the main device. There will be 1 provider for every pedestal connected.
+      </TextBlock>
+
+      <!--Troubleshooting-->
+      <Label Margin="0 50 0 0" FontSize="16" FontWeight="Bold" Content="Troubleshooting"/>
+      <BulletDecorator>
+        <BulletDecorator.Bullet>
+          <Ellipse Height="5" Width="5" Fill="#FFFFFF"/>
+        </BulletDecorator.Bullet>
+        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Foreground="#FFFFFF" Margin="5 0 0 0" MaxWidth="600">
+           Turn off firewalls and see if the devices connect correctly
+        </TextBlock>
+      </BulletDecorator>
+      <BulletDecorator>
+        <BulletDecorator.Bullet>
+          <Ellipse Height="5" Width="5" Fill="#FFFFFF"/>
+        </BulletDecorator.Bullet>
+        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Foreground="#FFFFFF" Margin="5 0 0 0" MaxWidth="600">
+           Make sure all devices are on the same network
+        </TextBlock>
+      </BulletDecorator>
+      <BulletDecorator>
+        <BulletDecorator.Bullet>
+          <Ellipse Height="5" Width="5" Fill="#FFFFFF"/>
+        </BulletDecorator.Bullet>
+        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Foreground="#FFFFFF" Margin="5 0 0 0" MaxWidth="600">
+           Use the leap motion calibration tool on the pedestal(s) to check that the leap motion device is on and tracking hands correctly
+        </TextBlock>
+      </BulletDecorator>
+      <BulletDecorator>
+        <BulletDecorator.Bullet>
+          <Ellipse Height="5" Width="5" Fill="#FFFFFF"/>
+        </BulletDecorator.Bullet>
+        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Foreground="#FFFFFF" Margin="5 0 0 0" MaxWidth="600">
+           Make sure other applications are not blocking any of the TCP / UDP ports (Ex. Tangible Engine, RFID scanners, etc.)
+        </TextBlock>
+      </BulletDecorator>
+      <BulletDecorator>
+        <BulletDecorator.Bullet>
+          <Ellipse Height="5" Width="5" Fill="#FFFFFF"/>
+        </BulletDecorator.Bullet>
+        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Foreground="#FFFFFF" Margin="5 0 0 0" MaxWidth="600">
+           For multiple pedestals, make sure the Device IDs (under General) are unique
+        </TextBlock>
+      </BulletDecorator>
+      <BulletDecorator>
+        <BulletDecorator.Bullet>
+          <Ellipse Height="5" Width="5" Fill="#FFFFFF"/>
+        </BulletDecorator.Bullet>
+        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Foreground="#FFFFFF" Margin="5 0 0 0" MaxWidth="600">
+          If pedestal lights aren't turning on, check that the arduino is connected through the Windows Device Manager
+        </TextBlock>
+      </BulletDecorator>
+      <BulletDecorator>
+        <BulletDecorator.Bullet>
+          <Ellipse Height="5" Width="5" Fill="#FFFFFF"/>
+        </BulletDecorator.Bullet>
+        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Foreground="#FFFFFF" Margin="5 0 0 0" MaxWidth="600">
+          Make sure to "save" and "restart" Touchless after settings are changed
+        </TextBlock>
+      </BulletDecorator>
+      
+    </ui:SimpleStackPanel>
+  </Grid>
+</UserControl>

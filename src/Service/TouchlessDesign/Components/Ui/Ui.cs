@@ -18,35 +18,35 @@ namespace TouchlessDesign.Components.Ui {
     private bool? _hasAddOnScreen;
     private bool _addOnIsPrimary;
 
-    public bool HasAddOnScreen {
-      get {
-        if (!_hasAddOnScreen.HasValue) {
-          if(Screen.AllScreens.Length < 2) {
-            _addOnIsPrimary = (Screen.AllScreens.Length > 0 && !Config.Display.PedestalMode);
-          }
-          _hasAddOnScreen = Screen.AllScreens.Length > 1 || _addOnIsPrimary;
-          Log.Debug($"Has addon: {_hasAddOnScreen.Value}");
-        }
-        Log.Debug($"Do we have?: {_hasAddOnScreen.Value}");
-        return _hasAddOnScreen.Value;
-      }
-    }
+    //public bool HasAddOnScreen {
+    //  get {
+    //    if (!_hasAddOnScreen.HasValue) {
+    //      if(Screen.AllScreens.Length < 2) {
+    //        _addOnIsPrimary = (Screen.AllScreens.Length > 0 && !Config.Display.PedestalMode);
+    //      }
+    //      _hasAddOnScreen = Screen.AllScreens.Length > 1 || _addOnIsPrimary;
+    //      Log.Debug($"Has addon: {_hasAddOnScreen.Value}");
+    //    }
+    //    Log.Debug($"Do we have?: {_hasAddOnScreen.Value}");
+    //    return _hasAddOnScreen.Value;
+    //  }
+    //}
 
     private Rectangle? _addOnBounds;
 
     public Rectangle AddOnScreenBounds {
       get {
         if (!_addOnBounds.HasValue) {
-          if (HasAddOnScreen) {
-            Screen screen = Screen.PrimaryScreen;
-            if(!_addOnIsPrimary) {
-              screen = Screen.AllScreens.First(p => !p.Primary);
-            }
-            _addOnBounds = screen.Bounds;
-          }
-          else {
+          //if (HasAddOnScreen) {
+          //  Screen screen = Screen.PrimaryScreen;
+          //  if(!_addOnIsPrimary) {
+          //    screen = Screen.AllScreens.First(p => !p.Primary);
+          //  }
+          //  _addOnBounds = screen.Bounds;
+          //}
+          //else {
             _addOnBounds = new Rectangle();
-          }
+          //}
         }
         return _addOnBounds.Value;
       }

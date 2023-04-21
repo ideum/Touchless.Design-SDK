@@ -16,13 +16,13 @@ namespace TouchlessDesign.Config {
       Port = 4949
     };
 
-    public bool WsEnabled = false;
+    //public bool WsEnabled = false;
 
-    public IpInfo WsData = new IpInfo {
-      Address = null,
-      Loopback = true,
-      Port = 4950
-    };
+    //public IpInfo WsData = new IpInfo {
+    //  Address = null,
+    //  Loopback = true,
+    //  Port = 4950
+    //};
 
     public int UdpBroadcastInterval_ms = 1000;
 
@@ -40,19 +40,19 @@ namespace TouchlessDesign.Config {
       Port = 4952
     };
 
-    public IpInfo FadeCandyData = new IpInfo {
-      Loopback = true,
-      Port = 7890
-    };
+    //public IpInfo FadeCandyData = new IpInfo {
+    //  Loopback = true,
+    //  Port = 7890
+    //};
 
-    public IpInfo FadeCandyRelay = new IpInfo {
-      Loopback = true,
-      Port = 7891
-    };
+    //public IpInfo FadeCandyRelay = new IpInfo {
+    //  Loopback = true,
+    //  Port = 7891
+    //};
 
-    public int FadeCandyInitialConnectInterval_ms = 500;
+    //public int FadeCandyInitialConnectInterval_ms = 500;
 
-    public int FadeCandyReconnectInterval_ms = 500;
+    //public int FadeCandyReconnectInterval_ms = 500;
 
     private const string Filename = "network.json";
 
@@ -73,15 +73,15 @@ namespace TouchlessDesign.Config {
       PingInterval_ms = i.PingInterval_ms;
       TcpEnabled = i.TcpEnabled;
       TcpData = i.TcpData;
-      WsEnabled = i.WsEnabled;
-      WsData = i.WsData;
+      //WsEnabled = i.WsEnabled;
+      //WsData = i.WsData;
       UdpBroadcastInterval_ms = i.UdpBroadcastInterval_ms;
       UdpEnabled = i.UdpEnabled;
       UdpBroadcast = i.UdpBroadcast;
       UdpData = i.UdpData;
-      FadeCandyData = i.FadeCandyData;
-      FadeCandyInitialConnectInterval_ms = i.FadeCandyInitialConnectInterval_ms;
-      FadeCandyReconnectInterval_ms = i.FadeCandyReconnectInterval_ms;
+      //FadeCandyData = i.FadeCandyData;
+      //FadeCandyInitialConnectInterval_ms = i.FadeCandyInitialConnectInterval_ms;
+      //FadeCandyReconnectInterval_ms = i.FadeCandyReconnectInterval_ms;
     }
   }
 }

@@ -28,7 +28,8 @@
             <c:BoolControl Value="{Binding RemoteProviderMode}"
                      Header="Remote Provider Mode"
                      LabelMinWidth="180"/>
-            <c:NumberControl Value="{Binding DeviceId, Mode=TwoWay}"
+      <TextBlock HorizontalAlignment="Left" Text="Pedestal is a remote provider of touch data. Enable if on a pedestal." />
+      <c:NumberControl Value="{Binding DeviceId, Mode=TwoWay}"
                        Header="Device ID"
                        ShowSlider="False"
                        Min="0"
@@ -36,7 +37,8 @@
                        SmallChange="1" LargeChange="10"
                        NumberFormatter="{StaticResource IntNumberFormatter}"
                        LabelMinWidth="150"/>
-            <Button Click="HandleOpenDirectoryClicked" Margin="0 6 0 0">Open Directory</Button>
-        </ui:SimpleStackPanel>
+      <TextBlock HorizontalAlignment="Left" Text="If more than one pedestal is connected, increase the device ID" />
+      <Button Click="HandleOpenDirectoryClicked" Margin="0 290 0 0">Open Touchless Install Directory</Button>
+    </ui:SimpleStackPanel>
     </Grid>
 </UserControl>

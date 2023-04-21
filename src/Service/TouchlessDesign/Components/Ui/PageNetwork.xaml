@@ -15,6 +15,7 @@
   <Grid Margin="8">
     <ui:SimpleStackPanel Spacing="5" HorizontalAlignment="Left">
       <Label Margin="0 0 0 0" FontSize="16" FontWeight="Bold" Content="TCP"/>
+      <TextBlock HorizontalAlignment="Left" Text="Used for app to app communication." Foreground="#FFFCF800"/>
       <c:BoolControl Value="{Binding TcpEnabled, Mode=TwoWay}" 
                      Header="Enabled"
                      LabelMinWidth="150"/>
@@ -35,8 +36,8 @@
         <c:BoolControl Value="{Binding SdkLoopback, Mode=TwoWay}" 
                     Header="SDK Loopback"
                     LabelMinWidth="150"/>
-            <Label Margin="0 6 0 0" FontSize="16" FontWeight="Bold" Content="Web Socket"/>
-      <c:BoolControl Value="{Binding WsEnabled, Mode=TwoWay}" 
+            <!--<Label Margin="0 6 0 0" FontSize="16" FontWeight="Bold" Content="Web Socket"/>-->
+      <!--<c:BoolControl Value="{Binding WsEnabled, Mode=TwoWay}" 
                      Header="Enabled"
                      LabelMinWidth="150"/>
       <c:NumberControl Value="{Binding WsPort, Mode=TwoWay}" 
@@ -45,8 +46,9 @@
                        ShowSlider="False"
                        Min="1" Max="65535"
                        SmallChange="1" LargeChange="10"
-                       NumberFormatter="{StaticResource IntNumberFormatter}"/>
+                       NumberFormatter="{StaticResource IntNumberFormatter}"/>-->
       <Label Margin="0 6 0 0" FontSize="16" FontWeight="Bold" Content="UDP"/>
+      <TextBlock HorizontalAlignment="Left" Text="Used for sending and receiving touch input data." Foreground="#FFFCF800"/>
       <c:BoolControl Value="{Binding UdpEnabled, Mode=TwoWay}" 
                      Header="Enabled"
                      LabelMinWidth="150"/>

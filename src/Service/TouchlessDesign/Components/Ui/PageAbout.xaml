@@ -123,7 +123,7 @@
     </Rectangle>
     <StackPanel VerticalAlignment="Bottom" TextElement.FontSize="16" Margin="0 -10 0 20" DockPanel.Dock="Bottom">
       <TextBlock x:Name="VersionText" HorizontalAlignment="Center" Text="v1.0.0" />
-      <TextBlock HorizontalAlignment="Center" Text="© 2020 Ideum, Inc. All rights reserved." />
+      <TextBlock HorizontalAlignment="Center" Text="© 2023 Ideum, Inc. All rights reserved." />
       <StackPanel Orientation="Horizontal" Margin="0 10" HorizontalAlignment="Center">
         <Button Margin="8" Foreground="White" Style="{StaticResource StyleLinkButton}" Click="HandleReleasesClicked">
           <StackPanel Orientation="Horizontal">

@@ -20,24 +20,26 @@
       </Grid.ColumnDefinitions>
       <c:BoolControl x:Name="ModeButton" 
                      Value="{Binding InputProvider, Mode=TwoWay}" 
-                     Header="Mode"
+                     Header="Touch Data Retrieval Mode"
                      OnContent="Remote (UDP)"
                      OffContent="Local"
                      LabelMinWidth="120"/>
       <Button Grid.Column="1" Content="Network Settings" HorizontalAlignment="Right" Width="160" Click="OpenNetworkSettingsButtonClicked" Visibility="{Binding ElementName=ModeButton, Path=Value, Converter={StaticResource BoolToVis}}" />
     </Grid>
+    <TextBlock HorizontalAlignment="Left"  Text="* If on a pedestal, use local mode. If on a touch table device, use remote mode." Foreground="#FFA7A7A7" />
     <Grid>
       <Grid.ColumnDefinitions>
-        <ColumnDefinition />
-        <ColumnDefinition />
+        <ColumnDefinition Width="254*" />
+        <ColumnDefinition Width="97*"/>
+        <ColumnDefinition Width="351*" />
       </Grid.ColumnDefinitions>
       <c:BoolControl Value="{Binding MouseEmulation, Mode=TwoWay}" 
                          Header="Mouse Emulation"
-                         LabelMinWidth="120"/>
-      <c:StringControl Grid.Column="1" Value="{Binding MouseEmulationKeyboardShortcut, Mode=TwoWay}" 
+                         LabelMinWidth="120" Grid.ColumnSpan="2"/>
+      <c:StringControl Grid.Column="2" Value="{Binding MouseEmulationKeyboardShortcut, Mode=TwoWay}" 
                            Header="Keyboard Shortcut"
-                           HorizontalAlignment="Right" VerticalAlignment="Center"
-                           ValueMinWidth="160"/>
+                           HorizontalAlignment="Left" VerticalAlignment="Center"
+                           ValueMinWidth="160" Margin="68,0,0,0"/>
     </Grid>
     <c:NumberControl Value="{Binding ClickThreshold, Mode=TwoWay}" 
                          Header="Grab Threshold"

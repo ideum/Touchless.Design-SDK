@@ -246,8 +246,8 @@ namespace TouchlessDesign.Components.Lighting {
         var templatePath = Path.Combine(DataDir, FadeCandyDir, FadeCandyTemplate);
         var s = File.ReadAllText(templatePath);
         accessedFile = true;
-        s = s.Replace("$(data_port)", Config.Network.FadeCandyData.Port.ToString());
-        s = s.Replace("$(relay_port)", Config.Network.FadeCandyRelay.Port.ToString());
+        //s = s.Replace("$(data_port)", Config.Network.FadeCandyData.Port.ToString());
+        //s = s.Replace("$(relay_port)", Config.Network.FadeCandyRelay.Port.ToString());
         s = s.Replace("$(channel)", Channel.ToString());
         s = s.Replace("$(led_count)", LightCount.ToString());
         var configPath = Path.Combine(DataDir, FadeCandyDir, FadeCandyConfigFilename);
@@ -340,26 +340,26 @@ namespace TouchlessDesign.Components.Lighting {
 
     private void TryConnectLoop(object state) {
       NetworkState = NetworkStates.Connecting;
-      Thread.Sleep(Config.Network.FadeCandyInitialConnectInterval_ms);
+      //Thread.Sleep(Config.Network.FadeCandyInitialConnectInterval_ms);
       while (NetworkState == NetworkStates.Connecting && _didStartEnabled) {
         try {
-          var endPoint = Config.Network.FadeCandyData.GetEndPoint();
-          _socket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-          _socket.Connect(endPoint);
-          if (_socket.Connected && NetworkState == NetworkStates.Connecting) {
-            NetworkState = NetworkStates.Connected;
-            Log.Info($"Connected to FadeCandy Server.");
-          }
-          else {
-            CloseSocket();
-          }
+          //var endPoint = Config.Network.FadeCandyData.GetEndPoint();
+          //_socket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+          //_socket.Connect(endPoint);
+          //if (_socket.Connected && NetworkState == NetworkStates.Connecting) {
+          //  NetworkState = NetworkStates.Connected;
+          //  Log.Info($"Connected to FadeCandy Server.");
+          //}
+          //else {
+          //  CloseSocket();
+          //}
         }
         catch (Exception e) {
           Log.Error($"Caught exception while trying to connect to FadeCandy server: {e}");
         }
 
         if (NetworkState == NetworkStates.Connecting) {
-          Thread.Sleep(Config.Network.FadeCandyReconnectInterval_ms);
+          //Thread.Sleep(Config.Network.FadeCandyReconnectInterval_ms);
         }
       }
     }
@@ -425,11 +425,11 @@ namespace TouchlessDesign.Components.Lighting {
     #region Shortcuts
 
     public int Channel {
-      get { return Config.Display.FadeCandyChannel; }
+      get { return -1; }
     }
 
     public int LightCount {
-      get { return Config.Display.FadeCandyLightCount; }
+      get { return 0; }
     }
 
     #endregion

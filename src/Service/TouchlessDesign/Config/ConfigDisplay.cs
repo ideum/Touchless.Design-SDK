@@ -34,7 +34,7 @@ namespace TouchlessDesign.Config {
 
     public bool AddOnEnabled = true;
 
-    public bool PedestalMode = false;
+    //public bool PedestalMode = false;
 
     public DisplayInfo AddOnDisplay = new DisplayInfo {
       Primary = false,
@@ -45,9 +45,11 @@ namespace TouchlessDesign.Config {
 
     public float LightingIntensity = 0.667f;
 
-    public int FadeCandyChannel = 0;
+    public int LightingComPort = 1; 
 
-    public int FadeCandyLightCount = 64;
+    //public int FadeCandyChannel = 0;
+
+    //public int FadeCandyLightCount = 64;
 
     private const string Filename = "display.json";
 
@@ -65,8 +67,9 @@ namespace TouchlessDesign.Config {
       AddOnDisplay = i.AddOnDisplay;
       LightingEnabled = i.LightingEnabled;
       LightingIntensity = i.LightingIntensity;
-      FadeCandyChannel = i.FadeCandyChannel;
-      FadeCandyLightCount = i.FadeCandyLightCount;
+      LightingComPort = i.LightingComPort;
+      //FadeCandyChannel = i.FadeCandyChannel;
+      //FadeCandyLightCount = i.FadeCandyLightCount;
     }
 
 

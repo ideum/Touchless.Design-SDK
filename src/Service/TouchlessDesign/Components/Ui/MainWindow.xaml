@@ -115,6 +115,7 @@
                                    Margin="12 0 0 0"
                                    FontSize="17" TextElement.FontFamily="/TouchlessDesign;component/Resources/#TeX Gyre Heros" />
                           </Button>
+
                         </DockPanel>
                         <Border Background="{StaticResource Ideum.Brush.ForegroundSecondary1}"
                             DockPanel.Dock="Left"
@@ -151,6 +152,10 @@
 
             <TabItem IsSelected="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type c:MainWindow}}, Path=SelectNetworkTab}" Header="Network" Foreground="{StaticResource Ideum.Brush.ForegroundSecondary}">
               <c:PageNetwork DataContext="{StaticResource NetworkViewModel}" />
+            </TabItem>
+            
+            <TabItem Header="Setup" Foreground="{StaticResource Ideum.Brush.ForegroundSecondary}">
+              <c:PageSetup />
             </TabItem>
           </TabControl>
         </DockPanel>

@@ -19,6 +19,7 @@
   <TabControl Style="{StaticResource TabControlPivotStyle}">
     <TabItem Header="Overlay">
       <ui:SimpleStackPanel Spacing="5" Margin="0 6 0 0">
+        <TextBlock HorizontalAlignment="Left" Text="Touch overlay for the touch table device. Will glow red if a user touches the table while Touchless is running." Foreground="#FFFCF800" />
         <c:BoolControl Value="{Binding OverlayEnabled, Mode=TwoWay}" 
                        Header="Enabled"
                        LabelMinWidth="140"/>
@@ -38,10 +39,7 @@
     </TabItem>
     <TabItem Header="Onboarding">
       <ui:SimpleStackPanel Spacing="5" Margin="0 6 0 0">
-        <Label Content="Note: Overlay must be enabled for the Onboarding experience to function."
-               FontSize="14"
-               FontStyle="Italic" 
-               Visibility="{Binding OverlayEnabled, Mode=TwoWay, Converter={StaticResource BoolToVisNegated}}"/>
+        <TextBlock HorizontalAlignment="Left" Text="Touch device onboarding tutorial that explains how to use Touchless. Overlay must be enabled." Foreground="#FFFCF800" />
         <c:BoolControl Value="{Binding OnboardingEnabled, Mode=TwoWay}" 
                          Header="Enabled"
                          LabelMinWidth="140"/>
@@ -80,6 +78,7 @@
     </TabItem>
     <TabItem Header="Add-On">
       <ui:SimpleStackPanel Spacing="5" Margin="0 6 0 0">
+        <TextBlock HorizontalAlignment="Left" Text="Pedestal UI application that gives users feedback and instructions. Enable if on the pedestal." Foreground="#FFFCF800" />
         <c:BoolControl Value="{Binding AddOnEnabled, Mode=TwoWay}" 
                        Header="Enabled"
                        LabelMinWidth="60"/>
@@ -89,13 +88,14 @@
                            LabelMinWidth="60"
                            ValueMinWidth="180"
                            ItemTemplate="{StaticResource DisplayComboBoxItemTemplateStyle}"/>
-        <c:BoolControl Value="{Binding PedestalMode, Mode=TwoWay}" 
+        <!--<c:BoolControl Value="{Binding PedestalMode, Mode=TwoWay}" 
                 Header="Pedestal Mode"
-                LabelMinWidth="60"/>
+                LabelMinWidth="60"/>-->
        </ui:SimpleStackPanel>
     </TabItem>
     <TabItem Header="Lighting">
       <ui:SimpleStackPanel Spacing="5" Margin="0 6 0 0">
+        <TextBlock HorizontalAlignment="Left" Text="Pedestal lighting can be enabled or disabled. Choose the COMPORT that the lights are plugged in to." Foreground="#FFFCF800" />
         <c:BoolControl Value="{Binding LEDsEnabled, Mode=TwoWay}" 
                        Header="Enabled"
                        LabelMinWidth="60"/>
@@ -103,6 +103,13 @@
                          Header="Intensity"
                          Min="0" Max="1"
                          LabelMinWidth="60"/>
+        <c:NumberControl Value="{Binding LEDComPort, Mode=TwoWay}" 
+                       Header="COM Port"
+                       LabelMinWidth="150"
+                       ShowSlider="False"
+                       Min="1" Max="256"
+                       SmallChange="1" LargeChange="10"
+                       NumberFormatter="{StaticResource IntNumberFormatter}"/>
       </ui:SimpleStackPanel>
     </TabItem>
   </TabControl>

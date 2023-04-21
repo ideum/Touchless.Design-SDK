@@ -96,8 +96,8 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
       Model.TcpEnabled = TcpEnabled;
       Model.TcpData.Port = TcpPort;
       Model.TcpData.SdkLoopback = SdkLoopback;
-      Model.WsEnabled = WsEnabled;
-      Model.WsData.Port = WsPort;
+      //Model.WsEnabled = WsEnabled;
+      //Model.WsData.Port = WsPort;
       Model.UdpEnabled = UdpEnabled;
       Model.UdpBroadcast.Port = UdpBroadcastPort;
       Model.UdpBroadcastInterval_ms = UdpBroadcastRate;
@@ -108,8 +108,8 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
       TcpEnabled = Model.TcpEnabled;
       TcpPort = Model.TcpData.Port;
       SdkLoopback = Model.TcpData.SdkLoopback;
-      WsEnabled = Model.WsEnabled;
-      WsPort = Model.WsData.Port;
+      //WsEnabled = Model.WsEnabled;
+      //WsPort = Model.WsData.Port;
       UdpEnabled = Model.UdpEnabled;
       UdpBroadcastPort = Model.UdpBroadcast.Port;
       UdpBroadcastRate = Model.UdpBroadcastInterval_ms;

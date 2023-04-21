@@ -106,7 +106,7 @@ namespace TouchlessDesign.Components.Ipc {
             var dims_px = Ui.AddOnScreenBounds;
             Log.Debug("Recieved query for addon");
             c.Send(Msg.Factories.AddOnQuery(
-              Ui.HasAddOnScreen,
+              false,
               Lighting.NetworkState == TouchlessDesign.Components.Lighting.Lighting.NetworkStates.Connected,
               dims_px.Width,
               dims_px.Height,

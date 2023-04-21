@@ -118,12 +118,12 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
       set { SetValue(AddOnEnabledProperty, value); }
     }
 
-    public static readonly DependencyProperty PedestalModeProperty = Reg<DisplayViewModel, bool>("PedestalMode", true, PropertyTypes.Save);
+    //public static readonly DependencyProperty PedestalModeProperty = Reg<DisplayViewModel, bool>("PedestalMode", true, PropertyTypes.Save);
 
-    public bool PedestalMode {
-      get { return (bool)GetValue(PedestalModeProperty); }
-      set { SetValue(PedestalModeProperty, value); }
-    }
+    //public bool PedestalMode {
+    //  get { return (bool)GetValue(PedestalModeProperty); }
+    //  set { SetValue(PedestalModeProperty, value); }
+    //}
 
     public static readonly DependencyProperty AddOnDisplayProperty = Reg<DisplayViewModel, ScreenViewModel>("AddOnDisplay", null, PropertyTypes.Save);
 
@@ -147,6 +147,13 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
     public double LEDIntensity {
       get { return (double)GetValue(LEDIntensityProperty); }
       set { SetValue(LEDIntensityProperty, value); }
+    }
+
+    public static readonly DependencyProperty LEDComPortProperty = Reg<DisplayViewModel, int>("LEDComPort", 1, PropertyTypes.Save);
+
+    public int LEDComPort {
+      get { return (int)GetValue(LEDComPortProperty); }
+      set { SetValue(LEDComPortProperty, value); }
     }
 
     public DisplayViewModel() {
@@ -227,9 +234,10 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
       Model.Onboarding2Enabled = Onboarding2Enabled;
       Model.Onboarding3Enabled = Onboarding3Enabled;
       Model.AddOnEnabled = AddOnEnabled;
-      Model.PedestalMode = PedestalMode;
+      //Model.PedestalMode = PedestalMode;
       Model.LightingEnabled = LEDsEnabled;
       Model.LightingIntensity = (float) LEDIntensity;
+      Model.LightingComPort = LEDComPort;
     }
 
     public override void UpdateValuesFromModel() {
@@ -249,10 +257,11 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
       Onboarding2Enabled = Model.Onboarding2Enabled;
       Onboarding3Enabled = Model.Onboarding3Enabled;
       AddOnEnabled = Model.AddOnEnabled;
-      PedestalMode = Model.PedestalMode;
+      //PedestalMode = Model.PedestalMode;
       AddOnDisplay = FindClosestDisplay(Model.AddOnDisplay);
       LEDsEnabled = Model.LightingEnabled;
       LEDIntensity = Model.LightingIntensity;
+      LEDComPort = Model.LightingComPort;
       _preventMessagesSending = false;
       SendMessage();
     }

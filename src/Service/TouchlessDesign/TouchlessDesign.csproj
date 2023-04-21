@@ -133,6 +133,9 @@
     <Compile Include="Components\Ui\Converters\ListBoxItemToIndexConverter.cs" />
     <Compile Include="Components\Ui\Converters\MultiBoolConverter.cs" />
     <Compile Include="Components\Ui\Converters\MultiBoolToVisibilityConverter.cs" />
+    <Compile Include="Components\Ui\PageSetup.xaml.cs">
+      <DependentUpon>PageSetup.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Components\Ui\PageAbout.xaml.cs">
       <DependentUpon>PageAbout.xaml</DependentUpon>
     </Compile>
@@ -268,6 +271,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Components\Ui\PageSetup.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Components\Ui\PageAbout.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
