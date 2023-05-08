@@ -39,32 +39,32 @@ public class App : MonoBehaviour
       Log.Error(e);
     }
 
-#if !UNITY_EDITOR
-        if(Display.displays.Length > 0)
-        {
-            //PlayerPrefs.SetInt("UnitySelectMonitor", screen);
+//#if !UNITY_EDITOR
+//        if(Display.displays.Length > 0)
+//        {
+//            //PlayerPrefs.SetInt("UnitySelectMonitor", screen);
 
-            var display = Display.displays[0];
-            int w = display.systemWidth;
-            int h = display.systemHeight;
-            Screen.SetResolution(w, h, true);
-        } 
+//            var display = Display.displays[0];
+//            int w = display.systemWidth;
+//            int h = display.systemHeight;
+//            Screen.SetResolution(w, h, true);
+//        } 
 
-    else if (Display.displays.Length > 1) {
-      //PlayerPrefs.SetInt("UnitySelectMonitor", screen);
+//    else if (Display.displays.Length > 1) {
+//      //PlayerPrefs.SetInt("UnitySelectMonitor", screen);
 
-      var display = Display.displays[screen];
-      int w = display.systemWidth;
-      int h = display.systemHeight;
+//      var display = Display.displays[screen];
+//      int w = display.systemWidth;
+//      int h = display.systemHeight;
 
-      Display.displays[screen].Activate();
+//      Display.displays[screen].Activate();
       
-      Screen.SetResolution(w, h, true);
-    }
-    else {
-      Application.Quit();
-    }
-#endif
+//      Screen.SetResolution(w, h, true);
+//    }
+//    else {
+//      Application.Quit();
+//    }
+//#endif
 
 
     Ideum.TouchlessDesign.Initialize(AppSettings.Get().DataDirectory.GetPath());
@@ -100,8 +100,8 @@ public class App : MonoBehaviour
 
   // Response to the addon information query. Scales the application to fit the pixel ratio of the screen.
   private void HandleAddOnQuery(bool hasScreen, bool hasLEDs, int width_px, int height_px, int width_mm, int height_mm) {
-    BigScreen.SetActive(width_px != height_px);
-    PedestalScreen.SetActive(width_px == height_px);
+    //BigScreen.SetActive(width_px != height_px);
+    //PedestalScreen.SetActive(width_px == height_px);
 
     Log.Info($"{hasScreen}, {hasLEDs}, {width_px}, {height_px}, {width_mm}, {height_mm}");
     if (!hasScreen) return;
@@ -128,6 +128,7 @@ public class App : MonoBehaviour
 
   // Method delegate to handle TouchlessDesign response to QueryClickAndHoverState.
   private void HandleQueryResponse(bool clickState, HoverStates hoverState) {
+    //Debug.Log("clickState: " + clickState + ", hoverState: " + hoverState);
     UIController.DoStateChange(hoverState, clickState);
   }
 }
