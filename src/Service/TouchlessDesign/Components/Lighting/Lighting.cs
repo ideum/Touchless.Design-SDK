@@ -14,8 +14,6 @@ namespace TouchlessDesign.Components.Lighting
     public class Lighting : AppComponent
     {
 
-        private const string FadeCandyDir = "bin/Service/Components/Lighting/FadeCandyServer/";
-
         public Property<Color> CurrentColor { get; } = new Property<Color>();
 
         private bool _didStartEnabled;
@@ -25,7 +23,7 @@ namespace TouchlessDesign.Components.Lighting
         {
             if (!Config.Display.LightingEnabled) return;
             _didStartEnabled = true;
-            InitializeServer();
+            
             InitializeNetworking();
             InitializeRendering();
             InitializeStateHandling();
@@ -47,7 +45,7 @@ namespace TouchlessDesign.Components.Lighting
                 DeInitializeStateHandling();
                 DeInitializeRendering();
                 DeInitializeNetworking();
-                DeInitializeServer();
+               
                 _didStartEnabled = false;
             }
             if(serialPort != null && serialPort.IsOpen)
@@ -289,90 +287,6 @@ namespace TouchlessDesign.Components.Lighting
 
         #endregion
 
-        #region Server Process Management
-
-        #region Settings
-
-        private const string FadeCandyTemplate = "config_template.json_template";
-        private const string FadeCandyConfigFilename = "device_mapping.json";
-
-        private void UpdateFadeCandySettings()
-        {
-            var accessedFile = false;
-            try
-            {
-                var templatePath = Path.Combine(DataDir, FadeCandyDir, FadeCandyTemplate);
-                var s = File.ReadAllText(templatePath);
-                accessedFile = true;
-                //s = s.Replace("$(data_port)", Config.Network.FadeCandyData.Port.ToString());
-                //s = s.Replace("$(relay_port)", Config.Network.FadeCandyRelay.Port.ToString());
-                s = s.Replace("$(channel)", Channel.ToString());
-                s = s.Replace("$(led_count)", LightCount.ToString());
-                var configPath = Path.Combine(DataDir, FadeCandyDir, FadeCandyConfigFilename);
-                File.WriteAllText(configPath, s);
-            }
-            catch (Exception e)
-            {
-                if (accessedFile)
-                {
-                    Log.Error($"Error writing config json {e}");
-                }
-                else
-                {
-                    Log.Error($"Error reading config template json {e}");
-                }
-            }
-        }
-
-        [DllImport("user32.dll")]
-        static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
-
-        private const string ServerFilename = "fcserver.exe";
-
-        private string _serverPath, _serverConfigPath;
-        private Process _serverProcess;
-
-        private void InitializeServer()
-        {
-            _serverPath = Path.Combine(DataDir, FadeCandyDir, ServerFilename);
-            _serverConfigPath = Path.Combine(DataDir, FadeCandyDir, FadeCandyConfigFilename);
-            UpdateFadeCandySettings();
-            if (!File.Exists(_serverPath))
-            {
-                Log.Error($"LED Server exe does not exist at: {_serverPath}");
-                return;
-            }
-            _serverProcess = new Process { StartInfo = new ProcessStartInfo(_serverPath, _serverConfigPath) };
-            _serverProcess.Start();
-            ThreadPool.QueueUserWorkItem(HideServerProcessWindow);
-        }
-
-        private void HideServerProcessWindow(object state)
-        {
-            while (_serverProcess != null && !_serverProcess.HasExited && _serverProcess.MainWindowHandle == IntPtr.Zero)
-            {
-                Thread.Sleep(10);
-            }
-
-            if (_serverProcess != null && !_serverProcess.HasExited && _serverProcess.MainWindowHandle != IntPtr.Zero)
-            {
-                var t = _serverProcess.MainWindowHandle;
-                ShowWindow(t, 0);
-            }
-        }
-
-        private void DeInitializeServer()
-        {
-            if (_serverProcess != null && !_serverProcess.HasExited)
-            {
-                _serverProcess?.Kill();
-            }
-            _serverProcess = null;
-        }
-
-        #endregion
-
-        #endregion
 
         #region Networking
 
