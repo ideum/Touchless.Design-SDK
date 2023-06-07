@@ -83,7 +83,7 @@ Configuration is primarily handled through the UI, but all configurable values a
 
 !["About"](/docs/images/td1.JPG)
 !["Network"](/docs/images/td8.JPG)
-!["Steup"](/docs/images/td9.JPG)
+!["Setup"](/docs/images/td9.JPG)
 
 
 ##### Main Device Settings
@@ -181,7 +181,9 @@ public void OnPointerExit(PointerEventData eventData) {
 }
 ```
 
-## New: Multi-User Functionality
+## New in 3.0.0
+
+### Multi-User Functionality
 
 Version 3.0.0 now includes multi-user functionality to allow for multiple pedestals to interact with one main display.
 
@@ -190,6 +192,11 @@ The first client pedestal to connect will have control of the mouse, while latte
 At the bottom of the Touchless.Design popup window, text now provides information on the number of touch provider pedestals as well as overall clients (apps) that are connected and talking to one another.
 
 An example Unity project (Pong) has been placed in the directory ```examples/Touchless-Pong.unitypackage``` as a way to see how this new functionality can be used. 
+
+### Arduino Powered Lights
+
+Originally, Touchless used Fade Candy lights to illuminate the pedestal and change colors to indicate certain gestures. Fade Candy is now deprecated, so a replacement set up has been implemented to achieve the same effect. Pedestals now use arduino powered lights (an Adafruit Trinket M0 wired to NeoPixel LED strips)  and a COM Port to send commands back and forth. You can find the arduino board [[here](https://www.adafruit.com/product/3500)].
+
 
 ## First Time Hardware Setup
 

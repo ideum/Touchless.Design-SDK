@@ -1,6 +1,7 @@
 ﻿using DG.Tweening;
 using System;
 using System.Collections.Generic;
+using TMPro;
 using TouchlessDesign.Config;
 using UnityEngine;
 using UnityEngine.UI;
@@ -25,6 +26,10 @@ namespace Ideum {
     public TableSensorUI TableUI;
     public SensorBar Sensor;
     public RectTransform Scalar;
+
+    public TextMeshProUGUI userCount;
+    private int totalUsers = 0;
+    private int curUser = 1;
 
     public bool Active {
       get { return _active; }
@@ -190,6 +195,8 @@ namespace Ideum {
         a.Deactivate();
       }
       _currentActivity = null;
+      curUser = 1;
+      userCount.text = curUser + " of " + totalUsers;
     }
 
     private void SetupActivities() {
@@ -254,21 +261,43 @@ namespace Ideum {
       _progress = _activeActivities.Count > 1 ? (float)_currentActivityIndex / ((float)_activeActivities.Count - 1f) : 0;
       Steps.SetProgress(_progress, _currentActivityIndex);
       if (_currentActivityIndex >= _activeActivities.Count) {
-        _complete = true;
-        EndWindow.Activate();
-        _seq?.Kill();
-        _seq = DOTween.Sequence();
+        //first check if next user needs to go
+        if (curUser < totalUsers)
+        {
+          curUser++;
+          userCount.text = curUser + " of " + totalUsers;
 
-        _seq.AppendInterval(0.5f);
-        _seq.OnComplete(() => {
-          MainWindow.alpha = 0.0f;
-        });
-        _currentActivity.Deactivate();
-        _currentActivity = null;
-        return;
+          //do everything again
+          SetupActivities();
+          return;
+        }
+        else
+        {
+          //if all users have gone, show end window
+          _complete = true;
+          EndWindow.Activate();
+          _seq?.Kill();
+          _seq = DOTween.Sequence();
+
+          _seq.AppendInterval(0.5f);
+          _seq.OnComplete(() =>
+          {
+            MainWindow.alpha = 0.0f;
+          });
+          _currentActivity.Deactivate();
+          _currentActivity = null;
+          return;
+        }
       }
 
       StartActivity();
+    }
+
+    public void UpdateNumUsers(int count)
+    {
+      totalUsers = count;
+
+      userCount.text = curUser + " of " + totalUsers;
     }
   }
 }

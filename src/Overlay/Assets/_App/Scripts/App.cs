@@ -134,6 +134,8 @@ namespace Ideum {
       newCursor.SetHoverColor(targetColor, true);
       Debug.Log($"Setting Hover Color for ID {user.DeviceId} to {targetColor}");
       _cursors.Add(newCursor);
+
+      Onboarding.UpdateNumUsers(_cursors.Count);
     }
 
     // At a regular interval, query the click and hover states, as well as the no touch state, passing respective method delegates. Also manages onboarding timeout
