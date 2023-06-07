@@ -34,7 +34,8 @@ namespace TouchlessDesign.Components.Lighting
                 serialPort = new SerialPort(comPort, 9600);
                 serialPort.Open();
             }
-
+            int intensity = (int)Math.Round(255 * Config.Display.LightingIntensity);
+            serialPort.Write("brightness:" + Config.Display.LightingIntensity.ToString());
             serialPort.Write(ColorToHexConverter(NormalColor));
         }
 
@@ -149,6 +150,8 @@ namespace TouchlessDesign.Components.Lighting
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+            int intensity = (int)Math.Round(255 * Config.Display.LightingIntensity);
+            serialPort.Write("brightness:" + Config.Display.LightingIntensity.ToString());
 
             string hexColor = ColorToHexConverter(color);
             serialPort.Write(hexColor);
