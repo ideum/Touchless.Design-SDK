@@ -2,14 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
+using TouchlessDesign.Config;
 
 namespace Ideum.Data {
+
   public enum HoverStates {
     None,
     Click,
     Drag,
     DragHorizontal,
-    DragVertical
+    DragVertical,
   }
 
   public class Msg : IPayload {
@@ -33,6 +35,22 @@ namespace Ideum.Data {
       NoTouch,
       NoTouchQuery,
       AddOnQuery,
+      SubscribeToDisplaySettings,
+      DisplaySettingsChanged,
+      HandCountQuery,
+      Hands,
+      SetPriority,
+      OnboardingQuery,
+      SetOnboarding,
+      OverlayCursorVisibilityQuery,
+      SetOverlayCursorVisible,
+      RegisterRemoteClient,
+      UsersQuery,
+      SubscribeToUserUpdates,
+      UserUpdate,
+      UserAdded,
+      UserRemoved,
+      QueryStateUserId,
     }
 
     [JsonProperty("T")]
@@ -59,6 +77,9 @@ namespace Ideum.Data {
 
     #endregion
 
+    [JsonProperty("Priority")]
+    public int Priority = 0;
+
     [JsonProperty("B")]
     public bool? Bool = null;
 
@@ -77,6 +98,33 @@ namespace Ideum.Data {
     [JsonProperty("H")]
     public int? H = null;
 
+    [JsonProperty("String")]
+    public string S = null;
+
+    [JsonProperty("F1")]
+    public float? F1 = null;
+
+    [JsonProperty("Config")]
+    public ConfigDisplay Config;
+
+    [JsonProperty("HandCount")]
+    public int HandCount;
+
+    [JsonProperty("IsClicking")]
+    public bool IsClicking;
+
+    [JsonProperty("UserIds")]
+    public int[] Users;
+
+    [JsonProperty("DeviceId")]
+    public int DeviceId;
+
+    [JsonProperty("TouchlessUserInfo")]
+    public Msg[] TouchlesUserInfo;
+
+    [JsonProperty("MouseDriverId")]
+    public int MouseDriverId = -1;
+
     #endregion
 
     #region Constructors
@@ -85,13 +133,16 @@ namespace Ideum.Data {
 
     }
 
-    public Msg(Types type, bool? boolValue = null, int? x = null, int? y = null, int? w = null, int? h = null) {
+    public Msg(Types type, bool? boolValue = null, int? x = null, int? y = null, int? w = null, int? h = null, string s = null, float? f1 = null, int priority = 0) {
       Type = type;
       Bool = boolValue;
       X = x;
       Y = y;
       W = w;
       H = h;
+      S = s;
+      F1 = f1;
+      Priority = priority;
     }
 
     #endregion
@@ -135,7 +186,7 @@ namespace Ideum.Data {
 
       public static Msg HoverQuery() {
         return new Msg {
-          Type = Types.HoverQuery
+          Type = Types.HoverQuery,
         };
       }
 
@@ -234,6 +285,62 @@ namespace Ideum.Data {
       public static Msg AddOnQuery(bool hasSecondScreen, bool hasLEDs, int width_px = 0, int height_px = 0, int width_mm = 0, int height_mm = 0) {
         return new Msg { Type = Types.AddOnQuery, Bool = hasSecondScreen, Bool2 = hasLEDs, X = width_px, Y = height_px, W = width_mm, H = height_mm };
       }
+
+      public static Msg SettingsMessage(ConfigDisplay config) {
+        return new Msg { Config = config };
+      }
+
+      public static Msg HandCountQuery() {
+        return new Msg { Type = Types.HandCountQuery };
+      }
+
+      public static Msg HandCountQuery(int handCount) {
+        return new Msg { Type = Types.HandCountQuery, X = handCount };
+      }
+
+      public static Msg SubscribeMessage() {
+        return new Msg { Type = Types.SubscribeToDisplaySettings };
+      }
+
+      public static Msg UserSubscribeMessage() {
+        return new Msg { Type = Types.SubscribeToUserUpdates };
+      }
+
+      public static Msg HandMessage() {
+        return new Msg { Type = Types.Hands };
+      }
+
+      public static Msg PriorityMessage(int priority = 0) {
+        return new Msg { Type = Types.SetPriority, Priority = priority };
+      }
+
+      public static Msg OnboardingQueryMessage(bool onboardingActive) {
+        return new Msg { Type = Types.OnboardingQuery, Bool = onboardingActive };
+      }
+
+      public static Msg OnboardingQueryMessage() {
+        return new Msg { Type = Types.OnboardingQuery };
+      }
+
+      public static Msg SetOnboardingMessage(bool onboardingActive) {
+        return new Msg { Type = Types.SetOnboarding, Bool = onboardingActive };
+      }
+
+      public static Msg OverlayCursorVisibilityQuery() {
+        return new Msg { Type = Types.OverlayCursorVisibilityQuery };
+      }
+
+      public static Msg SetOverlayCursorVisible(bool value) {
+        return new Msg { Type = Types.SetOverlayCursorVisible, Bool = value };
+      }
+
+      public static Msg UsersQuery(int priority = 0) {
+        return new Msg { Type = Types.UsersQuery, Priority = priority };
+      }
+
+      public static Msg QueryStateUserId() {
+        return new Msg { Type = Types.QueryStateUserId };
+      }
     }
 
     #endregion
@@ -257,6 +364,16 @@ namespace Ideum.Data {
     public delegate void NoTouchDelegate(bool noTouch);
 
     public delegate void AddOnQueryDelegate(bool hasScreen, bool hasLEDs, int width_px, int height_px, int width_mm, int height_mm);
+
+    public delegate void HandCountQueryDelegate(int handCount);
+
+    public delegate void OnboardingQueryDelegate(bool onboardingActive);
+
+    public delegate void OverlayCursorVisibilityDelegate(bool cursorVisible);
+
+    public delegate void StateUserQueryDelegate(int deviceId);
+
+    public delegate void UsersQueryDelegate();
 
     public class Callback {
 
@@ -310,6 +427,26 @@ namespace Ideum.Data {
       }
 
       public Callback(Types type, params AddOnQueryDelegate[] callbacks) {
+        Type = type;
+        _callbacks = new HashSet<object>(callbacks);
+      }
+
+      public Callback(Types type, params HandCountQueryDelegate[] callbacks) {
+        Type = type;
+        _callbacks = new HashSet<object>(callbacks);
+      }
+
+      public Callback(Types type, params OnboardingQueryDelegate[] callbacks) {
+        Type = type;
+        _callbacks = new HashSet<object>(callbacks);
+      }
+
+      public Callback(Types type, params OverlayCursorVisibilityDelegate[] callbacks) {
+        Type = type;
+        _callbacks = new HashSet<object>(callbacks);
+      }
+
+      public Callback(Types type, params UsersQueryDelegate[] callbacks) {
         Type = type;
         _callbacks = new HashSet<object>(callbacks);
       }
@@ -373,6 +510,28 @@ namespace Ideum.Data {
                 msg.H.Value
                 )
               );
+            break;
+          case Types.SubscribeToDisplaySettings:
+            break;
+          case Types.DisplaySettingsChanged:
+            break;
+          case Types.HandCountQuery:
+            Operate(collection.OfType<HandCountQueryDelegate>(), p => p(msg.X.Value));
+            break;
+          case Types.Hands:
+            break;
+          case Types.SetPriority:
+            break;
+          case Types.OnboardingQuery:
+            Operate(collection.OfType<OnboardingQueryDelegate>(), p => p(msg.Bool.Value));
+            break;
+          case Types.OverlayCursorVisibilityQuery:
+            Operate(collection.OfType<OverlayCursorVisibilityDelegate>(), p => p(msg.Bool.Value));
+            break;
+          case Types.SetOnboarding:
+            break;
+          case Types.QueryStateUserId:
+            Operate(collection.OfType<StateUserQueryDelegate>(), p => p(msg.DeviceId));
             break;
           default:
             throw new ArgumentOutOfRangeException();
@@ -441,6 +600,36 @@ namespace Ideum.Data {
         }
       }
 
+      public void Add(HandCountQueryDelegate a) {
+        lock (_callbacks) {
+          _callbacks.Add(a);
+        }
+      }
+
+      public void Add(OnboardingQueryDelegate a) {
+        lock (_callbacks) {
+          _callbacks.Add(a);
+        }
+      }
+
+      public void Add(OverlayCursorVisibilityDelegate a) {
+        lock (_callbacks) {
+          _callbacks.Add(a);
+        }
+      }
+
+      public void Add(StateUserQueryDelegate a) {
+        lock (_callbacks) {
+          _callbacks.Add(a);
+        }
+      }
+
+      public void Add(UsersQueryDelegate a) {
+        lock (_callbacks) {
+          _callbacks.Add(a);
+        }
+      }
+
       public void Remove(object a) {
         lock (_callbacks) {
           _callbacks.Remove(a);
@@ -490,6 +679,20 @@ namespace Ideum.Data {
             return true;
           case Types.AddOnQuery:
             return true;
+          case Types.SubscribeToDisplaySettings:
+            return false;
+          case Types.DisplaySettingsChanged:
+            return true;
+          case Types.HandCountQuery:
+            return true;
+          case Types.Hands:
+            return false;
+          case Types.SetPriority:
+            return false;
+          case Types.OnboardingQuery:
+            return true;
+          case Types.SetOnboarding:
+            return false;
           default:
             throw new ArgumentOutOfRangeException();
         }
@@ -528,6 +731,20 @@ namespace Ideum.Data {
             return Bool.HasValue;
           case Types.AddOnQuery:
             return Bool.HasValue && Bool2.HasValue && X.HasValue && Y.HasValue && W.HasValue && H.HasValue;
+          case Types.SubscribeToDisplaySettings:
+            return true;
+          case Types.DisplaySettingsChanged:
+            return false;
+          case Types.HandCountQuery:
+            return false;
+          case Types.Hands:
+            return true;
+          case Types.SetPriority:
+            return true;
+          case Types.OnboardingQuery:
+            return Bool.HasValue;
+          case Types.SetOnboarding:
+            return true;
           default:
             throw new ArgumentOutOfRangeException();
         }
@@ -539,5 +756,5 @@ namespace Ideum.Data {
     }
 
     #endregion
-  }
+  } 
 }
