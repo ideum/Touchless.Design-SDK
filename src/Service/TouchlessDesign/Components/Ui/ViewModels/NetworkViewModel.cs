@@ -42,19 +42,25 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
       set { SetValue(SdkLoopbackProperty, value); }
     }
 
-    public static readonly DependencyProperty WsEnabledProperty = Reg<NetworkViewModel, bool>("WsEnabled", true, PropertyTypes.Restart);
-
-    public bool WsEnabled {
-      get { return (bool)GetValue(WsEnabledProperty); }
-      set { SetValue(WsEnabledProperty, value); }
+    public static readonly DependencyProperty DeviceIdProperty = Reg<GeneralViewModel, int>("DeviceId", 0, PropertyTypes.Restart);
+    public int DeviceId {
+      get { return (int)GetValue(DeviceIdProperty); }
+      set { SetValue(DeviceIdProperty, value); }
     }
 
-    public static readonly DependencyProperty WsPortProperty = Reg<NetworkViewModel, int>("WsPort", 4950, PropertyTypes.Restart);
+    //public static readonly DependencyProperty WsEnabledProperty = Reg<NetworkViewModel, bool>("WsEnabled", true, PropertyTypes.Restart);
 
-    public int WsPort {
-      get { return (int)GetValue(WsPortProperty); }
-      set { SetValue(WsPortProperty, value); }
-    }
+    //public bool WsEnabled {
+    //  get { return (bool)GetValue(WsEnabledProperty); }
+    //  set { SetValue(WsEnabledProperty, value); }
+    //}
+
+    //public static readonly DependencyProperty WsPortProperty = Reg<NetworkViewModel, int>("WsPort", 4950, PropertyTypes.Restart);
+
+    //public int WsPort {
+    //  get { return (int)GetValue(WsPortProperty); }
+    //  set { SetValue(WsPortProperty, value); }
+    //}
 
     public static readonly DependencyProperty UdpEnabledProperty = Reg<NetworkViewModel, bool>("UdpEnabled", true, PropertyTypes.Restart);
 
@@ -95,9 +101,11 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
     public override void ApplyValuesToModel() {
       Model.TcpEnabled = TcpEnabled;
       Model.TcpData.Port = TcpPort;
-      Model.TcpData.SdkLoopback = SdkLoopback;
-      //Model.WsEnabled = WsEnabled;
-      //Model.WsData.Port = WsPort;
+      //Model.TcpData.ServerLoopback = SdkLoopback;
+      Model.TcpData.RemoteLoopback = !SdkLoopback;
+      Model.RemoteProviderMode = !SdkLoopback;
+      Model.DeviceID = DeviceId;
+
       Model.UdpEnabled = UdpEnabled;
       Model.UdpBroadcast.Port = UdpBroadcastPort;
       Model.UdpBroadcastInterval_ms = UdpBroadcastRate;
@@ -107,9 +115,8 @@ namespace TouchlessDesign.Components.Ui.ViewModels {
     public override void UpdateValuesFromModel() {
       TcpEnabled = Model.TcpEnabled;
       TcpPort = Model.TcpData.Port;
-      SdkLoopback = Model.TcpData.SdkLoopback;
-      //WsEnabled = Model.WsEnabled;
-      //WsPort = Model.WsData.Port;
+      SdkLoopback = !Model.TcpData.RemoteLoopback;
+      DeviceId = Model.DeviceID;
       UdpEnabled = Model.UdpEnabled;
       UdpBroadcastPort = Model.UdpBroadcast.Port;
       UdpBroadcastRate = Model.UdpBroadcastInterval_ms;

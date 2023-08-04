@@ -143,17 +143,15 @@
             <TabItem Header="General" Foreground="{StaticResource Ideum.Brush.ForegroundSecondary}">
               <c:PageGeneral DataContext="{StaticResource GeneralViewModel}"/>
             </TabItem>
-            <TabItem Header="Display" Foreground="{StaticResource Ideum.Brush.ForegroundSecondary}">
-              <c:PageDisplay DataContext="{StaticResource DisplayViewModel}" />
+            <TabItem IsSelected="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type c:MainWindow}}, Path=SelectNetworkTab}" Header="Network" Foreground="{StaticResource Ideum.Brush.ForegroundSecondary}">
+              <c:PageNetwork DataContext="{StaticResource NetworkViewModel}" />
             </TabItem>
             <TabItem Header="Input" Foreground="{StaticResource Ideum.Brush.ForegroundSecondary}">
               <c:PageInput DataContext="{StaticResource InputViewModel}"/>
             </TabItem>
-
-            <TabItem IsSelected="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type c:MainWindow}}, Path=SelectNetworkTab}" Header="Network" Foreground="{StaticResource Ideum.Brush.ForegroundSecondary}">
-              <c:PageNetwork DataContext="{StaticResource NetworkViewModel}" />
+            <TabItem Header="Display" Foreground="{StaticResource Ideum.Brush.ForegroundSecondary}">
+              <c:PageDisplay DataContext="{StaticResource DisplayViewModel}" />
             </TabItem>
-            
             <TabItem Header="Setup" Foreground="{StaticResource Ideum.Brush.ForegroundSecondary}">
               <c:PageSetup />
             </TabItem>

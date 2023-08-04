@@ -6,8 +6,8 @@ namespace TouchlessDesign.Config {
     public bool StartOnStartup = true;
     public bool ShowUiOnStartup = false;
     public int UiStartUpDelay = 0;
-    public bool RemoteProviderMode = false;
-    public int DeviceID = 0;
+    //public bool RemoteProviderMode = false; MOVED TO NETWORK CONFIG
+    //public int DeviceID = 0;
 
     private const string Filename = "general.json";
 
@@ -17,7 +17,7 @@ namespace TouchlessDesign.Config {
         FilePath = path,
         StartOnStartup = true,
         UiStartUpDelay = 0,
-        RemoteProviderMode = false
+        //RemoteProviderMode = false
       });
     }
 
@@ -29,7 +29,7 @@ namespace TouchlessDesign.Config {
     public override void Apply(ConfigGeneral i) {
       StartOnStartup = i.StartOnStartup;
       UiStartUpDelay = i.UiStartUpDelay;
-      RemoteProviderMode = i.RemoteProviderMode;
+      //RemoteProviderMode = i.RemoteProviderMode;
     }
   }
 }

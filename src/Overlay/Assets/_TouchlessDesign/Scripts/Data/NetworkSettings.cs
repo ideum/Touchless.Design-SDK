@@ -5,6 +5,7 @@ namespace Ideum.Data {
   public class NetworkSettings {
     private const string Filename = "network.json";
 
+    public int DeviceID;
     public string PrimaryMsgType = "msg";
     public string PingMsgType = "ping";
     public int ReconnectClientInterval_ms = 1000;
@@ -28,9 +29,10 @@ namespace Ideum.Data {
         ReconnectClientInterval_ms = 1000,
         PingInterval_ms = 5000,
         TcpData = new IpInfo {
-          Loopback = true,
+          RemoteLoopback = true,
           Port = 4949
-        }
+        },
+        DeviceID = 0
       };
     }
   }

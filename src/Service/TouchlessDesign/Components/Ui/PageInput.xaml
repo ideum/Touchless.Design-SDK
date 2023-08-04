@@ -20,13 +20,13 @@
       </Grid.ColumnDefinitions>
       <c:BoolControl x:Name="ModeButton" 
                      Value="{Binding InputProvider, Mode=TwoWay}" 
-                     Header="Touch Data Retrieval Mode"
+                     Header="Input Provider"
                      OnContent="Remote (UDP)"
                      OffContent="Local"
                      LabelMinWidth="120"/>
-      <Button Grid.Column="1" Content="Network Settings" HorizontalAlignment="Right" Width="160" Click="OpenNetworkSettingsButtonClicked" Visibility="{Binding ElementName=ModeButton, Path=Value, Converter={StaticResource BoolToVis}}" />
+      <!--<Button Grid.Column="1" Content="Network Settings" HorizontalAlignment="Right" Width="160" Click="OpenNetworkSettingsButtonClicked" Visibility="{Binding ElementName=ModeButton, Path=Value, Converter={StaticResource BoolToVis}}" />-->
     </Grid>
-    <TextBlock HorizontalAlignment="Left"  Text="* If on a pedestal, use local mode. If on a touch table device, use remote mode." Foreground="#FFA7A7A7" />
+    <TextBlock HorizontalAlignment="Left"  Text="Server => Remote | Pedestal => Local | Can use local mode with server if a leap motion is plugged in." Foreground="#FFFCF800" />
     <Grid>
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="254*" />

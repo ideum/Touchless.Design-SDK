@@ -279,7 +279,9 @@ namespace Ideum {
       data.Reset();
 
       if(created) {
-        TouchlessMouseStates.Add(id, new MouseState());
+        if(!TouchlessMouseStates.ContainsKey(id)) {
+          TouchlessMouseStates.Add(id, new MouseState());
+        }
         data.position = TouchlessDesign.Users[id].ScreenPosition;
       }
 

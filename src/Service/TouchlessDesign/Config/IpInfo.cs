@@ -4,12 +4,12 @@ namespace TouchlessDesign.Config {
   public class IpInfo {
 
     public string Address;
-    public bool Loopback;
-    public bool SdkLoopback;
+    public bool RemoteLoopback;
+    public bool ServerLoopback;
     public int Port;
 
     public virtual IPEndPoint GetEndPoint() {
-      if (Loopback) {
+      if (RemoteLoopback) {
         return new IPEndPoint(IPAddress.Loopback, Port);
       }
 

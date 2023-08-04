@@ -19,7 +19,7 @@
   <TabControl Style="{StaticResource TabControlPivotStyle}">
     <TabItem Header="Overlay">
       <ui:SimpleStackPanel Spacing="5" Margin="0 6 0 0">
-        <TextBlock HorizontalAlignment="Left" Text="Touch overlay for the touch table device. Will glow red if a user touches the table while Touchless is running." Foreground="#FFFCF800" />
+        <TextBlock HorizontalAlignment="Left" Text="Server specific. Touch overlay for the touch table device." Foreground="#FFFCF800" />
         <c:BoolControl Value="{Binding OverlayEnabled, Mode=TwoWay}" 
                        Header="Enabled"
                        LabelMinWidth="140"/>
@@ -39,7 +39,7 @@
     </TabItem>
     <TabItem Header="Onboarding">
       <ui:SimpleStackPanel Spacing="5" Margin="0 6 0 0">
-        <TextBlock HorizontalAlignment="Left" Text="Touch device onboarding tutorial that explains how to use Touchless. Overlay must be enabled." Foreground="#FFFCF800" />
+        <TextBlock HorizontalAlignment="Left" Text="Overlay must be enabled. Touch device onboarding tutorial that explains how to use Touchless. " Foreground="#FFFCF800" />
         <c:BoolControl Value="{Binding OnboardingEnabled, Mode=TwoWay}" 
                          Header="Enabled"
                          LabelMinWidth="140"/>

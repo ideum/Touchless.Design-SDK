@@ -17,7 +17,7 @@
           <TextBlock>Step 1</TextBlock>
         </BulletDecorator.Bullet>
         <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Foreground="#FFFFFF" Margin="5 0 0 0" MaxWidth="600">
-          Install the touch device version of Touchless onto the touch device / computer, and the pedestal version of Touchless onto the pedestal(s).
+          Install Touchless.Design onto the server computer as well as the pedestal(s) and then follow the instructions to set up which device is being used. (i.e. Networking -> Running as Server or Running as Pedestal, Input -> Remote vs Local, Display preferences, etc)
         </TextBlock>
       </BulletDecorator>
       <BulletDecorator>

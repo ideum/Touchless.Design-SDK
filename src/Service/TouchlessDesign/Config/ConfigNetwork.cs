@@ -11,18 +11,13 @@ namespace TouchlessDesign.Config {
 
     public IpInfo TcpData = new IpInfo {
       Address = null,
-      Loopback = true,
-      SdkLoopback = true,
+      RemoteLoopback = false, //true when pedestal, false when server
+      ServerLoopback = true, //always true
       Port = 4949
     };
 
-    //public bool WsEnabled = false;
-
-    //public IpInfo WsData = new IpInfo {
-    //  Address = null,
-    //  Loopback = true,
-    //  Port = 4950
-    //};
+    public bool RemoteProviderMode = false;
+    public int DeviceID = 0;
 
     public int UdpBroadcastInterval_ms = 1000;
 
@@ -30,13 +25,13 @@ namespace TouchlessDesign.Config {
 
     public IpInfo UdpBroadcast = new IpInfo {
       Address = null,
-      Loopback = false,
+      RemoteLoopback = false,
       Port = 4951
     };
 
     public IpInfo UdpData = new IpInfo {
       Address = null,
-      Loopback = false,
+      RemoteLoopback = false,
       Port = 4952
     };
 
@@ -59,7 +54,8 @@ namespace TouchlessDesign.Config {
     public static ConfigNetwork Get(string dir) {
       var path = Path.Combine(dir, Filename);
       return Factory.Get(path, () => new ConfigNetwork {
-        FilePath = path
+        FilePath = path,
+        RemoteProviderMode = false
       });
     }
 
@@ -79,6 +75,7 @@ namespace TouchlessDesign.Config {
       UdpEnabled = i.UdpEnabled;
       UdpBroadcast = i.UdpBroadcast;
       UdpData = i.UdpData;
+      RemoteProviderMode = i.RemoteProviderMode;
       //FadeCandyData = i.FadeCandyData;
       //FadeCandyInitialConnectInterval_ms = i.FadeCandyInitialConnectInterval_ms;
       //FadeCandyReconnectInterval_ms = i.FadeCandyReconnectInterval_ms;

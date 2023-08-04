@@ -60,7 +60,7 @@ namespace TouchlessDesign.Components.Input {
       InitializeHooks();
       //InitializeClickHandling();
       InitializeInputProvider();
-      if (Config.General.RemoteProviderMode) {
+      if (Config.Network.RemoteProviderMode) {
         _udpClient = new RemoteClient();
         _udpClient.DataDir = DataDir;
         _udpClient.Start();
@@ -75,7 +75,7 @@ namespace TouchlessDesign.Components.Input {
       DeInitializeClickHandling();
       DeInitializeHooks();
 
-      if (Config.General.RemoteProviderMode) {
+      if (Config.Network.RemoteProviderMode) {
         _udpClient?.Stop();
       }
     }
@@ -138,7 +138,7 @@ namespace TouchlessDesign.Components.Input {
           _remoteClient.Bind(this);
           _remoteClientActive = true;
           Log.Info("Connected. Attempting to register as a remote client");
-          _remoteClient.Send(new Msg(Msg.Types.RegisterRemoteClient, Config.General.DeviceID));
+          _remoteClient.Send(new Msg(Msg.Types.RegisterRemoteClient, Config.Network.DeviceID));
           return true;
         }
       }
@@ -198,13 +198,13 @@ namespace TouchlessDesign.Components.Input {
 
     private void QueryClickAndHoverState() {
       if (_remoteClientActive) {
-        _remoteClient.Send(Msg.Factories.ClickAndHoverQuery(Config.General.DeviceID));
+        _remoteClient.Send(Msg.Factories.ClickAndHoverQuery(Config.Network.DeviceID));
       }
     }
 
     private void QueryNoTouch() {
       if (_remoteClientActive) {
-        _remoteClient.Send(Msg.Factories.NoTouchQuery(Config.General.DeviceID));
+        _remoteClient.Send(Msg.Factories.NoTouchQuery(Config.Network.DeviceID));
       }
     }
     #endregion
@@ -295,7 +295,7 @@ namespace TouchlessDesign.Components.Input {
 
       // Add our local user if needed
       if (providerType == typeof(LeapMotionProvider)) {
-        RegisterUser(new TouchlessUser(Config.General.DeviceID, "127.0.0.1"));
+        RegisterUser(new TouchlessUser(Config.Network.DeviceID, "127.0.0.1"));
       }
 
       object instance = null;
@@ -318,7 +318,7 @@ namespace TouchlessDesign.Components.Input {
       try {
         _provider.Start();
         Log.Info($"Input provider '{_provider.GetType().Name}' started.");
-        if (Config.General.RemoteProviderMode) {
+        if (Config.Network.RemoteProviderMode) {
           _inputProviderTimer = new Timer(HandleRemoteUpdate, null, 0, Config.Input.UpdateRate_ms);
         }
         else {
@@ -371,6 +371,8 @@ namespace TouchlessDesign.Components.Input {
               user.ScreenX = pixelX; 
               user.ScreenY = pixelY;
               if (user == stateUser && Config.Input.MouseEmulationEnabled) {
+                v = 1 - v;
+                pixelY = (int)Math.Round(v * Bounds.Height + Bounds.Top);
                 SetPosition(pixelX, pixelY);
               }
 

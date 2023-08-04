@@ -44,13 +44,13 @@ namespace Ideum {
 
     private static ClientManager _connectionManager;
     private static NetworkSettings _networkSettings;
-    private static GeneralSettings _generalSettings;
+    //private static GeneralSettings _generalSettings;
 
     public static bool IsConnected { get; private set; }
 
     private static void InitializeNetworking(string dataDir = null) {
       _networkSettings = NetworkSettings.Get(dataDir);
-      _generalSettings = GeneralSettings.Get(dataDir);
+      //_generalSettings = GeneralSettings.Get(dataDir);
       _connectionManager = new ClientManager(_networkSettings);
       _connectionManager.OnConnected += OnConnected;
       _connectionManager.OnDisconnected += OnDisconnected;
@@ -230,7 +230,7 @@ namespace Ideum {
     public static void QueryDimensions(Msg.QueryDimsDelegate callback) {
       DimsQueries.Add(callback);
       Msg msg = Msg.Factories.DimensionsQuery();
-      msg.DeviceId = _generalSettings.DeviceID;
+      msg.DeviceId = _networkSettings.DeviceID;
       _connectionManager.Send(msg);
     }
 
@@ -246,7 +246,7 @@ namespace Ideum {
     }
 
     public static void SetHoverState(HoverStates hover, int priority = 0) {
-      SetHoverState(_generalSettings.DeviceID, hover, priority);
+      SetHoverState(_networkSettings.DeviceID, hover, priority);
     }
 
     /// <summary>
@@ -254,7 +254,7 @@ namespace Ideum {
     /// </summary>
     /// <param name="isHovering">If isHovering is true, the hover-state will be set to HoverStates.Click. If false, the hover-state will be set to HoverStates.None</param>
     public static void SetHoverState(bool isHovering, int priority = 0) {
-      SetHoverState(_generalSettings.DeviceID, isHovering, priority);
+      SetHoverState(_networkSettings.DeviceID, isHovering, priority);
     }
 
     public static void SetHoverState(int deviceId, bool isHovering, int priority = 0) {
@@ -268,56 +268,56 @@ namespace Ideum {
     public static void QueryHoverState(Msg.BoolDelegate callback) {
       HoverQueries.Add(callback);
       var msg = Msg.Factories.HoverQuery();
-      msg.DeviceId = _generalSettings.DeviceID;
+      msg.DeviceId = _networkSettings.DeviceID;
       _connectionManager.Send(msg);
     }
 
     public static void QueryHoverState(Msg.HoverStateDelegate callback) {
       HoverQueries.Add(callback);
       var msg = Msg.Factories.HoverQuery();
-      msg.DeviceId = _generalSettings.DeviceID;
+      msg.DeviceId = _networkSettings.DeviceID;
       _connectionManager.Send(msg);
     }
 
     public static void SetPosition(int x, int y, int priority = 0) {
       Msg msg = Msg.Factories.Position(x, y);
       msg.Priority = priority;
-      msg.DeviceId = _generalSettings.DeviceID;
+      msg.DeviceId = _networkSettings.DeviceID;
       _connectionManager.Send(msg);
     }
 
     public static void SetClickState(bool isDown, int priority = 0) {
       Msg msg = Msg.Factories.Click(isDown);
       msg.Priority = priority;
-      msg.DeviceId = _generalSettings.DeviceID;
+      msg.DeviceId = _networkSettings.DeviceID;
       _connectionManager.Send(msg);
     }
 
     public static void SetNoTouchState(bool value, int priority = 0) {
       Msg msg = Msg.Factories.NoTouch(value);
       msg.Priority = priority;
-      msg.DeviceId = _generalSettings.DeviceID;
+      msg.DeviceId = _networkSettings.DeviceID;
       _connectionManager.Send(msg);
     }
 
     public static void QueryClickState(Msg.BoolDelegate callback) {
       ClickQueries.Add(callback);
       Msg msg = Msg.Factories.ClickQuery();
-      msg.DeviceId = _generalSettings.DeviceID;
+      msg.DeviceId = _networkSettings.DeviceID;
       _connectionManager.Send(msg);
     }
 
     public static void QueryClickAndHoverState(Msg.ClickAndHoverDelegate callback) {
       ClickAndHoverQueries.Add(callback);
       Msg msg = Msg.Factories.ClickAndHoverQuery();
-      msg.DeviceId = _generalSettings.DeviceID;
+      msg.DeviceId = _networkSettings.DeviceID;
       _connectionManager.Send(msg);
     }
 
     public static void QueryClickAndHoverState(Msg.ClickAndHoverBoolDelegate callback) {
       ClickAndHoverQueries.Add(callback);
       Msg msg = Msg.Factories.ClickAndHoverQuery();
-      msg.DeviceId = _generalSettings.DeviceID;
+      msg.DeviceId = _networkSettings.DeviceID;
       _connectionManager.Send(msg);
     }
 
@@ -329,14 +329,14 @@ namespace Ideum {
     public static void QueryAddOn(Msg.AddOnQueryDelegate callback) {
       AddOnQueries.Add(callback);
       Msg msg = Msg.Factories.AddOnQuery();
-      msg.DeviceId = _generalSettings.DeviceID;
+      msg.DeviceId = _networkSettings.DeviceID;
       _connectionManager.Send(msg);
     }
 
     public static void QueryHandCount(Msg.HandCountQueryDelegate callback) {
       HandQueries.Add(callback);
       Msg msg = Msg.Factories.HandCountQuery();
-      msg.DeviceId = _generalSettings.DeviceID;
+      msg.DeviceId = _networkSettings.DeviceID;
       _connectionManager.Send(msg);
     }
 
