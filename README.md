@@ -10,7 +10,7 @@ Alongside this system are three additional applications: a dynamic cursor overla
 
 Important Notes:
 - The [Leap Motion V4 Orion SDK](https://developer.leapmotion.com/releases/leap-motion-orion-410-99fe5-crpgl) must be installed with a leap motion device connected for this application to function.
-- This repository is meant to be built and run using the [Touchless Add-on](https://ideum.com/products/touch-tables/drafting#touchless) with a Leap Motion device, 3.5” display, and an [Ideum Touchless Pedestal](https://ideum.com/products/touchless/touchless-pedestal).
+- This repository is meant to be built and run using the [Touchless Add-on](https://ideum.com/products/touch-tables/drafting#touchless) with a Leap Motion device and an [Ideum Touchless Pedestal](https://ideum.com/products/touchless/touchless-pedestal).
 - The keyboard shortcut <b>Ctrl+Alt+I</b> will toggle mouse emulation on/off when the service is running.
 
 Preview Video:
