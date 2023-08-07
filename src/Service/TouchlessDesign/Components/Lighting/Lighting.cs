@@ -23,20 +23,23 @@ namespace TouchlessDesign.Components.Lighting
         {
             if (!Config.Display.LightingEnabled) return;
             _didStartEnabled = true;
-            
+
             InitializeNetworking();
             InitializeRendering();
             InitializeStateHandling();
             if (serialPort == null)
             {
                 string comPort = "COM" + Config.Display.LightingComPort.ToString();
-                Console.Write(comPort);
+                Log.Debug(comPort);
                 serialPort = new SerialPort(comPort, 9600);
                 serialPort.Open();
+                Log.Debug("Serial Port Open Status: " + serialPort.IsOpen);
             }
             int intensity = (int)Math.Round(255 * Config.Display.LightingIntensity);
-            serialPort.Write("brightness:" + Config.Display.LightingIntensity.ToString());
-            serialPort.Write(ColorToHexConverter(NormalColor));
+
+            string serialMsg = "time:100;" + "brightness:" + intensity + ";" + ColorToHexConverter(NormalColor) + ";";
+            serialPort.Write(serialMsg);
+            Log.Debug(serialMsg);
         }
 
         protected override void DoStop()
@@ -46,10 +49,10 @@ namespace TouchlessDesign.Components.Lighting
                 DeInitializeStateHandling();
                 DeInitializeRendering();
                 DeInitializeNetworking();
-               
+
                 _didStartEnabled = false;
             }
-            if(serialPort != null && serialPort.IsOpen)
+            if (serialPort != null && serialPort.IsOpen)
             {
                 serialPort.Close();
             }
@@ -151,11 +154,13 @@ namespace TouchlessDesign.Components.Lighting
                     throw new ArgumentOutOfRangeException();
             }
             int intensity = (int)Math.Round(255 * Config.Display.LightingIntensity);
-            serialPort.Write("brightness:" + Config.Display.LightingIntensity.ToString());
 
             string hexColor = ColorToHexConverter(color);
-            serialPort.Write(hexColor);
 
+            string serialMsg = "time:0;" + "brightness:" + intensity + ";" + hexColor + ";";
+            serialPort.Write(serialMsg);
+            
+            Log.Debug(serialMsg);
             ColorLerpAnimation.SetColors(CurrentColor.Value, color);
             PlayAnimation(ColorLerpAnimation);
         }
@@ -447,7 +452,7 @@ namespace TouchlessDesign.Components.Lighting
             {
                 hex = "#" + c.R.ToString("X2") + c.G.ToString("X2") + c.B.ToString("X2");
             }
-            catch(Exception e)
+            catch (Exception e)
             {
 
             }
